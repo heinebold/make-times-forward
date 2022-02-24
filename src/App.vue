@@ -1,70 +1,94 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "@/components/HelloWorld.vue";
+import MainLogo from "@/components/icons/MainLogo.vue";
 </script>
 
 <template>
   <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+    <h1 title="Mach Mal Voran">Make Times Forward</h1>
+    <MainLogo class="logo" />
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+    </nav>
   </header>
 
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style>
 @import "@/assets/base.css";
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100vw;
+  margin: 0;
+  padding: 0 2rem;
 
   font-weight: normal;
+
+  display: flex;
+  flex-direction: column;
+  place-items: center;
 }
 
 header {
+  --max-header-height: 25vh;
+  --min-header-height: 2.5em;
+
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  height: 128px;
+  max-height: var(--max-header-height);
+  min-height: var(--min-header-height);
+  width: 100%;
+  max-width: 1280px;
   line-height: 1.5;
-  max-height: 100vh;
+  padding: 0 1em;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+header .logo {
+  margin: 0 2rem;
+  max-height: var(--max-header-height);
+  min-height: var(--min-header-height);
+  max-width: 42vw
 }
 
-a,
-.green {
+header h1 {
+  flex-basis: 5.5em;
+  min-width: 5.5em;
+}
+
+main {
+  max-height: calc(100vh - 128px);
+  max-width: 100%;
+  overflow: scroll;
+}
+
+a {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: var(--color-accent-fg);
   transition: 0.4s;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: var(--color-accent-bg);
   }
 }
 
 nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  text-align: left;
+  font-size: 1rem;
+
+  padding: 1rem 0;
+  margin-top: 1rem;
+
+  display: flex;
+  place-items: flex-start;
+  flex-wrap: wrap;
 }
 
 nav a.router-link-exact-active {
@@ -85,41 +109,19 @@ nav a:first-of-type {
   border: 0;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
+@media (max-width: 599px) {
+  header h1 {
+    display: none;
   }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+  header .logo {
+    margin-left: 0;
+    margin-right: 1em;
   }
+}
 
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+@media (max-height: 299px) {
+  header h1 {
+    min-width: 10em;
   }
 }
 </style>

@@ -21,6 +21,22 @@
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 }
 
+
+/* accent color base values */
+:root {
+  --color-accent-hue: 210;
+  --color-accent-saturation: 100%;
+  --color-accent-lightness: 42%;
+  --color-accent-bg-opacity: 0.1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-accent-saturation: 75%;
+    --color-accent-lightness: 50%;
+    --color-accent-bg-opacity: 0.3;
+  }
+}
+
 /* semantic color variables for this project */
 :root {
   --color-background: var(--vt-c-white);
@@ -32,6 +48,20 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+
+
+  --color-accent-fg: hsla(
+          var(--color-accent-hue),
+          var(--color-accent-saturation),
+          var(--color-accent-lightness),
+          1
+  );
+  --color-accent-bg: hsla(
+          var(--color-accent-hue),
+          var(--color-accent-saturation),
+          var(--color-accent-lightness),
+          var(--color-accent-bg-opacity)
+  );
 
   --section-gap: 160px;
 }
