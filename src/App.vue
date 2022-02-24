@@ -65,6 +65,7 @@ main {
   max-height: calc(100vh - 128px);
   max-width: 100%;
   overflow: scroll;
+  margin-top: 2vh;
 }
 
 a {
@@ -123,5 +124,9 @@ nav a:first-of-type {
   header h1 {
     min-width: 10em;
   }
+}
+
+h2 {
+  margin-bottom: 0.7rem;
 }
 </style>
