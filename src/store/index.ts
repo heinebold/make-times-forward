@@ -3,6 +3,7 @@ import { createStore, useStore as baseUseStore, Store } from "vuex";
 import dayjs, { Dayjs } from "dayjs";
 
 export interface State {
+  clock: () => Dayjs;
   time: Dayjs;
 }
 
@@ -16,20 +17,24 @@ export function useStore() {
 export const store = createStore<State>({
   strict: process.env.NODE_ENV !== "production",
   state() {
+    const clock = dayjs;
     return {
-      time: dayjs(),
+      clock,
+      time: clock(),
     };
   },
   mutations: {
     updateClock(state) {
-      state.time = dayjs();
+      state.time = state.clock();
     },
   },
 });
 
 function tickClock() {
   store.commit("updateClock");
-  setTimeout(tickClock, 1000 - store.state.time.millisecond());
+  const ms = store.state.time.millisecond();
+  const timeout = (ms > 900 ? 2000 : 1000) - ms;
+  setTimeout(tickClock, timeout);
 }
 
 tickClock();
