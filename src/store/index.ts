@@ -22,12 +22,16 @@ export const store = createStore<State>({
     return {
       clock,
       time: clock(),
-      use12hTime: false,
+      use12hTime: localStorage.getItem("timeDisplayMode") === "12h",
     };
   },
   mutations: {
     updateClock(state) {
       state.time = state.clock();
+    },
+    set12hTime(state, use12h: boolean) {
+      state.use12hTime = use12h;
+      localStorage.setItem("timeDisplayMode", use12h ? "12h" : "24h");
     },
   },
 });

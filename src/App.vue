@@ -16,6 +16,7 @@ const use12hTime = computed(() => store.state.use12hTime);
     <MainLogo class="logo" />
     <nav>
       <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/settings">Settings</RouterLink>
       <RouterLink to="/about">About</RouterLink>
       <TextClock
         prefix="🕰️ "
