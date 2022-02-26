@@ -1,17 +1,18 @@
 <template>
-  <div class="textclock">{{ displayTime }}</div>
+  <div class="textclock">{{ prefix }}{{ displayTime }}</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 export default defineComponent({
   name: "TextClock",
   props: {
-    baseTime: Dayjs,
+    time: { type: Dayjs, required: true },
     includeSeconds: Boolean,
     use12h: Boolean,
+    prefix: String,
   },
   computed: {
     format(): string {
@@ -20,9 +21,6 @@ export default defineComponent({
       } else {
         return this.includeSeconds ? "HH:mm:ss" : "HH:mm";
       }
-    },
-    time(): Dayjs {
-      return this.baseTime || dayjs("0000-00-00T00:00:00.0");
     },
     displayTime(): string {
       return this.time.format(this.format);

@@ -17,7 +17,12 @@ const use12hTime = computed(() => store.state.use12hTime);
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-      <TextClock include-seconds :base-time="appTime" :use12h="use12hTime" />
+      <TextClock
+        prefix="🕰️ "
+        include-seconds
+        :time="appTime"
+        :use12h="use12hTime"
+      />
     </nav>
   </header>
 
