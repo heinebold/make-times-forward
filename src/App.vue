@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import MainLogo from "@/components/icons/MainLogo.vue";
+import TextClock from "@/components/TextClock.vue";
+import dayjs from "dayjs";
+import { onMounted, ref } from "vue";
+
+const baseClock = ref(dayjs());
+onMounted(() => setInterval(() => (baseClock.value = dayjs()), 1000));
 </script>
 
 <template>
@@ -10,6 +16,7 @@ import MainLogo from "@/components/icons/MainLogo.vue";
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
+      <TextClock include-seconds="include-seconds" :base-time="baseClock" />
     </nav>
   </header>
 
@@ -53,7 +60,7 @@ header .logo {
   margin: 0 2rem;
   max-height: var(--max-header-height);
   min-height: var(--min-header-height);
-  max-width: 42vw
+  max-width: 42vw;
 }
 
 header h1 {
@@ -100,13 +107,13 @@ nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
 
-nav a {
+nav > * {
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
 }
 
-nav a:first-of-type {
+nav *:last-child {
   border: 0;
 }
 
