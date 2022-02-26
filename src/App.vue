@@ -2,11 +2,11 @@
 import { RouterLink, RouterView } from "vue-router";
 import MainLogo from "@/components/icons/MainLogo.vue";
 import TextClock from "@/components/TextClock.vue";
-import dayjs from "dayjs";
-import { onMounted, ref } from "vue";
+import { useStore } from "@/store";
+import { computed } from "vue";
 
-const baseClock = ref(dayjs());
-onMounted(() => setInterval(() => (baseClock.value = dayjs()), 1000));
+const store = useStore();
+const appTime = computed(() => store.state.time);
 </script>
 
 <template>
@@ -16,7 +16,7 @@ onMounted(() => setInterval(() => (baseClock.value = dayjs()), 1000));
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-      <TextClock include-seconds="include-seconds" :base-time="baseClock" />
+      <TextClock include-seconds :base-time="appTime" />
     </nav>
   </header>
 
