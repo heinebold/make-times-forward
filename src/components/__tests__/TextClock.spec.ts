@@ -15,31 +15,21 @@ describe("TextClock", () => {
     cy.get("div.textclock").should("have.text", "13:37:42");
   });
 
-  it("interprets offset as seconds", () => {
+  it("uses 12h format if told so", () => {
     mount(TextClock, {
-      props: { baseTime: dayjs("1999-01-31T13:37:42"), offsetSeconds: 20 },
+      props: { baseTime: dayjs("1999-01-31T13:37:42"), use12h: true },
     });
-    cy.get("div.textclock").should("have.text", "13:38");
+    cy.get("div.textclock").should("have.text", "01:37 pm");
   });
 
-  it("handles negative offset", () => {
+  it("correctly shows seconds in 12h mode", () => {
     mount(TextClock, {
       props: {
-        baseTime: dayjs("1999-01-31T13:37:42"),
-        offsetSeconds: -5,
+        baseTime: dayjs("1999-01-31T03:37:42"),
+        use12h: true,
         includeSeconds: true,
       },
     });
-    cy.get("div.textclock").should("have.text", "13:37:37");
-  });
-
-  it("renders 0s for undefined base clock", () => {
-    mount(TextClock, {
-      props: {
-        offsetSeconds: 28,
-        includeSeconds: true,
-      },
-    });
-    cy.get("div.textclock").should("have.text", "00:00:28");
+    cy.get("div.textclock").should("have.text", "03:37:42 am");
   });
 });

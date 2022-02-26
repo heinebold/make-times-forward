@@ -4,25 +4,28 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export default defineComponent({
   name: "TextClock",
   props: {
-    baseTime: dayjs,
-    offsetSeconds: Number,
+    baseTime: Dayjs,
     includeSeconds: Boolean,
-  },
-  data() {
-    return {
-      format: this.includeSeconds ? "HH:mm:ss" : "HH:mm",
-    };
+    use12h: Boolean,
   },
   computed: {
+    format(): string {
+      if (this.use12h) {
+        return this.includeSeconds ? "hh:mm:ss a" : "hh:mm a";
+      } else {
+        return this.includeSeconds ? "HH:mm:ss" : "HH:mm";
+      }
+    },
+    time(): Dayjs {
+      return this.baseTime || dayjs("0000-00-00T00:00:00.0");
+    },
     displayTime(): string {
-      return (this.baseTime || dayjs(Date.UTC(0, 0, 0, -1)))
-        .add((this.offsetSeconds || 0) * 1000)
-        .format(this.format);
+      return this.time.format(this.format);
     },
   },
 });

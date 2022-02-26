@@ -7,6 +7,7 @@ import { computed } from "vue";
 
 const store = useStore();
 const appTime = computed(() => store.state.time);
+const use12hTime = computed(() => store.state.use12hTime);
 </script>
 
 <template>
@@ -16,7 +17,7 @@ const appTime = computed(() => store.state.time);
     <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-      <TextClock include-seconds :base-time="appTime" />
+      <TextClock include-seconds :base-time="appTime" :use12h="use12hTime" />
     </nav>
   </header>
 

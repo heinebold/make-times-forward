@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from "dayjs";
 export interface State {
   clock: () => Dayjs;
   time: Dayjs;
+  use12hTime: boolean;
 }
 
 // define injection key
@@ -21,6 +22,7 @@ export const store = createStore<State>({
     return {
       clock,
       time: clock(),
+      use12hTime: false,
     };
   },
   mutations: {
