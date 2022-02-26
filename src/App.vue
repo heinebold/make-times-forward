@@ -31,8 +31,9 @@ const use12hTime = computed(() => store.state.use12hTime);
 
 #app {
   width: 100vw;
+  max-width: 100vw;
+  max-height: 100vh;
   margin: 0;
-  padding: 0 2rem;
 
   font-weight: normal;
 
@@ -72,8 +73,9 @@ header h1 {
 main {
   max-height: calc(100vh - 128px);
   max-width: 100%;
-  overflow: scroll;
+  overflow: auto;
   margin-top: 2vh;
+  padding: 0 2rem;
 }
 
 a {
