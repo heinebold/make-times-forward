@@ -85,17 +85,18 @@ div.schedule-item {
 }
 
 div.countdown {
-  font-size: 100%;
+  font-size: 120%;
 }
 div.title {
-  font-size: 90%;
+  font-size: 100%;
   text-overflow: ellipsis;
   line-height: 1.2em;
   max-height: 2.4em;
   margin-bottom: 0.33em;
+  text-align: center;
 }
 div.info {
-  font-size: 60%;
+  font-size: 66.67%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -114,7 +115,6 @@ div.schedule {
 div.main {
   display: flex;
   justify-content: space-around;
-  gap: 1rem;
   flex-wrap: wrap-reverse;
 }
 
