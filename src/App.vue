@@ -12,14 +12,14 @@ const use12hTime = computed(() => store.state.use12hTime);
 
 function clockEmoji(time: Dayjs): string {
   let hour = time.hour() % 12;
-  if (time.minute() > 50) {
+  if (time.minute() > 45) {
     hour += 1;
   }
   if (hour == 0) {
     hour = 12;
   }
   let clockIndex = 128335 + hour;
-  if (time.minute() > 20 && time.minute() <= 50) {
+  if (time.minute() > 15 && time.minute() <= 50) {
     clockIndex += 12;
   }
   return String.fromCodePoint(clockIndex);
@@ -94,7 +94,7 @@ header h1 {
 main {
   max-height: calc(96vh - var(--header-height));
   box-shadow: 1px 1px red;
-  max-width: 100%;
+  max-width: 100vw;
   overflow: auto;
   margin-top: 2vh;
   padding: 0;
