@@ -4,10 +4,26 @@ import MainLogo from "@/components/icons/MainLogo.vue";
 import TextClock from "@/components/TextClock.vue";
 import { useStore } from "@/store";
 import { computed } from "vue";
+import type { Dayjs } from "dayjs";
 
 const store = useStore();
 const appTime = computed(() => store.state.time);
 const use12hTime = computed(() => store.state.use12hTime);
+
+function clockEmoji(time: Dayjs): string {
+  let hour = time.hour() % 12;
+  if (time.minute() > 50) {
+    hour += 1;
+  }
+  if (hour == 0) {
+    hour = 12;
+  }
+  let clockIndex = 128335 + hour;
+  if (time.minute() > 20 && time.minute() <= 50) {
+    clockIndex += 12;
+  }
+  return String.fromCodePoint(clockIndex);
+}
 </script>
 
 <template>
@@ -19,7 +35,7 @@ const use12hTime = computed(() => store.state.use12hTime);
       <RouterLink to="/settings">Settings</RouterLink>
       <RouterLink to="/about">About</RouterLink>
       <TextClock
-        prefix="🕰️ "
+        :prefix="clockEmoji(appTime) + ' '"
         include-seconds
         :time="appTime"
         :use12h="use12hTime"
