@@ -52,6 +52,8 @@ function clockEmoji(time: Dayjs): string {
 @import "@/assets/base.css";
 
 #app {
+  --header-height: 8vmin;
+
   width: 100vw;
   max-width: 100vw;
   max-height: 100vh;
@@ -65,39 +67,37 @@ function clockEmoji(time: Dayjs): string {
 }
 
 header {
-  --max-header-height: 25vh;
-  --min-header-height: 2.5em;
-
   display: flex;
   place-items: center;
   justify-content: center;
-  height: 128px;
-  max-height: var(--max-header-height);
-  min-height: var(--min-header-height);
+  align-content: center;
+  align-items: center;
+
+  min-height: 1.2em;
+  max-height: var(--header-height);
   width: 100%;
-  max-width: 1280px;
-  line-height: 1.5;
-  padding: 0 1em;
+  overflow: hidden;
 }
 
 header .logo {
-  margin: 0 2rem;
-  max-height: var(--max-header-height);
-  min-height: var(--min-header-height);
-  max-width: 42vw;
+  margin: 0 1.6em;
+  width: var(--header-height);
+  height: var(--header-height);
 }
 
 header h1 {
   flex-basis: 5.5em;
-  min-width: 5.5em;
+  line-height: 1.47ex;
+  font-size: 3.5vmin;
 }
 
 main {
-  max-height: calc(100vh - 128px);
+  max-height: calc(96vh - var(--header-height));
+  box-shadow: 1px 1px red;
   max-width: 100%;
   overflow: auto;
   margin-top: 2vh;
-  padding: 0 2rem;
+  padding: 0;
 }
 
 a {
@@ -117,7 +117,6 @@ nav {
   font-size: 1rem;
 
   padding: 1rem 0;
-  margin-top: 1rem;
 
   display: flex;
   place-items: flex-start;
@@ -142,7 +141,7 @@ nav *:last-child {
   border: 0;
 }
 
-@media (max-width: 599px) {
+@media (max-width: 599px), (max-height: 299px) {
   header h1 {
     display: none;
   }
@@ -152,9 +151,9 @@ nav *:last-child {
   }
 }
 
-@media (max-height: 299px) {
-  header h1 {
-    min-width: 10em;
+@media (max-width: 409px) {
+  header .textclock {
+    display: none;
   }
 }
 
