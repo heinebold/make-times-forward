@@ -92,12 +92,16 @@ header h1 {
 }
 
 main {
-  max-height: calc(96vh - var(--header-height));
-  box-shadow: 1px 1px red;
-  max-width: 100vw;
+  height: calc(96vh - var(--header-height));
+  width: 100%;
   overflow: auto;
   margin-top: 2vh;
   padding: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
 }
 
 a {
