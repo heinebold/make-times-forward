@@ -43,7 +43,7 @@ import CountdownClock from "@/components/CountdownClock.vue";
 import ElapsedSecondsMeter from "@/components/ElapsedSecondsMeter.vue";
 
 export default {
-  name: "ScheduleItem",
+  name: "CurrentItem",
   components: { ElapsedSecondsMeter, CountdownClock, TextClock },
   props: {
     start: dayjs,

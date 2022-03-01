@@ -1,13 +1,13 @@
 <template>
   <section class="current">
     <schedule-card v-if="previousItem" class="previous">
-      <schedule-item v-bind="previousItem" />
+      <current-item v-bind="previousItem" />
     </schedule-card>
     <schedule-card v-if="currentItem" class="current">
-      <schedule-item v-bind="currentItem" />
+      <current-item v-bind="currentItem" />
     </schedule-card>
     <schedule-card v-if="nextItem" class="next">
-      <schedule-item v-bind="nextItem" />
+      <current-item v-bind="nextItem" />
     </schedule-card>
   </section>
 </template>
@@ -16,10 +16,10 @@
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "vuex";
-import ScheduleItem from "@/components/ScheduleItem.vue";
+import CurrentItem from "@/components/CurrentItem.vue";
 export default {
   name: "CurrentSchedulePanel",
-  components: { ScheduleItem, ScheduleCard },
+  components: { CurrentItem, ScheduleCard },
   props: {
     items: Array,
   },
