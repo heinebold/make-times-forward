@@ -1,25 +1,26 @@
 <template>
-  <section class="current">
-    <schedule-card v-if="previousItem" class="previous">
-      <current-item v-bind="previousItem" />
-    </schedule-card>
-    <schedule-card v-if="currentItem" class="current">
-      <current-item v-bind="currentItem" />
-    </schedule-card>
-    <schedule-card v-if="nextItem" class="next">
-      <current-item v-bind="nextItem" />
-    </schedule-card>
+  <section class="schedule-container">
+    <div class="schedule-list">
+      <schedule-card
+        v-for="(item, index) in items"
+        :key="index"
+        class="previous"
+      >
+        <schedule-item v-bind="item" />
+      </schedule-card>
+    </div>
   </section>
 </template>
 
 <script lang="ts">
 import ScheduleCard from "@/components/ScheduleCard.vue";
+import ScheduleItem from "@/components/ScheduleItem.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "vuex";
-import CurrentItem from "@/components/CurrentItem.vue";
+
 export default {
-  name: "CurrentSchedulePanel",
-  components: { CurrentItem, ScheduleCard },
+  name: "FullSchedulePanel",
+  components: { ScheduleItem, ScheduleCard },
   props: {
     items: Array,
   },
@@ -53,48 +54,31 @@ export default {
 </script>
 
 <style scoped>
-section.current {
+.schedule-list {
+}
+
+.schedule-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  overflow: hidden auto;
 }
 
-section.current {
+.schedule-container {
   width: 44vmax;
   height: 44vmax;
 }
-.current {
-  font-size: 2.5vmax;
-}
-.previous {
-  font-size: 1.4vmax;
-}
-.next {
-  font-size: 1.9vmax;
+.schedule-container {
+  font-size: 2vmax;
 }
 
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
-  section.current {
+  .schedule-container {
     width: 88vmin;
     height: 88vmin;
   }
-  .current {
-    font-size: 5vmin;
+  .schedule-container {
+    font-size: 4vmin;
   }
-  .previous {
-    font-size: 2.8vmin;
-  }
-  .next {
-    font-size: 3.8vmin;
-  }
-}
-
-.previous > * {
-  filter: saturate(0) opacity(0.5) blur(0.03em);
-}
-
-.next > * {
-  filter: opacity(0.66);
 }
 </style>
