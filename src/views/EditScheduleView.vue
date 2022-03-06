@@ -51,9 +51,9 @@ function selectItem(index: number) {
   if (selectedIndex.value >= 0) {
     title.value = schedule.value[selectedIndex.value].title;
     start.value =
-      schedule.value[selectedIndex.value].start.format("YYYY-MM-DDThh:mm");
+      schedule.value[selectedIndex.value].start.format("YYYY-MM-DDTHH:mm");
     end.value =
-      schedule.value[selectedIndex.value].end.format("YYYY-MM-DDThh:mm");
+      schedule.value[selectedIndex.value].end.format("YYYY-MM-DDTHH:mm");
   }
 }
 
