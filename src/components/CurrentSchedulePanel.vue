@@ -18,7 +18,8 @@ import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "vuex";
 import CurrentItem from "@/components/CurrentItem.vue";
 import MainSquare from "@/components/MainSquare.vue";
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "CurrentSchedulePanel",
   components: { MainSquare, CurrentItem, ScheduleCard },
   props: {
@@ -26,9 +27,11 @@ export default {
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
-      return [...this.items].sort((t1: TimeSlot, t2: TimeSlot) => {
-        return t1.start.diff(t2.start, "minutes");
-      });
+      return [...(this.items as TimeSlot[])].sort(
+        (t1: TimeSlot, t2: TimeSlot) => {
+          return t1.start.diff(t2.start, "minutes");
+        }
+      );
     },
     currentItemIndex(): number {
       const foundIndex = (
@@ -50,7 +53,7 @@ export default {
 
     ...mapState({ appTime: "time" }),
   },
-};
+});
 </script>
 
 <style scoped>

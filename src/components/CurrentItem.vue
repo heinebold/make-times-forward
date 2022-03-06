@@ -29,19 +29,19 @@
 -->
 
 <script lang="ts">
-import TextClock from "@/components/TextClock.vue";
 import { mapState } from "vuex";
 import dayjs, { Dayjs } from "dayjs";
 import CountdownClock from "@/components/CountdownClock.vue";
 import ElapsedSecondsMeter from "@/components/ElapsedSecondsMeter.vue";
 import DurationInfo from "@/components/DurationInfo.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "CurrentItem",
-  components: { DurationInfo, ElapsedSecondsMeter, CountdownClock, TextClock },
+  components: { DurationInfo, ElapsedSecondsMeter, CountdownClock },
   props: {
-    start: dayjs,
-    end: dayjs,
+    start: { type: dayjs, required: true },
+    end: { type: dayjs, required: true },
     title: String,
   },
   computed: {
@@ -56,7 +56,7 @@ export default {
     },
     ...mapState({ appTime: "time" }),
   },
-};
+});
 </script>
 
 <style scoped>

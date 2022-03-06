@@ -4,12 +4,6 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: "MainSquare",
-};
-</script>
-
 <style scoped>
 .main-square {
   display: flex;

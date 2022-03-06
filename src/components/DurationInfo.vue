@@ -14,13 +14,14 @@
 import TextClock from "@/components/TextClock.vue";
 import dayjs, { Dayjs } from "dayjs";
 import { mapState } from "vuex";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "DurationInfo",
   components: { TextClock },
   props: {
-    start: dayjs,
-    end: dayjs,
+    start: { type: dayjs, required: true },
+    end: { type: dayjs, required: true },
   },
   computed: {
     durationMinutes(): number {
@@ -28,7 +29,7 @@ export default {
     },
     ...mapState(["use12hTime"]),
   },
-};
+});
 </script>
 
 <style scoped>

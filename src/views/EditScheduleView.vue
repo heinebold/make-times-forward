@@ -23,7 +23,7 @@
     numbered
     :items="schedule"
     :selected="selectedIndex"
-    @select="selectItem"
+    @select-item="selectItem"
   />
 </template>
 

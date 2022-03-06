@@ -10,11 +10,13 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ElapsedSecondsMeter",
   props: {
-    duration: Number,
-    elapsed: Number,
+    duration: { type: Number, required: true },
+    elapsed: { type: Number, required: true },
   },
   computed: {
     greenYellowBoundary(): number {
@@ -28,7 +30,7 @@ export default {
       return Math.max(this.greenYellowBoundary + 1, this.duration - 5);
     },
   },
-};
+});
 </script>
 
 <style scoped></style>
