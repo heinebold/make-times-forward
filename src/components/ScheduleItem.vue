@@ -1,33 +1,21 @@
 <template>
   <div class="schedule-item">
     <div class="title" :title="title">{{ title }}</div>
-    <div class="info">
-      <div class="schedule">
-        <text-clock :time="start" /><template v-if="durationMinutes"
-          >→<text-clock :time="end"
-        /></template>
-      </div>
-      <div v-if="durationMinutes">{{ durationMinutes }} min</div>
-    </div>
+    <duration-info class="info" :start="start" :end="end" />
   </div>
 </template>
 
 <script lang="ts">
-import TextClock from "@/components/TextClock.vue";
 import dayjs, { Dayjs } from "dayjs";
+import DurationInfo from "@/components/DurationInfo.vue";
 
 export default {
   name: "ScheduleItem",
-  components: { TextClock },
+  components: { DurationInfo },
   props: {
     start: dayjs,
     end: dayjs,
     title: String,
-  },
-  computed: {
-    durationMinutes(): number {
-      return (this.end as Dayjs).diff(this.start as Dayjs, "minutes");
-    },
   },
 };
 </script>
@@ -50,17 +38,10 @@ div.title {
   line-height: 1.2em;
   max-height: 2.4em;
 }
-div.info {
-  font-size: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-width: 7em;
-}
 
-div.schedule {
-  display: flex;
-  gap: 0.33em;
+.info {
+  font-size: 50%;
+  width: 7em;
+  text-align: center;
 }
 </style>

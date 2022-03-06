@@ -2,14 +2,7 @@
   <div class="schedule-item">
     <div class="title" :title="title">{{ title }}</div>
     <div class="main">
-      <div class="info">
-        <div class="schedule">
-          <text-clock :time="start" /><template v-if="durationMinutes"
-            >→<text-clock :time="end"
-          /></template>
-        </div>
-        <div v-if="durationMinutes">{{ durationMinutes }} min</div>
-      </div>
+      <duration-info class="duration-info" :start="start" :end="end" />
       <div class="countdown">
         <countdown-clock
           v-if="hasStarted"
@@ -41,27 +34,22 @@ import { mapState } from "vuex";
 import dayjs, { Dayjs } from "dayjs";
 import CountdownClock from "@/components/CountdownClock.vue";
 import ElapsedSecondsMeter from "@/components/ElapsedSecondsMeter.vue";
+import DurationInfo from "@/components/DurationInfo.vue";
 
 export default {
   name: "CurrentItem",
-  components: { ElapsedSecondsMeter, CountdownClock, TextClock },
+  components: { DurationInfo, ElapsedSecondsMeter, CountdownClock, TextClock },
   props: {
     start: dayjs,
     end: dayjs,
     title: String,
   },
   computed: {
-    durationMinutes(): number {
-      return (this.end as Dayjs).diff(this.start as Dayjs, "minutes");
-    },
     durationSeconds(): number {
       return (this.end as Dayjs).diff(this.start as Dayjs, "seconds");
     },
     elapsedSeconds(): number {
       return (this.appTime as Dayjs).diff(this.start as Dayjs, "seconds");
-    },
-    isToday(): boolean {
-      return (this.appTime as Dayjs).isSame(this.start as Dayjs, "day");
     },
     hasStarted(): boolean {
       return !(this.appTime as Dayjs).isBefore(this.start as Dayjs, "second");
@@ -82,6 +70,7 @@ div.schedule-item {
   flex-direction: column;
   gap: 0.4em;
   justify-content: space-between;
+  text-align: center;
 }
 
 div.countdown {
@@ -93,23 +82,10 @@ div.title {
   line-height: 1.2em;
   max-height: 2.4em;
   margin-bottom: 0.33em;
-  text-align: center;
 }
-div.info {
+
+.duration-info {
   font-size: 66.67%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-div.main > div {
-  text-align: center;
-  max-width: 100%;
-}
-
-div.schedule {
-  display: flex;
-  gap: 0.33em;
 }
 
 div.main {
