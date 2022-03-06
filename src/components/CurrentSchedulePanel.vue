@@ -3,8 +3,13 @@
     <schedule-card class="previous" :class="previousItem ? '' : 'placeholder'">
       <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
-    <schedule-card class="current" :class="currentItem ? '' : 'placeholder'">
+    <schedule-card class="current">
       <current-item v-if="currentItem" v-bind="currentItem" />
+      <progress
+        v-else-if="previousItem && nextItem"
+        :max="nextItem.start.diff(previousItem.end, 'seconds')"
+        :value="appTime.diff(previousItem.end, 'seconds')"
+      />
     </schedule-card>
     <schedule-card class="next" :class="nextItem ? '' : 'placeholder'">
       <current-item v-if="nextItem" v-bind="nextItem" />
@@ -42,13 +47,19 @@ export default defineComponent({
       return foundIndex < 0 ? this.sortedItems.length : foundIndex;
     },
     currentItem(): TimeSlot | undefined {
-      return this.sortedItems[this.currentItemIndex];
+      const currentItem = this.sortedItems[this.currentItemIndex];
+      return currentItem.start.isAfter(this.appTime, "minute")
+        ? undefined
+        : currentItem;
     },
     previousItem(): TimeSlot | undefined {
       return this.sortedItems[this.currentItemIndex - 1];
     },
     nextItem(): TimeSlot | undefined {
-      return this.sortedItems[this.currentItemIndex + 1];
+      const currentItem = this.sortedItems[this.currentItemIndex];
+      return currentItem.start.isAfter(this.appTime, "minute")
+        ? currentItem
+        : this.sortedItems[this.currentItemIndex + 1];
     },
 
     ...mapState({ appTime: "time" }),
@@ -76,6 +87,10 @@ export default defineComponent({
   min-height: 4em;
 }
 
+progress {
+  width: 100%;
+}
+
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
   .current {
     font-size: 5vmin;
@@ -93,6 +108,6 @@ export default defineComponent({
 }
 
 .next > * {
-  filter: opacity(0.66);
+  /*filter: opacity(0.66);*/
 }
 </style>
