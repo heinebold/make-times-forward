@@ -1,16 +1,17 @@
 <template>
-  <section class="schedule-container">
+  <main-square>
     <h2>Schedule</h2>
     <div class="schedule-list">
       <schedule-card
         v-for="(item, index) in items"
         :key="index"
-        class="previous"
+        :class="selected === index ? 'selected' : ''"
+        @click="$emit('select', index)"
       >
         <schedule-item v-bind="item" />
       </schedule-card>
     </div>
-  </section>
+  </main-square>
 </template>
 
 <script lang="ts">
@@ -18,12 +19,14 @@ import ScheduleCard from "@/components/ScheduleCard.vue";
 import ScheduleItem from "@/components/ScheduleItem.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "vuex";
+import MainSquare from "@/components/MainSquare.vue";
 
 export default {
   name: "FullSchedulePanel",
-  components: { ScheduleItem, ScheduleCard },
+  components: { MainSquare, ScheduleItem, ScheduleCard },
   props: {
     items: Array,
+    selected: Number,
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
@@ -55,26 +58,11 @@ export default {
 </script>
 
 <style scoped>
-.schedule-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden auto;
-
-  width: 44vmax;
-  height: 44vmax;
-  font-size: 2vmax;
-}
-
-.schedule-container h2 {
+h2 {
   font-size: 100%;
 }
 
-@media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
-  .schedule-container {
-    width: 88vmin;
-    height: 88vmin;
-    font-size: 4vmin;
-  }
+.selected {
+  background-color: var(--color-accent-bg);
 }
 </style>

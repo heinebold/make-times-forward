@@ -1,5 +1,5 @@
 <template>
-  <section class="current">
+  <main-square>
     <schedule-card class="previous" :class="previousItem ? '' : 'placeholder'">
       <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
@@ -9,7 +9,7 @@
     <schedule-card class="next" :class="nextItem ? '' : 'placeholder'">
       <current-item v-if="nextItem" v-bind="nextItem" />
     </schedule-card>
-  </section>
+  </main-square>
 </template>
 
 <script lang="ts">
@@ -17,9 +17,10 @@ import ScheduleCard from "@/components/ScheduleCard.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "vuex";
 import CurrentItem from "@/components/CurrentItem.vue";
+import MainSquare from "@/components/MainSquare.vue";
 export default {
   name: "CurrentSchedulePanel",
-  components: { CurrentItem, ScheduleCard },
+  components: { MainSquare, CurrentItem, ScheduleCard },
   props: {
     items: Array,
   },
@@ -53,17 +54,10 @@ export default {
 </script>
 
 <style scoped>
-section.current {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.main-square {
   justify-content: space-evenly;
 }
 
-section.current {
-  width: 44vmax;
-  height: 44vmax;
-}
 .current {
   font-size: 2.5vmax;
 }
@@ -80,10 +74,6 @@ section.current {
 }
 
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
-  section.current {
-    width: 88vmin;
-    height: 88vmin;
-  }
   .current {
     font-size: 5vmin;
   }
