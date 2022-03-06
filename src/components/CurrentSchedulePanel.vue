@@ -1,13 +1,13 @@
 <template>
   <section class="current">
-    <schedule-card v-if="previousItem" class="previous">
-      <current-item v-bind="previousItem" />
+    <schedule-card class="previous" :class="previousItem ? '' : 'placeholder'">
+      <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
-    <schedule-card v-if="currentItem" class="current">
-      <current-item v-bind="currentItem" />
+    <schedule-card class="current" :class="currentItem ? '' : 'placeholder'">
+      <current-item v-if="currentItem" v-bind="currentItem" />
     </schedule-card>
-    <schedule-card v-if="nextItem" class="next">
-      <current-item v-bind="nextItem" />
+    <schedule-card class="next" :class="nextItem ? '' : 'placeholder'">
+      <current-item v-if="nextItem" v-bind="nextItem" />
     </schedule-card>
   </section>
 </template>
@@ -72,6 +72,11 @@ section.current {
 }
 .next {
   font-size: 1.9vmax;
+}
+
+.placeholder {
+  visibility: hidden;
+  min-height: 4em;
 }
 
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {

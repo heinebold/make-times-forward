@@ -1,5 +1,6 @@
 <template>
   <section class="schedule-container">
+    <h2>Schedule</h2>
     <div class="schedule-list">
       <schedule-card
         v-for="(item, index) in items"
@@ -54,30 +55,25 @@ export default {
 </script>
 
 <style scoped>
-.schedule-list {
-}
-
 .schedule-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden auto;
-}
 
-.schedule-container {
   width: 44vmax;
   height: 44vmax;
-}
-.schedule-container {
   font-size: 2vmax;
+}
+
+.schedule-container h2 {
+  font-size: 100%;
 }
 
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
   .schedule-container {
     width: 88vmin;
     height: 88vmin;
-  }
-  .schedule-container {
     font-size: 4vmin;
   }
 }
