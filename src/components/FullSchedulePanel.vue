@@ -8,6 +8,7 @@
         :class="selected === index ? 'selected' : ''"
         @click="$emit('select', index)"
       >
+        <i v-if="numbered">{{ index }} </i>
         <schedule-item v-bind="item" />
       </schedule-card>
     </div>
@@ -27,6 +28,7 @@ export default {
   props: {
     items: Array,
     selected: Number,
+    numbered: Boolean,
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
@@ -60,6 +62,17 @@ export default {
 <style scoped>
 h2 {
   font-size: 100%;
+}
+
+.schedule-card {
+  display: flex;
+  align-items: center;
+}
+.schedule-card > * {
+  flex-grow: 1;
+}
+i {
+  font-size: 70%;
 }
 
 .selected {

@@ -1,9 +1,9 @@
 <template>
-  <div class="card"><slot></slot></div>
+  <div class="schedule-card"><slot></slot></div>
 </template>
 
 <style scoped>
-.card {
+.schedule-card {
   margin: 0.2em;
   padding: 0.25em 0.4em;
   box-shadow: 0 0 0.2em lightslategray;

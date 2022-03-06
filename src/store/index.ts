@@ -47,6 +47,18 @@ export const store = createStore<State>({
       state.use12hTime = use12h;
       localStorage.setItem("timeDisplayMode", use12h ? "12h" : "24h");
     },
+    updateScheduleItem(state, payload: { index: number; newItem: TimeSlot }) {
+      state.schedule[payload.index] = payload.newItem;
+      localStorage.setItem("schedule", JSON.stringify(state.schedule));
+    },
+    addScheduleItem(state, newItem: TimeSlot) {
+      state.schedule[state.schedule.length] = newItem;
+      localStorage.setItem("schedule", JSON.stringify(state.schedule));
+    },
+    deleteScheduleItem(state, index: number) {
+      state.schedule.splice(index, 1);
+      localStorage.setItem("schedule", JSON.stringify(state.schedule));
+    },
   },
 });
 

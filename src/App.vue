@@ -31,7 +31,8 @@ function clockEmoji(time: Dayjs): string {
     <h1 title="Mach Mal Voran">Make Times Forward</h1>
     <MainLogo class="logo" />
     <nav>
-      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/">Display</RouterLink>
+      <RouterLink to="/edit-schedule">Edit</RouterLink>
       <RouterLink to="/settings">Settings</RouterLink>
       <RouterLink to="/about">About</RouterLink>
       <TextClock
