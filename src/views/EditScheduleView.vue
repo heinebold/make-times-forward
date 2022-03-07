@@ -75,6 +75,9 @@ function addItem() {
 }
 function deleteItem(index: number) {
   store.commit("deleteScheduleItem", index);
+  if (selectedIndex.value >= schedule.value.length) {
+    selectItem(selectedIndex.value);
+  }
 }
 </script>
 
