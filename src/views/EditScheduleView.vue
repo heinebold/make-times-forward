@@ -80,19 +80,30 @@ function deleteItem(index: number) {
 
 <style scoped>
 .edit-section {
+  --edit-font-size: 2.5vmax;
+}
+@media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
+  .edit-section {
+    --edit-font-size: 5vmin;
+  }
+}
+
+.edit-section {
   justify-content: space-evenly;
 }
 .selected-item {
   display: flex;
   flex-direction: column;
-  font-size: 110%;
+  font-size: var(--edit-font-size);
 }
 .selected-item label {
   display: flex;
   justify-content: space-between;
+  font-size: var(--edit-font-size);
 }
 .selected-item label input {
   width: 14em;
-  font-size: 4vmin;
+  max-width: 14em;
+  font-size: var(--edit-font-size);
 }
 </style>
