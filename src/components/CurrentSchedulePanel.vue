@@ -1,9 +1,12 @@
 <template>
   <main-square>
-    <schedule-card class="previous" :class="previousItem ? '' : 'placeholder'">
+    <schedule-card class="previous" :class="{ placeholder: !previousItem }">
       <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
-    <schedule-card class="current">
+    <schedule-card
+      class="current"
+      :class="{ placeholder: !(currentItem || (previousItem && nextItem)) }"
+    >
       <current-item v-if="currentItem" v-bind="currentItem" />
       <progress
         v-else-if="previousItem && nextItem"
@@ -11,7 +14,7 @@
         :value="appTime.diff(previousItem.end, 'seconds')"
       />
     </schedule-card>
-    <schedule-card class="next" :class="nextItem ? '' : 'placeholder'">
+    <schedule-card class="next" :class="{ placeholder: !nextItem }">
       <current-item v-if="nextItem" v-bind="nextItem" />
     </schedule-card>
   </main-square>
@@ -33,33 +36,30 @@ export default defineComponent({
   computed: {
     sortedItems(): Array<TimeSlot> {
       return [...(this.items as TimeSlot[])].sort(
-        (t1: TimeSlot, t2: TimeSlot) => {
-          return t1.start.diff(t2.start, "minutes");
-        }
+        (t1: TimeSlot, t2: TimeSlot) => t1.start.diff(t2.start, "minutes")
       );
     },
-    currentItemIndex(): number {
-      const foundIndex = (
-        this.sortedItems as unknown as Array<TimeSlot>
-      ).findIndex(
-        (item: TimeSlot) => !item.end.isBefore(this.appTime, "minute")
+    firstNonPastIndex(): number {
+      const foundIndex = this.sortedItems.findIndex((item: TimeSlot) =>
+        item.end.isAfter(this.appTime, "minute")
       );
       return foundIndex < 0 ? this.sortedItems.length : foundIndex;
     },
     currentItem(): TimeSlot | undefined {
-      const currentItem = this.sortedItems[this.currentItemIndex];
-      return currentItem.start.isAfter(this.appTime, "minute")
-        ? undefined
+      const currentItem = this.sortedItems[this.firstNonPastIndex];
+      return currentItem?.start.isAfter(this.appTime, "minute")
+        ? this.previousItem
+          ? undefined
+          : currentItem
         : currentItem;
     },
     previousItem(): TimeSlot | undefined {
-      return this.sortedItems[this.currentItemIndex - 1];
+      return this.sortedItems[this.firstNonPastIndex - 1];
     },
     nextItem(): TimeSlot | undefined {
-      const currentItem = this.sortedItems[this.currentItemIndex];
-      return currentItem.start.isAfter(this.appTime, "minute")
-        ? currentItem
-        : this.sortedItems[this.currentItemIndex + 1];
+      return this.currentItem
+        ? this.sortedItems[this.firstNonPastIndex + 1]
+        : this.sortedItems[this.firstNonPastIndex];
     },
 
     ...mapState({ appTime: "time" }),

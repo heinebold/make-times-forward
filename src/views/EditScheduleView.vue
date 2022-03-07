@@ -63,7 +63,6 @@ function updateItem(index: number) {
     start: dayjs(start.value),
     end: dayjs(end.value || start.value),
   };
-  console.log(newItem);
   store.commit("updateScheduleItem", { index, newItem });
 }
 function addItem() {
