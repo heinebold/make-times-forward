@@ -28,7 +28,7 @@ function readStoredSchedule() {
 }
 
 export const store = createStore<State>({
-  strict: process.env.NODE_ENV !== "production",
+  strict: import.meta.env.DEV,
   state() {
     const clock = dayjs;
 
