@@ -98,7 +98,7 @@ body {
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
-  font-family: "DejaVu Sans Condensed", serif;
+  font-family: "DejaVu Sans Condensed", "DejaVu Sans Condensed Bundled", serif;
   font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

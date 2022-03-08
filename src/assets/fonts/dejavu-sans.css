@@ -1,29 +1,29 @@
 /* Norma l*/
 
 @font-face {
-    font-family: "DejaVu Sans";
-    src: local('DejaVu Sans'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans.ttf") format("truetype");
+    font-family: "DejaVu Sans Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "DejaVu Sans";
-    src: local('DejaVu Sans'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans-Bold.ttf") format("truetype");
+    font-family: "DejaVu Sans Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans-Bold.ttf") format("truetype");
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "DejaVu Sans";
-    src: local('DejaVu Sans'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans-Oblique.ttf") format("truetype");
+    font-family: "DejaVu Sans Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans-Oblique.ttf") format("truetype");
     font-weight: normal;
     font-style: oblique;
 }
 
 @font-face {
-    font-family: "DejaVu Sans";
-    src: local('DejaVu Sans'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans-BoldOblique.ttf") format("truetype");
+    font-family: "DejaVu Sans Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSans-BoldOblique.ttf") format("truetype");
     font-weight: bold;
     font-style: oblique;
 }
@@ -32,29 +32,29 @@
 /* Condensed */
 
 @font-face {
-    font-family: "DejaVu Sans Condensed";
-    src: local('DejaVu Sans Condensed'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed.ttf") format("truetype");
+    font-family: "DejaVu Sans Condensed Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "DejaVu Sans Condensed";
-    src: local('DejaVu Sans Condensed'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed-Bold.ttf") format("truetype");
+    font-family: "DejaVu Sans Condensed Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed-Bold.ttf") format("truetype");
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "DejaVu Sans Condensed";
-    src: local('DejaVu Sans Condensed'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed-Oblique.ttf") format("truetype");
+    font-family: "DejaVu Sans Condensed Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed-Oblique.ttf") format("truetype");
     font-weight: normal;
     font-style: oblique;
 }
 
 @font-face {
-    font-family: "DejaVu Sans Condensed";
-    src: local('DejaVu Sans Condensed'), url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed-BoldOblique.ttf") format("truetype");
+    font-family: "DejaVu Sans Condensed Bundled";
+    src: url("@/assets/fonts/dejavu-sans/ttf/DejaVuSansCondensed-BoldOblique.ttf") format("truetype");
     font-weight: bold;
     font-style: oblique;
 }
