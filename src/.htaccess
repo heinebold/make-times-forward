@@ -1,0 +1,36 @@
+# This configures apache to support vue-router's history mode
+# It will only be present in the final build if you choose "apache" mode (build:apache)
+
+<IfModule mod_version.c>
+# If we can determine the version
+    <IfVersion >= 2.2.16>
+    # check whether we have a version that knows about FallbackResource
+        FallbackResource index.html
+    </IfVersion>
+    <IfVersion < 2.2.16>
+        # If we don't have FallbackResource, use mod_rewrite if present
+        <IfModule mod_rewrite.c>
+          RewriteEngine On
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . index.html [L]
+        </IfModule>
+        # If we have neither, we're out of luck.
+    </IfVersion>
+</IfModule>
+
+<IfModule !mod_version.c>
+# If we can't determine the version, we don't assume that we have FallbackResource and try mod_rewrite first
+    <IfModule mod_rewrite.c>
+      RewriteEngine On
+      RewriteRule ^index\.html$ - [L]
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteCond %{REQUEST_FILENAME} !-d
+      RewriteRule . index.html [L]
+    </IfModule>
+    <IfModule !mod_rewrite.c>
+    # but if we don't have mod_rewrite, let's try this before giving up.
+       FallbackResource index.html
+   </IfModule>
+</IfModule>
