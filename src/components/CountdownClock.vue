@@ -1,10 +1,5 @@
 <template>
-  <TextClock
-    :use12h="false"
-    :include-seconds="includeSeconds"
-    :time="time"
-    :prefix="clockPrefix"
-  />
+  <div class="textclock">{{ prefix }}{{ sign }}{{ displayTime }}</div>
 </template>
 
 <script lang="ts">
@@ -26,7 +21,6 @@ const signPlaceholder = " ";
 
 export default defineComponent({
   name: "CountdownClock",
-  components: { TextClock },
 
   props: {
     from: { type: Dayjs, required: true },
@@ -65,6 +59,12 @@ export default defineComponent({
     },
     clockPrefix(): string {
       return (this.prefix || "") + this.sign;
+    },
+    format(): string {
+      return this.includeSeconds ? "HH:mm:ss" : "HH:mm";
+    },
+    displayTime(): string {
+      return this.time.format(this.format);
     },
   },
 });

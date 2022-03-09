@@ -8,7 +8,6 @@ import type { Dayjs } from "dayjs";
 
 const store = useStore();
 const appTime = computed(() => store.state.time);
-const use12hTime = computed(() => store.state.use12hTime);
 
 function clockEmoji(time: Dayjs): string {
   let hour = time.hour() % 12;
@@ -39,7 +38,6 @@ function clockEmoji(time: Dayjs): string {
         :prefix="clockEmoji(appTime) + ' '"
         include-seconds
         :time="appTime"
-        :use12h="use12hTime"
       />
     </nav>
   </header>

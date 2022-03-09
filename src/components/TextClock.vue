@@ -4,23 +4,20 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(localizedFormat);
 
 export default defineComponent({
   name: "TextClock",
   props: {
     time: { type: Dayjs, required: true },
     includeSeconds: Boolean,
-    use12h: Boolean,
     prefix: String,
   },
   computed: {
     format(): string {
-      if (this.use12h) {
-        return this.includeSeconds ? "hh:mm:ss a" : "hh:mm a";
-      } else {
-        return this.includeSeconds ? "HH:mm:ss" : "HH:mm";
-      }
+      return this.includeSeconds ? "LTS" : "LT";
     },
     displayTime(): string {
       return this.time.format(this.format);

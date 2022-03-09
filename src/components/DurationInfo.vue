@@ -1,9 +1,8 @@
 <template>
   <div class="duration-info">
     <div class="schedule">
-      <text-clock :time="start" :use12h="use12hTime" /><template
-        v-if="durationMinutes"
-        >→<text-clock :time="end" :use12h="use12hTime"
+      <text-clock :time="start" /><template v-if="durationMinutes"
+        >→<text-clock :time="end"
       /></template>
     </div>
     <div v-if="durationMinutes">{{ durationMinutes }} min</div>
@@ -13,7 +12,6 @@
 <script lang="ts">
 import TextClock from "@/components/TextClock.vue";
 import dayjs, { Dayjs } from "dayjs";
-import { mapState } from "vuex";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -27,7 +25,6 @@ export default defineComponent({
     durationMinutes(): number {
       return (this.end as Dayjs).diff(this.start as Dayjs, "minutes");
     },
-    ...mapState(["use12hTime"]),
   },
 });
 </script>

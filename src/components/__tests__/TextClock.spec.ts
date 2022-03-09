@@ -3,12 +3,15 @@ import TextClock from "../TextClock.vue";
 import dayjs from "dayjs";
 
 describe("TextClock", () => {
+  import("dayjs/locale/de");
   it("renders hours and minutes of given time", () => {
+    dayjs.locale("de");
     mount(TextClock, { props: { time: dayjs("1999-01-31T13:37:42") } });
     cy.get("div.textclock").should("have.text", "13:37");
   });
 
   it("includes prefix", () => {
+    dayjs.locale("de");
     mount(TextClock, {
       props: { time: dayjs("1999-01-31T13:37:42"), prefix: "lol" },
     });
@@ -16,27 +19,18 @@ describe("TextClock", () => {
   });
 
   it("renders also seconds if told so", () => {
+    dayjs.locale("de");
     mount(TextClock, {
       props: { time: dayjs("1999-01-31T13:37:42"), includeSeconds: true },
     });
     cy.get("div.textclock").should("have.text", "13:37:42");
   });
 
-  it("uses 12h format if told so", () => {
+  it("uses locale", () => {
+    dayjs.locale("en");
     mount(TextClock, {
-      props: { time: dayjs("1999-01-31T13:37:42"), use12h: true },
+      props: { time: dayjs("1999-01-31T13:37:42"), includeSeconds: true },
     });
-    cy.get("div.textclock").should("have.text", "01:37 pm");
-  });
-
-  it("correctly shows seconds in 12h mode", () => {
-    mount(TextClock, {
-      props: {
-        time: dayjs("1999-01-31T03:37:42"),
-        use12h: true,
-        includeSeconds: true,
-      },
-    });
-    cy.get("div.textclock").should("have.text", "03:37:42 am");
+    cy.get("div.textclock").should("have.text", "1:37:42 PM");
   });
 });

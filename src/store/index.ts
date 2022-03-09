@@ -6,7 +6,6 @@ import type { TimeSlot } from "@/model/TimeSlot";
 export interface State {
   clock: () => Dayjs;
   time: Dayjs;
-  use12hTime: boolean;
   schedule: TimeSlot[];
 }
 
@@ -35,17 +34,12 @@ export const store = createStore<State>({
     return {
       clock,
       time: clock(),
-      use12hTime: localStorage.getItem("timeDisplayMode") === "12h",
       schedule: readStoredSchedule(),
     };
   },
   mutations: {
     updateClock(state) {
       state.time = state.clock();
-    },
-    set12hTime(state, use12h: boolean) {
-      state.use12hTime = use12h;
-      localStorage.setItem("timeDisplayMode", use12h ? "12h" : "24h");
     },
     updateScheduleItem(state, payload: { index: number; newItem: TimeSlot }) {
       state.schedule[payload.index] = payload.newItem;
