@@ -50,8 +50,6 @@ function clockEmoji(time: Dayjs): string {
 </template>
 
 <style>
-@import "@/assets/base.css";
-
 #app {
   --header-height: 8vmin;
 
