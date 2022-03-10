@@ -1,0 +1,30 @@
+{
+  "menu": {
+    "display": "Anzeige",
+    "edit": "Bearbeiten",
+    "settings": "Einstellungen",
+    "about": "Info"
+  },
+  "heading": {
+    "schedule": "Zeitplan",
+    "about": "Info und Rechtliches",
+    "settings": "Einstellungen"
+  },
+  "label": {
+    "start": "Start",
+    "end": "Ende",
+    "title": "Titel",
+    "add": "Hinzufügen",
+    "update": "Überschreiben",
+    "delete": {
+      "number": "Nr. {0} löschen"
+    }
+  },
+  "error": {
+    "404": {
+      "heading": "Nö, das gibt's hier nicht",
+      "subheading": "Sorry, aber wir haben keine Ahnung, was {0} sein soll.",
+      "message": "Probier's mal mit einem der Links oben - die führen zu Stellen, die es sogar wirklich gibt!"
+    }
+  }
+}

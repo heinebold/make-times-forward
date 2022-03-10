@@ -1,6 +1,6 @@
 <template>
   <main-square>
-    <h2>Schedule</h2>
+    <h2>{{ t("heading.schedule") }}</h2>
     <div class="schedule-list">
       <schedule-card
         v-for="(item, index) in typedItems"
@@ -22,9 +22,14 @@ import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "vuex";
 import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "FullSchedulePanel",
+  setup() {
+    const { t } = useI18n(); // call `useI18n`, and spread `t` from  `useI18n` returning
+    return { t }; // return render context that included `t`
+  },
   components: { MainSquare, ScheduleItem, ScheduleCard },
   props: {
     items: Array,

@@ -2,10 +2,12 @@
 import { RouterLink, RouterView } from "vue-router";
 import MainLogo from "@/components/icons/MainLogo.vue";
 import TextClock from "@/components/TextClock.vue";
+import { useI18n } from "vue-i18n";
 import { useStore } from "@/store";
 import { computed } from "vue";
 import type { Dayjs } from "dayjs";
 
+const { t } = useI18n();
 const store = useStore();
 const appTime = computed(() => store.state.time);
 
@@ -30,10 +32,10 @@ function clockEmoji(time: Dayjs): string {
     <h1 title="Mach Mal Voran">Make Times Forward</h1>
     <MainLogo class="logo" />
     <nav>
-      <RouterLink to="/">Display</RouterLink>
-      <RouterLink to="/edit-schedule">Edit</RouterLink>
-      <RouterLink to="/settings">Settings</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/">{{ t("menu.display") }}</RouterLink>
+      <RouterLink to="/edit-schedule">{{ t("menu.edit") }}</RouterLink>
+      <RouterLink to="/settings">{{ t("menu.settings") }}</RouterLink>
+      <RouterLink to="/about">{{ t("menu.about") }}</RouterLink>
       <TextClock
         :prefix="clockEmoji(appTime) + ' '"
         include-seconds

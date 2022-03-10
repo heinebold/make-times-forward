@@ -1,18 +1,19 @@
 <template>
   <div class="e404">
-    <h2>Nope, that's not a thing here</h2>
+    <h2>{{ t("error.404.heading") }}</h2>
     <section>
-      <h3>
-        Sorry, but we have no clue about this "<em>{{
-          decodeURI($route.path).substring(1)
-        }}</em
-        >" thingy.
-      </h3>
-      Why don't you use one of the links in the navigation bar? They lead you to
-      places that actually exist!
+      <i18n-t tag="h3" keypath="error.404.subheading">
+        <em>{{ decodeURI($route.path).substring(1) }}</em>
+      </i18n-t>
+      {{ t("error.404.message") }}
     </section>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+</script>
 
 <style scoped>
 .e404 {

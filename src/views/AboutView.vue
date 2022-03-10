@@ -1,8 +1,8 @@
 <template>
   <div class="about">
-    <h2>About</h2>
+    <h2>{{ t("heading.about") }}</h2>
     <section>
-      <h3>Attribution</h3>
+      <h3>{{ t("heading.attribution") }}</h3>
       <p>
         <a href="https://www.flaticon.com/free-icons/productivity"
           >Productivity icons created by monkik - Flaticon</a
@@ -14,7 +14,7 @@
       </p>
     </section>
     <section>
-      <h3>Disclaimer</h3>
+      <h3>{{ t("heading.disclaimer") }}</h3>
       <p>
         This is a private page, I do not earn any money with it and only intend
         to use it myself. The only reason you find it in the internet is because
@@ -29,6 +29,11 @@
     </section>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+</script>
 
 <style scoped>
 .about {

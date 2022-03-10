@@ -1,19 +1,27 @@
 <template>
   <main-square class="edit-section">
     <schedule-card class="selected-item">
-      <label>Title <input v-model="title" type="text" /></label>
-      <label>Start <input v-model="start" type="datetime-local" /></label>
-      <label>End <input v-model="end" type="datetime-local" /></label>
+      <label
+        >{{ t("label.title") }} <input v-model="title" type="text"
+      /></label>
+      <label
+        >{{ t("label.start") }} <input v-model="start" type="datetime-local"
+      /></label>
+      <label
+        >{{ t("label.end") }} <input v-model="end" type="datetime-local"
+      /></label>
     </schedule-card>
 
     <div>
       <template v-if="selectedIndex < 0">
-        <button @click="addItem">Add</button>
+        <button @click="addItem">{{ t("label.add") }}</button>
       </template>
       <template v-else>
-        <button @click="updateItem(selectedIndex)">Update</button>
+        <button @click="updateItem(selectedIndex)">
+          {{ t("label.update") }}
+        </button>
         <button @click="deleteItem(selectedIndex)">
-          Delete #{{ selectedIndex }}
+          {{ t("label.delete.number", [selectedIndex]) }}
         </button>
       </template>
     </div>
@@ -29,6 +37,7 @@
 
 <script setup lang="ts">
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
+import { useI18n } from "vue-i18n";
 import { useStore } from "@/store";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
@@ -37,6 +46,7 @@ import MainSquare from "@/components/MainSquare.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import dayjs from "dayjs";
 
+const { t } = useI18n();
 const store = useStore();
 const schedule = computed(() => store.state.schedule);
 

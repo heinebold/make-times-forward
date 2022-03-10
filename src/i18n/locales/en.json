@@ -1,0 +1,32 @@
+{
+  "menu": {
+    "display": "Display",
+    "edit": "Edit",
+    "settings": "Settings",
+    "about": "About"
+  },
+  "heading": {
+    "schedule": "Schedule",
+    "about": "About",
+    "attribution": "Attribution",
+    "disclaimer": "Disclaimer",
+    "settings": "Settings"
+  },
+  "label": {
+    "start": "Start",
+    "end": "End",
+    "title": "Title",
+    "add": "Add",
+    "update": "Update",
+    "delete": {
+      "number": "Delete #{0}"
+    }
+  },
+  "error": {
+    "404": {
+      "heading": "Nope, that's not a thing here",
+      "subheading": "Sorry, but we have no clue about this {0} thingy.",
+      "message": "Why don't you use one of the links in the navigation bar? They lead you to places that actually exist!"
+    }
+  }
+}
