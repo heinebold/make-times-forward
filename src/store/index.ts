@@ -7,6 +7,7 @@ export interface State {
   clock: () => Dayjs;
   time: Dayjs;
   use12hTime: boolean;
+  showPastInList: boolean;
   schedule: TimeSlot[];
 }
 
@@ -36,6 +37,7 @@ export const store = createStore<State>({
       clock,
       time: clock(),
       use12hTime: localStorage.getItem("timeDisplayMode") === "12h",
+      showPastInList: !!localStorage.getItem("showPastInList"),
       schedule: readStoredSchedule(),
     };
   },
@@ -46,6 +48,14 @@ export const store = createStore<State>({
     set12hTime(state, use12h: boolean) {
       state.use12hTime = use12h;
       localStorage.setItem("timeDisplayMode", use12h ? "12h" : "24h");
+    },
+    setShowPastInList(state, showPastInList: boolean) {
+      state.showPastInList = showPastInList;
+      if (showPastInList) {
+        localStorage.setItem("showPastInList", "showPastInList");
+      } else {
+        localStorage.removeItem("showPastInList");
+      }
     },
     updateScheduleItem(state, payload: { index: number; newItem: TimeSlot }) {
       state.schedule[payload.index] = payload.newItem;

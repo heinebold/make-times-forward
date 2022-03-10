@@ -7,12 +7,17 @@
         <h4>Time</h4>
         <time-settings />
       </section>
+      <section>
+        <h4>Schedule List</h4>
+        <list-settings />
+      </section>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import TimeSettings from "@/components/settings/TimeSettings.vue";
+import ListSettings from "@/components/settings/ListSettings.vue";
 </script>
 
 <style scoped>

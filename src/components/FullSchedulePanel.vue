@@ -2,15 +2,16 @@
   <main-square>
     <h2>Schedule</h2>
     <div class="schedule-list">
-      <schedule-card
-        v-for="(item, index) in typedItems"
-        :key="index"
-        :class="selected === index ? 'selected' : ''"
-        @click="$emit('select-item', index)"
-      >
-        <i v-if="numbered">{{ index }} </i>
-        <schedule-item v-bind="item" />
-      </schedule-card>
+      <template v-for="(item, index) in typedItems" :key="index">
+        <schedule-card
+          v-if="showPast || item.end.isAfter(appTime, 'minute')"
+          :class="selected === index ? 'selected' : ''"
+          @click="$emit('select-item', index)"
+        >
+          <i v-if="numbered">{{ index }} </i>
+          <schedule-item v-bind="item" />
+        </schedule-card>
+      </template>
     </div>
   </main-square>
 </template>
@@ -30,6 +31,7 @@ export default defineComponent({
     items: Array,
     selected: Number,
     numbered: Boolean,
+    showPast: { type: Boolean, default: true },
   },
   computed: {
     typedItems(): Array<TimeSlot> {
