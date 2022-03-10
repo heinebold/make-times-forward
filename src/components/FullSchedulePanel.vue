@@ -2,11 +2,14 @@
   <main-square>
     <h2>Schedule</h2>
     <div class="schedule-list">
-      <template v-for="(item, index) in typedItems" :key="index">
+      <template v-for="(item, index) in enhancedItems" :key="index">
         <schedule-card
           v-if="showPast || item.end.isAfter(appTime, 'minute')"
           :class="selected === index ? 'selected' : ''"
           @click="$emit('select-item', index)"
+          :style="{
+            marginBottom: '' + Math.min(10 * item.pause + 0.2, 2.4) + 'em',
+          }"
         >
           <i v-if="numbered">{{ index }} </i>
           <schedule-item v-bind="item" />
@@ -34,8 +37,34 @@ export default defineComponent({
     showPast: { type: Boolean, default: true },
   },
   computed: {
-    typedItems(): Array<TimeSlot> {
-      return this.items as TimeSlot[];
+    durationSum(): number {
+      return this.items?.length
+        ? (this.items as TimeSlot[])
+            .map((t) => t.end.diff(t.start, "minutes"))
+            .reduce(
+              (previousValue, currentValue) => previousValue + currentValue
+            )
+        : 1;
+    },
+    enhancedItems(): Array<TimeSlot & { pause: number }> {
+      if (!this.items) {
+        return [];
+      }
+      let result = [];
+      for (let itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
+        const item = this.items[itemIndex] as TimeSlot;
+        const successor = this.items[itemIndex + 1] as TimeSlot;
+        const pauseMinutes = successor?.start.isAfter(item.end)
+          ? successor.start.diff(item.end, "minutes")
+          : 0;
+        console.log(item.title, successor?.title, pauseMinutes);
+        const pause = pauseMinutes ? pauseMinutes / this.durationSum + 0.04 : 0;
+        result.push({
+          ...item,
+          pause,
+        });
+      }
+      return result;
     },
 
     ...mapState({ appTime: "time" }),
