@@ -27,11 +27,19 @@ import { mapState } from "vuex";
 import CurrentItem from "@/components/CurrentItem.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
+
+const dingDongSound = new Audio("/Single-ding-dong-tubular-bell.mp3");
+
 export default defineComponent({
   name: "CurrentSchedulePanel",
   components: { MainSquare, CurrentItem, ScheduleCard },
   props: {
     items: Array,
+  },
+  data() {
+    return {
+      previousCurrentItem: null as TimeSlot | undefined | null,
+    };
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
@@ -47,11 +55,19 @@ export default defineComponent({
     },
     currentItem(): TimeSlot | undefined {
       const currentItem = this.sortedItems[this.firstNonPastIndex];
-      return currentItem?.start.isAfter(this.appTime, "minute")
+      const actualResult = currentItem?.start.isAfter(this.appTime, "minute")
         ? this.previousItem
           ? undefined
           : currentItem
         : currentItem;
+
+      if (actualResult !== this.previousCurrentItem) {
+        this.previousCurrentItem === null || this.dingdong();
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.previousCurrentItem = actualResult;
+      }
+
+      return actualResult;
     },
     previousItem(): TimeSlot | undefined {
       return this.sortedItems[this.firstNonPastIndex - 1];
@@ -62,7 +78,12 @@ export default defineComponent({
         : this.sortedItems[this.firstNonPastIndex];
     },
 
-    ...mapState({ appTime: "time" }),
+    ...mapState({ appTime: "time", playSounds: "playSounds" }),
+  },
+  methods: {
+    dingdong() {
+      this.playSounds && dingDongSound.play();
+    },
   },
 });
 </script>

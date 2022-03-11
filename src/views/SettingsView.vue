@@ -8,8 +8,9 @@
         <time-settings />
       </section>
       <section>
-        <h4>Schedule List</h4>
+        <h4>Schedule View</h4>
         <list-settings />
+        <sound-settings />
       </section>
     </section>
   </div>
@@ -18,6 +19,7 @@
 <script setup lang="ts">
 import TimeSettings from "@/components/settings/TimeSettings.vue";
 import ListSettings from "@/components/settings/ListSettings.vue";
+import SoundSettings from "@/components/settings/SoundSettings.vue";
 </script>
 
 <style scoped>

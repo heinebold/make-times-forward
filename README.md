@@ -59,4 +59,5 @@ npm run lint
 ```
 
 ### Attribution
-[Productivity icons created by monkik - Flaticon](https://www.flaticon.com/free-icons/productivity)
+[Productivity icons created by monkik - Flaticon](https://www.flaticon.com/free-icons/productivity)  
+[Single Ding Dong Tubular Bell by Alexander - Orange Free Sounds](https://orangefreesounds.com/single-ding-dong-tubular-bell/)
