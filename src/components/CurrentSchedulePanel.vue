@@ -28,7 +28,9 @@ import CurrentItem from "@/components/CurrentItem.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
 
-const dingDongSound = new Audio("/Single-ding-dong-tubular-bell.mp3");
+const dingDongSound = new Audio(
+  import.meta.env.BASE_URL + "/Single-ding-dong-tubular-bell.mp3"
+);
 
 export default defineComponent({
   name: "CurrentSchedulePanel",
