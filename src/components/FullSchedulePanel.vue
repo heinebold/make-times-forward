@@ -57,7 +57,6 @@ export default defineComponent({
         const pauseMinutes = successor?.start.isAfter(item.end)
           ? successor.start.diff(item.end, "minutes")
           : 0;
-        console.log(item.title, successor?.title, pauseMinutes);
         const pause = pauseMinutes ? pauseMinutes / this.durationSum + 0.04 : 0;
         result.push({
           ...item,

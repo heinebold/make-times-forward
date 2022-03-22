@@ -97,6 +97,7 @@ export default defineComponent({
 
 .current {
   font-size: 2.5vmax;
+  font-weight: bold;
 }
 .previous {
   font-size: 1.4vmax;
