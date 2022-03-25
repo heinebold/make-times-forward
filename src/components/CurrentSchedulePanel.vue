@@ -96,6 +96,7 @@ export default defineComponent({
 }
 
 .current {
+  font-family: "DejaVu Sans", serif;
   font-size: 2.5vmax;
   font-weight: bold;
 }
