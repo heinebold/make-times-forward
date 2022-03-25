@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'DejaVu Sans Condensed';
+    src: local('DejaVu Sans Condensed'), local('DejaVuSansCondensed'),
+    url('woff/DejaVuSansCondensed.woff2') format('woff2'),
+    url('woff/DejaVuSansCondensed.woff') format('woff'),
+    url('ttf/DejaVuSansCondensed.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DejaVu Sans Condensed';
+    src: local('DejaVu Sans Condensed Bold'), local('DejaVuSansCondensed-Bold'),
+        url('woff/DejaVuSansCondensed-Bold.woff2') format('woff2'),
+        url('woff/DejaVuSansCondensed-Bold.woff') format('woff'),
+        url('ttf/DejaVuSansCondensed-Bold.ttf') format('ttf');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DejaVu Sans Condensed';
+    src: local('DejaVu Sans Condensed Oblique'), local('DejaVuSansCondensed-Oblique'),
+    url('woff/DejaVuSansCondensed-Oblique.woff2') format('woff2'),
+    url('woff/DejaVuSansCondensed-Oblique.woff') format('woff'),
+    url('ttf/DejaVuSansCondensed-Oblique.ttf') format('ttf');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'DejaVu Sans Condensed';
+    src: local('DejaVu Sans Condensed Bold Oblique'), local('DejaVuSansCondensed-BoldOblique'),
+    url('woff/DejaVuSansCondensed-BoldOblique.woff2') format('woff2'),
+    url('woff/DejaVuSansCondensed-BoldOblique.woff') format('woff'),
+    url('ttf/DejaVuSansCondensed-BoldOblique.ttf') format('ttf');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
