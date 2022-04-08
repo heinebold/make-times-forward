@@ -1,25 +1,14 @@
-# timetable
+# Make Times Forward
 
-This template should help get you started developing with Vue 3 in Vite.
+Display the (linear) schedule of an event. No backend, pure browser application that can run completely offline once it
+is loaded.
 
-## Recommended IDE Setup
+## Usage
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
+All data lives in LocalStorage. Create or modify your schedule in edit mode, show it in display mode, it's that simple!
 
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+You can even play a sound when the next schedule item starts. You can also turn that off because sound can be annoying.
+In case you speak German, you will also be annoyed by the horrible pun that gave this app its name.
 
 ## Project Setup
 
@@ -58,6 +47,7 @@ npm run test:e2e # or `npm run test:e2e:ci` for headless testing
 npm run lint
 ```
 
-### Attribution
-[Productivity icons created by monkik - Flaticon](https://www.flaticon.com/free-icons/productivity)  
-[Single Ding Dong Tubular Bell by Alexander - Orange Free Sounds](https://orangefreesounds.com/single-ding-dong-tubular-bell/)
+## Attribution
+
+- [Productivity icons created by monkik - Flaticon](https://www.flaticon.com/free-icons/productivity)
+- [Single Ding Dong Tubular Bell by Alexander - Orange Free Sounds](https://orangefreesounds.com/single-ding-dong-tubular-bell/)
