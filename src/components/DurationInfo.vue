@@ -13,8 +13,9 @@
 <script lang="ts">
 import TextClock from "@/components/TextClock.vue";
 import dayjs, { Dayjs } from "dayjs";
-import { mapState } from "vuex";
 import { defineComponent } from "vue";
+import { mapState } from "pinia";
+import { useSettingsStore } from "@/stores/settings";
 
 export default defineComponent({
   name: "DurationInfo",
@@ -27,7 +28,7 @@ export default defineComponent({
     durationMinutes(): number {
       return (this.end as Dayjs).diff(this.start as Dayjs, "minutes");
     },
-    ...mapState(["use12hTime"]),
+    ...mapState(useSettingsStore, ["use12hTime"]),
   },
 });
 </script>

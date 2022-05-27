@@ -5,10 +5,12 @@ import TextClock from "@/components/TextClock.vue";
 import { useStore } from "@/store";
 import { computed } from "vue";
 import type { Dayjs } from "dayjs";
+import { useSettingsStore } from "@/stores/settings";
 
 const store = useStore();
+const settingsStore = useSettingsStore();
 const appTime = computed(() => store.state.time);
-const use12hTime = computed(() => store.state.use12hTime);
+const use12hTime = computed(() => settingsStore.use12hTime);
 
 function clockEmoji(time: Dayjs): string {
   let hour = time.hour() % 12;

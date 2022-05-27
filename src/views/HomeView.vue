@@ -8,8 +8,10 @@ import CurrentSchedulePanel from "@/components/CurrentSchedulePanel.vue";
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
 import { useStore } from "@/store";
 import { computed } from "vue";
+import { useSettingsStore } from "@/stores/settings";
 
 const store = useStore();
+const settingsStore = useSettingsStore();
 const schedule = computed(() => store.state.schedule);
-const showPast = computed(() => store.state.showPastInList);
+const showPast = computed(() => settingsStore.showPastInList);
 </script>

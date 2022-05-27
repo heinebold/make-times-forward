@@ -23,10 +23,12 @@
 <script lang="ts">
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
-import { mapState } from "vuex";
+import { mapState as mapVuex } from "vuex";
+import { mapState } from "pinia";
 import CurrentItem from "@/components/CurrentItem.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
+import { useSettingsStore } from "@/stores/settings";
 
 const dingDongSound = new Audio(
   import.meta.env.BASE_URL + "/Single-ding-dong-tubular-bell.mp3"
@@ -80,7 +82,8 @@ export default defineComponent({
         : this.sortedItems[this.firstNonPastIndex];
     },
 
-    ...mapState({ appTime: "time", playSounds: "playSounds" }),
+    ...mapVuex({ appTime: "time" }),
+    ...mapState(useSettingsStore, ["playSounds"]),
   },
   methods: {
     dingdong() {

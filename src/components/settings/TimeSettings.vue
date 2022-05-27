@@ -7,12 +7,12 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "@/store";
 import { computed } from "vue";
+import { useSettingsStore } from "@/stores/settings";
 
-const store = useStore();
+const store = useSettingsStore();
 const use12hSetting = computed({
-  get: () => store.state.use12hTime,
-  set: (newValue: boolean) => store.commit("set12hTime", newValue),
+  get: () => store.use12hTime,
+  set: store.set12hTime,
 });
 </script>
