@@ -23,9 +23,10 @@
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import ScheduleItem from "@/components/ScheduleItem.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
-import { mapState } from "vuex";
+import { mapState } from "pinia";
 import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
+import { useClockStore } from "@/stores/clock";
 
 export default defineComponent({
   name: "FullSchedulePanel",
@@ -66,7 +67,7 @@ export default defineComponent({
       return result;
     },
 
-    ...mapState({ appTime: "time" }),
+    ...mapState(useClockStore, { appTime: "time" }),
   },
 });
 </script>

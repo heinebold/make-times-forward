@@ -14,8 +14,8 @@
         >
       </p>
       <p>
-        This app uses vue 3, vuex 4, vue-router 4, and dayjs, which all are
-        under MIT license.
+        This app uses vue 3, vue-router 4, and dayjs, which all are under MIT
+        license.
       </p>
     </section>
     <section>

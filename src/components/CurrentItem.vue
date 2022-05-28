@@ -29,12 +29,13 @@
 -->
 
 <script lang="ts">
-import { mapState } from "vuex";
+import { mapState } from "pinia";
 import dayjs, { Dayjs } from "dayjs";
 import CountdownClock from "@/components/CountdownClock.vue";
 import ElapsedSecondsMeter from "@/components/ElapsedSecondsMeter.vue";
 import DurationInfo from "@/components/DurationInfo.vue";
 import { defineComponent } from "vue";
+import { useClockStore } from "@/stores/clock";
 
 export default defineComponent({
   name: "CurrentItem",
@@ -54,7 +55,7 @@ export default defineComponent({
     hasStarted(): boolean {
       return !(this.appTime as Dayjs).isBefore(this.start as Dayjs, "second");
     },
-    ...mapState({ appTime: "time" }),
+    ...mapState(useClockStore, { appTime: "time" }),
   },
 });
 </script>
