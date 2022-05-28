@@ -29,16 +29,16 @@
 
 <script setup lang="ts">
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
-import { useStore } from "@/store";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import dayjs from "dayjs";
+import { useScheduleStore } from "@/stores/schedule";
 
-const store = useStore();
-const schedule = computed(() => store.state.schedule);
+const scheduleStore = useScheduleStore();
+const schedule = computed(() => scheduleStore.schedule);
 
 const selectedIndex: Ref<number> = ref(-1);
 
@@ -63,7 +63,7 @@ function updateItem(index: number) {
     start: dayjs(start.value),
     end: dayjs(end.value || start.value),
   };
-  store.commit("updateScheduleItem", { index, newItem });
+  scheduleStore.updateScheduleItem({ index, newItem });
 }
 function addItem() {
   const newItem: TimeSlot = {
@@ -71,10 +71,10 @@ function addItem() {
     start: dayjs(start.value),
     end: dayjs(end.value || start.value),
   };
-  store.commit("addScheduleItem", newItem);
+  scheduleStore.addScheduleItem(newItem);
 }
 function deleteItem(index: number) {
-  store.commit("deleteScheduleItem", index);
+  scheduleStore.deleteScheduleItem(index);
   if (selectedIndex.value >= schedule.value.length) {
     selectItem(selectedIndex.value);
   }

@@ -5,12 +5,12 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "@/store";
 import { computed } from "vue";
+import { useSettingsStore } from "@/stores/settings";
 
-const store = useStore();
+const store = useSettingsStore();
 const playSounds = computed({
-  get: () => store.state.playSounds,
-  set: (newValue: boolean) => store.commit("setPlaySounds", newValue),
+  get: () => store.playSounds,
+  set: store.setPlaySounds,
 });
 </script>

@@ -2,13 +2,15 @@
 import { RouterLink, RouterView } from "vue-router";
 import MainLogo from "@/components/icons/MainLogo.vue";
 import TextClock from "@/components/TextClock.vue";
-import { useStore } from "@/store";
 import { computed } from "vue";
 import type { Dayjs } from "dayjs";
+import { useSettingsStore } from "@/stores/settings";
+import { useClockStore } from "@/stores/clock";
 
-const store = useStore();
-const appTime = computed(() => store.state.time);
-const use12hTime = computed(() => store.state.use12hTime);
+const clockStore = useClockStore();
+const settingsStore = useSettingsStore();
+const appTime = computed(() => clockStore.time);
+const use12hTime = computed(() => settingsStore.use12hTime);
 
 function clockEmoji(time: Dayjs): string {
   let hour = time.hour() % 12;

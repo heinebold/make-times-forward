@@ -8,12 +8,12 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from "@/store";
 import { computed } from "vue";
+import { useSettingsStore } from "@/stores/settings";
 
-const store = useStore();
+const store = useSettingsStore();
 const showPastInList = computed({
-  get: () => store.state.showPastInList,
-  set: (newValue: boolean) => store.commit("setShowPastInList", newValue),
+  get: () => store.showPastInList,
+  set: store.setShowPastInList,
 });
 </script>
