@@ -5,6 +5,7 @@ import FullSchedulePanel from "../FullSchedulePanel.vue";
 import dayjs from "dayjs";
 import { createTestingPinia } from "@pinia/testing";
 import type { TimeSlot } from "../../model/TimeSlot";
+import { setAppClock } from "../../composables/clock";
 
 const simpleSchedule: TimeSlot[] = [
   {
@@ -45,14 +46,14 @@ function mountPanel(
 }
 
 describe("The FullSchedulePanel component", () => {
-  const now = dayjs("2020-03-01T14:00Z").toDate();
+  const now = dayjs("2020-03-01T14:00Z");
 
   beforeAll(() => {
-    vi.useFakeTimers({ now });
+    setAppClock(() => now);
   });
 
   afterAll(() => {
-    vi.useRealTimers();
+    setAppClock(dayjs);
   });
 
   it("Shows every item when showPast is true", () => {
