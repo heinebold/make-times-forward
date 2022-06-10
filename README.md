@@ -28,10 +28,10 @@ npm run dev
 npm run build
 ```
 
-### Run Unit Tests with [Cypress Component Testing](https://docs.cypress.io/guides/component-testing/introduction)
+### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit # or `npm run test:unit:ci` for headless testing
+npm run test:unit
 ```
 
 ### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
