@@ -41,9 +41,11 @@ function restartClockwork() {
   updateTime();
 }
 
-export function setAppClock(newClock: ClockFunction) {
+export function setAppClock(newClock: ClockFunction): ClockFunction {
+  const oldClock = appClock;
   appClock = newClock;
   startClock();
+  return oldClock;
 }
 
 export function useClock() {
