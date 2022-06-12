@@ -8,6 +8,12 @@
     :high="yellowRedBoundary"
   />
 </template>
+<!--
+  The strange "-0.01" minimum is a hack for webkit/chromium browsers:
+    For max = min ≤ value, Firefox shows a full meter, but Chromium an empty one.
+    I want the full bar for 0-Minute-Events, and this way, there'll be min < max also if max=0,
+    while not showing any visible difference to min=0
+-->
 
 <script lang="ts">
 import { defineComponent } from "vue";
