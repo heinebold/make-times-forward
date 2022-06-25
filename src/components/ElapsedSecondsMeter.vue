@@ -13,6 +13,9 @@
     For max = min ≤ value, Firefox shows a full meter, but Chromium an empty one.
     I want the full bar for 0-Minute-Events, and this way, there'll be min < max also if max=0,
     while not showing any visible difference to min=0
+
+    The `:value="Math.min(elapsed, duration)"` is of course visually identical to `:value="elapsed",
+    but it avoids useless DOM updates counting up to infinity without changing the actual look.
 -->
 
 <script lang="ts">
@@ -27,10 +30,8 @@ export default defineComponent({
   computed: {
     greenYellowBoundary(): number {
       const minutes = this.duration / 60;
-      return Math.max(
-        45,
-        60 * Math.min(Math.floor(minutes * 0.9), minutes - 1)
-      );
+      const boundaryMinutes = Math.min(Math.floor(minutes * 0.9), minutes - 1);
+      return Math.max(45, 60 * boundaryMinutes);
     },
     yellowRedBoundary(): number {
       return Math.max(this.greenYellowBoundary + 1, this.duration - 5);
