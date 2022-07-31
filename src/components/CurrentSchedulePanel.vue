@@ -40,11 +40,6 @@ export default defineComponent({
   props: {
     items: Array,
   },
-  data() {
-    return {
-      previousCurrentItem: null as TimeSlot | undefined | null,
-    };
-  },
   setup() {
     return { appTime: useClock() };
   },
@@ -62,19 +57,11 @@ export default defineComponent({
     },
     currentItem(): TimeSlot | undefined {
       const currentItem = this.sortedItems[this.firstNonPastIndex];
-      const actualResult = currentItem?.start.isAfter(this.appTime, "minute")
+      return currentItem?.start.isAfter(this.appTime, "minute")
         ? this.previousItem
           ? undefined
           : currentItem
         : currentItem;
-
-      if (actualResult !== this.previousCurrentItem) {
-        this.previousCurrentItem === null || this.dingdong();
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.previousCurrentItem = actualResult;
-      }
-
-      return actualResult;
     },
     previousItem(): TimeSlot | undefined {
       return this.sortedItems[this.firstNonPastIndex - 1];
@@ -85,6 +72,11 @@ export default defineComponent({
         : this.sortedItems[this.firstNonPastIndex];
     },
     ...mapState(useSettingsStore, ["playSounds"]),
+  },
+  watch: {
+    currentItem() {
+      this.dingdong();
+    },
   },
   methods: {
     dingdong() {
