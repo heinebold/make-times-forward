@@ -4,9 +4,10 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import ScheduleItem from "../ScheduleItem.vue";
 import dayjs from "dayjs";
 import { createTestingPinia } from "@pinia/testing";
+import { setAppClock } from "../../composables/clock";
 
 describe("The ScheduleItem component", () => {
-  const now = dayjs("2000-01-01T13:37:42Z").toDate();
+  const now = dayjs("2000-01-01T13:37:42Z");
   const start = dayjs("2000-01-01T13:40Z");
   const end = dayjs("2000-01-01T16:20Z");
   const title = "Some event";
@@ -14,7 +15,7 @@ describe("The ScheduleItem component", () => {
   let wrapper: VueWrapper;
 
   beforeAll(() => {
-    vi.useFakeTimers({ now });
+    setAppClock(() => now);
 
     wrapper = mount(ScheduleItem, {
       props: { start, end, title },
@@ -29,7 +30,7 @@ describe("The ScheduleItem component", () => {
   });
 
   afterAll(() => {
-    vi.useRealTimers();
+    setAppClock(dayjs);
   });
 
   it("Shows the title", () => {

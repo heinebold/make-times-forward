@@ -5,11 +5,10 @@ import TextClock from "@/components/TextClock.vue";
 import { computed } from "vue";
 import type { Dayjs } from "dayjs";
 import { useSettingsStore } from "@/stores/settings";
-import { useClockStore } from "@/stores/clock";
+import { useClock } from "@/composables/clock";
 
-const clockStore = useClockStore();
 const settingsStore = useSettingsStore();
-const appTime = computed(() => clockStore.time);
+const appTime = useClock();
 const use12hTime = computed(() => settingsStore.use12hTime);
 
 function clockEmoji(time: Dayjs): string {

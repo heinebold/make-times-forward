@@ -4,6 +4,7 @@ import { mount } from "@vue/test-utils";
 import DurationInfo from "../DurationInfo.vue";
 import dayjs from "dayjs";
 import { createTestingPinia } from "@pinia/testing";
+import { setAppClock } from "../../composables/clock";
 
 function mountDurationInfo(start: dayjs.Dayjs, end: dayjs.Dayjs) {
   return mount(DurationInfo, {
@@ -19,16 +20,16 @@ function mountDurationInfo(start: dayjs.Dayjs, end: dayjs.Dayjs) {
 }
 
 describe("The DurationInfo component", () => {
-  const now = dayjs("2000-01-01T13:37:42").toDate();
+  const now = dayjs("2000-01-01T13:37:42");
   const start = dayjs("2000-01-01T13:40");
   const end = dayjs("2000-01-01T16:20");
 
   beforeAll(() => {
-    vi.useFakeTimers({ now });
+    setAppClock(() => now);
   });
 
   afterAll(() => {
-    vi.useRealTimers();
+    setAppClock(dayjs);
   });
 
   it("Shows only the start time if start and end are identical", () => {

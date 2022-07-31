@@ -1,12 +1,13 @@
-import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { mount, VueWrapper } from "@vue/test-utils";
 import CurrentItem from "../CurrentItem.vue";
 import dayjs from "dayjs";
 import { createTestingPinia } from "@pinia/testing";
+import { setAppClock } from "../../composables/clock";
 
 describe("CurrentItem with a start date in the future", () => {
-  const now = dayjs("2000-01-01T13:37:42Z").toDate();
+  const now = dayjs("2000-01-01T13:37:42Z");
   const start = dayjs("2000-01-01T13:40Z");
   const end = dayjs("2000-01-01T16:20Z");
   const title = "Some future event";
@@ -14,7 +15,7 @@ describe("CurrentItem with a start date in the future", () => {
   let wrapper: VueWrapper;
 
   beforeAll(() => {
-    vi.useFakeTimers({ now });
+    setAppClock(() => now);
 
     wrapper = mount(CurrentItem, {
       props: { start, end, title },
@@ -29,7 +30,7 @@ describe("CurrentItem with a start date in the future", () => {
   });
 
   afterAll(() => {
-    vi.useRealTimers();
+    setAppClock(dayjs);
   });
 
   it("Shows the title", () => {
@@ -61,7 +62,7 @@ describe("CurrentItem with a start date in the future", () => {
 });
 
 describe("CurrentItem with a start date in the past and the end in the future", () => {
-  const now = dayjs("2000-01-01T13:37:42Z").toDate();
+  const now = dayjs("2000-01-01T13:37:42Z");
   const start = dayjs("2000-01-01T13:30Z");
   const end = dayjs("2000-01-01T16:20Z");
   const title = "Some ongoing event";
@@ -69,7 +70,7 @@ describe("CurrentItem with a start date in the past and the end in the future", 
   let wrapper: VueWrapper;
 
   beforeAll(() => {
-    vi.useFakeTimers({ now });
+    setAppClock(() => now);
 
     wrapper = mount(CurrentItem, {
       props: { start, end, title },
@@ -84,7 +85,7 @@ describe("CurrentItem with a start date in the past and the end in the future", 
   });
 
   afterAll(() => {
-    vi.useRealTimers();
+    setAppClock(dayjs);
   });
 
   it("Shows the title", () => {
@@ -115,7 +116,7 @@ describe("CurrentItem with a start date in the past and the end in the future", 
 });
 
 describe("CurrentItem with an end in the past", () => {
-  const now = dayjs("2000-01-01T16:20:42Z").toDate();
+  const now = dayjs("2000-01-01T16:20:42Z");
   const start = dayjs("2000-01-01T13:30Z");
   const end = dayjs("2000-01-01T14:42Z");
   const title = "Some past event";
@@ -123,7 +124,7 @@ describe("CurrentItem with an end in the past", () => {
   let wrapper: VueWrapper;
 
   beforeAll(() => {
-    vi.useFakeTimers({ now });
+    setAppClock(() => now);
 
     wrapper = mount(CurrentItem, {
       props: { start, end, title },
@@ -138,7 +139,7 @@ describe("CurrentItem with an end in the past", () => {
   });
 
   afterAll(() => {
-    vi.useRealTimers();
+    setAppClock(dayjs);
   });
 
   it("Shows the title", () => {

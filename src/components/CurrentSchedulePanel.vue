@@ -28,7 +28,7 @@ import CurrentItem from "@/components/CurrentItem.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
 import { useSettingsStore } from "@/stores/settings";
-import { useClockStore } from "@/stores/clock";
+import { useClock } from "@/composables/clock";
 
 const dingDongSound = new Audio(
   import.meta.env.BASE_URL + "/Single-ding-dong-tubular-bell.mp3"
@@ -44,6 +44,9 @@ export default defineComponent({
     return {
       previousCurrentItem: null as TimeSlot | undefined | null,
     };
+  },
+  setup() {
+    return { appTime: useClock() };
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
@@ -81,8 +84,6 @@ export default defineComponent({
         ? this.sortedItems[this.firstNonPastIndex + 1]
         : this.sortedItems[this.firstNonPastIndex];
     },
-
-    ...mapState(useClockStore, { appTime: "time" }),
     ...mapState(useSettingsStore, ["playSounds"]),
   },
   methods: {
