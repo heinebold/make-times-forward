@@ -7,10 +7,10 @@ const dummyClock = () => dayjs("1970-01-01T13:37:42.999Z");
 let appClock: ClockFunction = dummyClock;
 const time = ref(appClock());
 
-let timer: NodeJS.Timeout;
+const timer: { interval?: number; timeout?: number } = {};
 function clearTimer() {
-  clearInterval(timer);
-  clearTimeout(timer);
+  clearInterval(timer.interval);
+  clearTimeout(timer.timeout);
 }
 
 function startClock() {
@@ -32,12 +32,12 @@ function updateTime() {
 function adjustClock(millisecond: number) {
   const adjustTimeout = (millisecond > 900 ? 2000 : 1000) - millisecond;
   clearTimer();
-  timer = setTimeout(restartClockwork, adjustTimeout);
+  timer.timeout = setTimeout(restartClockwork, adjustTimeout);
 }
 
 function restartClockwork() {
   clearTimer();
-  timer = setInterval(tickClock, 1000);
+  timer.interval = setInterval(tickClock, 1000);
   updateTime();
 }
 
