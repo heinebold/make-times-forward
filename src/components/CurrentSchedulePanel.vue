@@ -29,10 +29,7 @@ import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useClock } from "@/composables/clock";
-
-const dingDongSound = new Audio(
-  import.meta.env.BASE_URL + "/Single-ding-dong-tubular-bell.mp3"
-);
+import { useSound } from "@/composables/sound";
 
 export default defineComponent({
   name: "CurrentSchedulePanel",
@@ -41,7 +38,10 @@ export default defineComponent({
     items: Array,
   },
   setup() {
-    return { appTime: useClock() };
+    return {
+      appTime: useClock(),
+      dingDongSound: useSound(),
+    };
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
@@ -80,7 +80,7 @@ export default defineComponent({
   },
   methods: {
     dingdong() {
-      this.playSounds && dingDongSound.play();
+      this.playSounds && this.dingDongSound.play();
     },
   },
 });
