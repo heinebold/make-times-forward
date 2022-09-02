@@ -1,5 +1,5 @@
 <template>
-  <main-square>
+  <main-square class="current-schedule">
     <schedule-card class="previous" :class="{ placeholder: !previousItem }">
       <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
