@@ -1,5 +1,5 @@
 <template>
-  <main-square>
+  <main-square class="current-schedule">
     <schedule-card class="previous" :class="{ placeholder: !previousItem }">
       <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
@@ -29,10 +29,7 @@ import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useClock } from "@/composables/clock";
-
-const dingDongSound = new Audio(
-  import.meta.env.BASE_URL + "/Single-ding-dong-tubular-bell.mp3"
-);
+import { useSound } from "@/composables/sound";
 
 export default defineComponent({
   name: "CurrentSchedulePanel",
@@ -40,13 +37,11 @@ export default defineComponent({
   props: {
     items: Array,
   },
-  data() {
-    return {
-      previousCurrentItem: null as TimeSlot | undefined | null,
-    };
-  },
   setup() {
-    return { appTime: useClock() };
+    return {
+      appTime: useClock(),
+      dingDongSound: useSound(),
+    };
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
@@ -62,19 +57,11 @@ export default defineComponent({
     },
     currentItem(): TimeSlot | undefined {
       const currentItem = this.sortedItems[this.firstNonPastIndex];
-      const actualResult = currentItem?.start.isAfter(this.appTime, "minute")
+      return currentItem?.start.isAfter(this.appTime, "minute")
         ? this.previousItem
           ? undefined
           : currentItem
         : currentItem;
-
-      if (actualResult !== this.previousCurrentItem) {
-        this.previousCurrentItem === null || this.dingdong();
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.previousCurrentItem = actualResult;
-      }
-
-      return actualResult;
     },
     previousItem(): TimeSlot | undefined {
       return this.sortedItems[this.firstNonPastIndex - 1];
@@ -86,9 +73,14 @@ export default defineComponent({
     },
     ...mapState(useSettingsStore, ["playSounds"]),
   },
+  watch: {
+    currentItem() {
+      this.dingdong();
+    },
+  },
   methods: {
     dingdong() {
-      this.playSounds && dingDongSound.play();
+      this.playSounds && this.dingDongSound.play();
     },
   },
 });
