@@ -18,6 +18,7 @@ function mountPanel(items: Schedule) {
     global: {
       plugins: [
         createTestingPinia({
+          initialState: { settings: { playSounds: true } },
           createSpy: vi.fn,
         }),
       ],
@@ -130,5 +131,46 @@ describe("The CurrentSchedulePanel component", () => {
   it.todo("plays the ding dong sound when sound playback is enabled", () => {
     mountPanel(simpleSchedule);
     expect(mockUseSound).toBeCalledTimes(1);
+  });
+});
+
+describe.todo("The DingDong sound on the Current Schedule Panel", () => {
+  const now = dayjs("2020-03-01T14:00Z");
+  const past = {
+    id: "past",
+    title: "Past",
+    start: dayjs("2020-03-01T12:00Z"),
+    end: dayjs("2020-03-01T13:30Z"),
+  };
+  const future = {
+    id: "future",
+    title: "Future",
+    start: dayjs("2020-03-01T23:00Z"),
+    end: dayjs("2020-03-02T00:42Z"),
+  };
+
+  beforeAll(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(now.toDate());
+    setAppClock(() => {
+      const result = dayjs();
+      console.log(result.toISOString());
+      return result;
+    });
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
+  it.skip("is played when the first item becomes current", () => {
+    mountPanel([past, future]);
+    vi.setSystemTime(future.start.toDate());
+    vi.advanceTimersToNextTimer();
+    /* the whole component is not picking up the change in time.
+    this is only happening in the test, it works in the app.
+    There's obviously a problem with reactivity in the test setup, but WHAT IST IT
+     */
+    expect(mockAudio.play).toBeCalledTimes(1);
   });
 });
