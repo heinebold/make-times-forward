@@ -3,17 +3,16 @@
     <schedule-card class="previous" :class="{ placeholder: !previousItem }">
       <current-item v-if="previousItem" v-bind="previousItem" />
     </schedule-card>
-    <schedule-card
-      class="current"
-      :class="{ placeholder: !(currentItem || (previousItem && nextItem)) }"
-    >
+
+    <schedule-card class="current" :class="{ placeholder: !scheduleIsOngoing }">
       <current-item v-if="currentItem" v-bind="currentItem" />
       <progress
-        v-else-if="previousItem && nextItem"
+        v-else-if="scheduleIsOngoing"
         :max="nextItem.start.diff(previousItem.end, 'seconds')"
         :value="appTime.diff(previousItem.end, 'seconds')"
       />
     </schedule-card>
+
     <schedule-card class="next" :class="{ placeholder: !nextItem }">
       <current-item v-if="nextItem" v-bind="nextItem" />
     </schedule-card>
@@ -56,12 +55,13 @@ export default defineComponent({
       return foundIndex < 0 ? this.sortedItems.length : foundIndex;
     },
     currentItem(): TimeSlot | undefined {
-      const currentItem = this.sortedItems[this.firstNonPastIndex];
-      return currentItem?.start.isAfter(this.appTime, "minute")
-        ? this.previousItem
-          ? undefined
-          : currentItem
-        : currentItem;
+      const firstNonPastItem = this.sortedItems[this.firstNonPastIndex];
+      // If the first non-past item is in the future, it is not actually a current item, so we return undefined - unless
+      // it is the first item of the schedule, which is to be shown in the center
+      return firstNonPastItem?.start.isAfter(this.appTime, "minute") &&
+        this.previousItem
+        ? undefined
+        : firstNonPastItem;
     },
     previousItem(): TimeSlot | undefined {
       return this.sortedItems[this.firstNonPastIndex - 1];
@@ -70,6 +70,9 @@ export default defineComponent({
       return this.currentItem
         ? this.sortedItems[this.firstNonPastIndex + 1]
         : this.sortedItems[this.firstNonPastIndex];
+    },
+    scheduleIsOngoing(): boolean {
+      return !!(this.currentItem || (this.nextItem && this.previousItem));
     },
     ...mapState(useSettingsStore, ["playSounds"]),
   },
@@ -80,14 +83,16 @@ export default defineComponent({
   },
   methods: {
     dingdong() {
-      this.playSounds && this.dingDongSound.play();
+      if (this.playSounds) {
+        this.dingDongSound.play();
+      }
     },
   },
 });
 </script>
 
 <style scoped>
-.main-square {
+.current-schedule {
   justify-content: space-evenly;
 }
 
