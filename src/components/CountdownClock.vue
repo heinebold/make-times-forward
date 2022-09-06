@@ -9,17 +9,17 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import TextClock from "@/components/TextClock.vue";
 
 type Precision = "minutes" | "seconds";
+const date0 = dayjs("1970-01-01T00:00:00");
 
 function countdown(from: Dayjs, to: Dayjs, precision: Precision): Dayjs {
   const normalizedFrom = from.startOf(precision);
   const normalizedTo = to.startOf(precision);
-  return normalizedTo
-    .subtract(normalizedFrom.unix(), "seconds")
-    .subtract(normalizedFrom.utcOffset(), "minutes");
+  const diff = normalizedTo.diff(normalizedFrom, precision);
+  return date0.add(diff, precision);
 }
 
 const signPlaceholder = " ";
