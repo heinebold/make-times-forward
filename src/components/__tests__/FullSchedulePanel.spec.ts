@@ -94,13 +94,13 @@ describe("The FullSchedulePanel component", () => {
 
   it("Numbers the items correctly when told to", () => {
     const wrapper = mountPanel({ showPast: false, numbered: true });
-    expect(wrapper.findAll("i").map((e) => e.text())).toEqual(["1", "2"]);
+    expect(wrapper.findAll("label").map((e) => e.text())).toEqual(["1", "2"]);
     expect(wrapper.text()).toMatch(/1\s*Present.*2\s*Future/);
   });
 
   it("Doesn't show numbers unless told so", () => {
     const wrapper = mountPanel({ showPast: false });
-    expect(wrapper.findAll("i").length).toEqual(0);
+    expect(wrapper.findAll("label").length).toEqual(0);
   });
 
   it("Doesn't select on click", () => {

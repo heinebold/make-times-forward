@@ -5,13 +5,11 @@
       <template v-for="(item, index) in enhancedItems" :key="index">
         <schedule-card
           v-if="showPast || item.end.isAfter(appTime, 'minute')"
-          :class="selected === index ? 'selected' : ''"
+          :class="{ selected: index === selected }"
+          :style="{ marginBottom: pauseMargin(item.pause) }"
           @click="$emit('select-item', index)"
-          :style="{
-            marginBottom: '' + Math.min(10 * item.pause + 0.2, 2.4) + 'em',
-          }"
         >
-          <i v-if="numbered">{{ index }} </i>
+          <label v-if="numbered">{{ index }}</label>
           <schedule-item v-bind="item" />
         </schedule-card>
       </template>
@@ -57,17 +55,23 @@ export default defineComponent({
       for (let itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
         const item = this.items[itemIndex] as TimeSlot;
         const successor = this.items[itemIndex + 1] as TimeSlot;
-        const pauseMinutes = successor?.start.isAfter(item.end)
-          ? successor.start.diff(item.end, "minutes")
-          : 0;
-        const pause = pauseMinutes ? pauseMinutes / this.durationSum + 0.04 : 0;
         result.push({
           ...item,
-          pause,
+          pause: this.pause(item, successor),
         });
       }
       return result;
     },
+  },
+  methods: {
+    pause(item: TimeSlot, successor?: TimeSlot) {
+      const pauseMinutes = successor?.start.isAfter(item.end)
+        ? successor.start.diff(item.end, "minutes")
+        : 0;
+      return pauseMinutes / this.durationSum;
+    },
+    pauseMargin: (pause: number) =>
+      pause ? `${Math.min(10 * pause, 1.8) + 0.6}em` : 0,
   },
 });
 </script>
@@ -84,8 +88,9 @@ h2 {
 .schedule-card > * {
   flex-grow: 1;
 }
-i {
+.schedule-list label {
   font-size: 70%;
+  font-style: italic;
 }
 
 .selected {
