@@ -22,7 +22,7 @@
   <full-schedule-panel
     numbered
     :items="schedule"
-    :selected="selectedIndex"
+    v-model:selected="selectedIndex"
     @select-item="selectItem"
   />
 </template>
@@ -46,8 +46,7 @@ const title: Ref<string> = ref("");
 const start: Ref<string | undefined> = ref(undefined);
 const end: Ref<string | undefined> = ref(undefined);
 
-function selectItem(index: number) {
-  selectedIndex.value = index === selectedIndex.value ? -1 : index;
+function selectItem() {
   if (selectedIndex.value >= 0) {
     title.value = schedule.value[selectedIndex.value].title;
     start.value =
