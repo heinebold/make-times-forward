@@ -1,20 +1,18 @@
 <template>
   <main-square class="edit-section">
     <schedule-card class="selected-item">
-      <label>Title <input v-model="title" type="text" /></label>
-      <label>Start <input v-model="start" type="datetime-local" /></label>
-      <label>End <input v-model="end" type="datetime-local" /></label>
+      <edit-item v-model:model-value="currentItem" />
     </schedule-card>
 
     <div>
       <template v-if="selectedIndex < 0">
-        <button @click="addItem">Add</button>
+        <button :disabled="!currentItem?.title" @click="addItem">Add</button>
       </template>
       <template v-else>
-        <button @click="updateItem(selectedIndex)">Update</button>
-        <button @click="deleteItem(selectedIndex)">
-          Delete #{{ selectedIndex }}
+        <button :disabled="!currentItem?.title" @click="updateItem">
+          Update
         </button>
+        <button @click="deleteItem">Delete #{{ selectedIndex }}</button>
       </template>
     </div>
   </main-square>
@@ -33,32 +31,13 @@ import { computed, ref, watch } from "vue";
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
-import dayjs from "dayjs";
 import { useScheduleStore } from "@/stores/schedule";
+import EditItem from "@/components/EditItem.vue";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
-
-const selectedIndex: Ref<number> = ref(-1);
-
-const title: Ref<string> = ref("");
-const start: Ref<string | undefined> = ref(undefined);
-const end: Ref<string | undefined> = ref(undefined);
-
-const currentItem = computed({
-  get() {
-    return {
-      title: title.value,
-      start: dayjs(start.value),
-      end: dayjs(end.value || start.value),
-    } as TimeSlot;
-  },
-  set(newItem: TimeSlot) {
-    title.value = newItem.title;
-    start.value = newItem.start.format("YYYY-MM-DDTHH:mm");
-    end.value = newItem.end.format("YYYY-MM-DDTHH:mm");
-  },
-});
+const selectedIndex = ref(-1);
+const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
 
 watch(selectedIndex, (newSelectedIndex: number) => {
   if (newSelectedIndex >= 0) {
@@ -66,15 +45,21 @@ watch(selectedIndex, (newSelectedIndex: number) => {
   }
 });
 
-function updateItem(index: number) {
-  const newItem: TimeSlot = currentItem.value;
-  scheduleStore.updateScheduleItem({ index, newItem });
+function updateItem() {
+  if (currentItem.value) {
+    scheduleStore.updateScheduleItem({
+      index: selectedIndex.value,
+      newItem: currentItem.value,
+    });
+  }
 }
 function addItem() {
-  scheduleStore.addScheduleItem(currentItem.value);
+  if (currentItem.value) {
+    scheduleStore.addScheduleItem(currentItem.value);
+  }
 }
-function deleteItem(index: number) {
-  scheduleStore.deleteScheduleItem(index);
+function deleteItem() {
+  scheduleStore.deleteScheduleItem(selectedIndex.value);
   if (selectedIndex.value >= schedule.value.length) {
     selectedIndex.value = -1;
   }
@@ -97,16 +82,6 @@ function deleteItem(index: number) {
 .selected-item {
   display: flex;
   flex-direction: column;
-  font-size: var(--edit-font-size);
-}
-.selected-item label {
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--edit-font-size);
-}
-.selected-item label input {
-  width: 14em;
-  max-width: 14em;
   font-size: var(--edit-font-size);
 }
 </style>
