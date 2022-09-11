@@ -23,14 +23,13 @@
     numbered
     :items="schedule"
     v-model:selected="selectedIndex"
-    @select-item="selectItem"
   />
 </template>
 
 <script setup lang="ts">
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
 import type { Ref } from "vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
@@ -46,36 +45,38 @@ const title: Ref<string> = ref("");
 const start: Ref<string | undefined> = ref(undefined);
 const end: Ref<string | undefined> = ref(undefined);
 
-function selectItem() {
-  if (selectedIndex.value >= 0) {
-    title.value = schedule.value[selectedIndex.value].title;
-    start.value =
-      schedule.value[selectedIndex.value].start.format("YYYY-MM-DDTHH:mm");
-    end.value =
-      schedule.value[selectedIndex.value].end.format("YYYY-MM-DDTHH:mm");
+const currentItem = computed({
+  get() {
+    return {
+      title: title.value,
+      start: dayjs(start.value),
+      end: dayjs(end.value || start.value),
+    } as TimeSlot;
+  },
+  set(newItem: TimeSlot) {
+    title.value = newItem.title;
+    start.value = newItem.start.format("YYYY-MM-DDTHH:mm");
+    end.value = newItem.end.format("YYYY-MM-DDTHH:mm");
+  },
+});
+
+watch(selectedIndex, (newSelectedIndex: number) => {
+  if (newSelectedIndex >= 0) {
+    currentItem.value = schedule.value[newSelectedIndex];
   }
-}
+});
 
 function updateItem(index: number) {
-  const newItem: TimeSlot = {
-    title: title.value,
-    start: dayjs(start.value),
-    end: dayjs(end.value || start.value),
-  };
+  const newItem: TimeSlot = currentItem.value;
   scheduleStore.updateScheduleItem({ index, newItem });
 }
 function addItem() {
-  const newItem: TimeSlot = {
-    title: title.value,
-    start: dayjs(start.value),
-    end: dayjs(end.value || start.value),
-  };
-  scheduleStore.addScheduleItem(newItem);
+  scheduleStore.addScheduleItem(currentItem.value);
 }
 function deleteItem(index: number) {
   scheduleStore.deleteScheduleItem(index);
   if (selectedIndex.value >= schedule.value.length) {
-    selectItem(selectedIndex.value);
+    selectedIndex.value = -1;
   }
 }
 </script>

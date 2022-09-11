@@ -7,10 +7,7 @@
           v-if="showPast || item.end.isAfter(appTime, 'minute')"
           :class="{ selected: index === selected }"
           :style="{ marginBottom: pauseMargin(item.pause) }"
-          @click="
-            $emit('update:selected', index === selected ? -1 : index);
-            $emit('select-item');
-          "
+          @click="$emit('update:selected', index === selected ? -1 : index)"
         >
           <label v-if="numbered">{{ index }}</label>
           <schedule-item v-bind="item" />
