@@ -65,13 +65,16 @@ export default defineComponent({
   },
   methods: {
     pause(item: TimeSlot, successor?: TimeSlot) {
+      if (!this.durationSum) {
+        return 0.015;
+      }
       const pauseMinutes = successor?.start.isAfter(item.end)
         ? successor.start.diff(item.end, "minutes")
         : 0;
       return pauseMinutes / this.durationSum;
     },
     pauseMargin: (pause: number) =>
-      pause ? `${Math.min(10 * pause, 1.8) + 0.6}em` : 0,
+      pause ? `${Math.min(8 * pause, 2.5) + 0.4}em` : 0,
   },
 });
 </script>
