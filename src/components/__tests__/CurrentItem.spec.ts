@@ -146,10 +146,11 @@ describe("CurrentItem with an end in the past", () => {
     expect(wrapper.find(".title").text()).toEqual(title);
   });
 
-  it("Shows a meter", () => {
+  it("Shows no meter", () => {
+    expect(wrapper.findAll("meter").length).toBe(0);
     expect(
       wrapper.findAllComponents({ name: "ElapsedSecondsMeter" })
-    ).toHaveLength(1);
+    ).toHaveLength(0);
   });
 
   it("Shows duration info", () => {

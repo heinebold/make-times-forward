@@ -14,7 +14,7 @@
       </div>
     </div>
     <elapsed-seconds-meter
-      v-if="hasStarted"
+      v-if="hasStarted && !hasEnded"
       :duration="durationSeconds"
       :elapsed="elapsedSeconds"
     />
@@ -50,7 +50,9 @@ export default defineComponent({
     hasStarted(): boolean {
       return !(this.appTime as Dayjs).isBefore(this.start as Dayjs, "second");
     },
-    // ...mapState(useClockStore, { appTime: "time" }),
+    hasEnded(): boolean {
+      return (this.appTime as Dayjs).isAfter(this.end as Dayjs, "second");
+    },
   },
 });
 </script>
