@@ -9,16 +9,19 @@ import { setAppClock } from "../../composables/clock";
 
 const simpleSchedule: TimeSlot[] = [
   {
+    id: "past",
     title: "Past",
     start: dayjs("2020-03-01T12:00Z"),
     end: dayjs("2020-03-01T13:30Z"),
   },
   {
+    id: "present",
     title: "Present",
     start: dayjs("2020-03-01T13:37Z"),
     end: dayjs("2020-03-01T14:20Z"),
   },
   {
+    id: "future",
     title: "Future",
     start: dayjs("2020-03-01T23:00Z"),
     end: dayjs("2020-03-02T00:42Z"),

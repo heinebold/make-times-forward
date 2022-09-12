@@ -28,21 +28,25 @@ function mountPanel(items: TimeSlot[]) {
 describe("The CurrentSchedulePanel component", () => {
   const now = dayjs("2020-03-01T14:00Z");
   const past = {
+    id: "past",
     title: "Past",
     start: dayjs("2020-03-01T12:00Z"),
     end: dayjs("2020-03-01T13:30Z"),
   };
   const present = {
+    id: "present",
     title: "Present",
     start: dayjs("2020-03-01T13:37Z"),
     end: dayjs("2020-03-01T14:20Z"),
   };
   const future = {
+    id: "future",
     title: "Future",
     start: dayjs("2020-03-01T23:00Z"),
     end: dayjs("2020-03-02T00:42Z"),
   };
   const future2 = {
+    id: "future",
     title: "Future",
     start: dayjs("2020-03-02T01:23Z"),
     end: dayjs("2020-03-02T02:34Z"),

@@ -1,5 +1,5 @@
 <template>
-  <div class="schedule-item">
+  <div class="schedule-item" :title="modelValue?.id">
     <label>Title <input v-model="title" type="text" /></label>
     <label>Start <input v-model="start" type="datetime-local" /></label>
     <label>End <input v-model="end" type="datetime-local" /></label>
@@ -32,6 +32,7 @@ function emitUpdate(update: { title?: string; start?: string; end?: string }) {
     title: update.title ?? title.value ?? "",
     start: dayjs(update.start ?? start.value),
     end: dayjs(update.end ?? end.value ?? update.start ?? start.value),
+    id: props.modelValue?.id ?? "",
   });
 }
 </script>

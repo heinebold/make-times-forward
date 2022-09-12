@@ -42,6 +42,8 @@ const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
 watch(selectedIndex, (newSelectedIndex: number) => {
   if (newSelectedIndex >= 0) {
     currentItem.value = schedule.value[newSelectedIndex];
+  } else if (currentItem.value) {
+    currentItem.value = { ...currentItem.value, id: "" };
   }
 });
 
