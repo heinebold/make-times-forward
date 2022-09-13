@@ -4,6 +4,7 @@
     <div class="schedule-list">
       <template v-for="(item, index) in enhancedItems" :key="index">
         <schedule-card
+          class="schedule-entry"
           v-if="showPast || item.end.isAfter(appTime, 'minute')"
           :class="{ selected: index === selected }"
           :style="{ marginBottom: pauseMargin(item.pause) }"
@@ -84,14 +85,14 @@ h2 {
   font-size: 100%;
 }
 
-.schedule-card {
+.schedule-entry {
   display: flex;
   align-items: center;
 }
-.schedule-card > * {
+.schedule-entry > * {
   flex-grow: 1;
 }
-.schedule-list label {
+.schedule-entry label {
   font-size: 70%;
   font-style: italic;
 }
