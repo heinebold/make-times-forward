@@ -5,14 +5,11 @@
     </schedule-card>
 
     <div>
-      <template v-if="selectedIndex < 0">
-        <button :disabled="!currentItem?.title" @click="addItem">Add</button>
-      </template>
-      <template v-else>
+      <template v-if="selectedId">
         <button :disabled="!currentItem?.title" @click="updateItem">
           Update
         </button>
-        <button @click="deleteItem">Delete #{{ selectedIndex }}</button>
+        <button @click="deleteItem">Delete #{{ currentIndex }}</button>
       </template>
     </div>
   </main-square>
@@ -20,7 +17,7 @@
   <full-schedule-panel
     numbered
     :items="schedule"
-    v-model:selected="selectedIndex"
+    v-model:selected="selectedId"
   />
 </template>
 
@@ -36,12 +33,15 @@ import EditItem from "@/components/EditItem.vue";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
-const selectedIndex = ref(-1);
+const selectedId = ref("");
 const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
+const currentIndex = computed(() =>
+  schedule.value.findIndex((t) => t.id === selectedId.value)
+);
 
-watch(selectedIndex, (newSelectedIndex: number) => {
-  if (newSelectedIndex >= 0) {
-    currentItem.value = schedule.value[newSelectedIndex];
+watch(selectedId, (newSelectedId: string) => {
+  if (newSelectedId.length) {
+    currentItem.value = schedule.value.find((t) => t.id === newSelectedId);
   } else if (currentItem.value) {
     currentItem.value = { ...currentItem.value, id: "" };
   }
@@ -49,10 +49,7 @@ watch(selectedIndex, (newSelectedIndex: number) => {
 
 function updateItem() {
   if (currentItem.value) {
-    scheduleStore.updateScheduleItem({
-      index: selectedIndex.value,
-      newItem: currentItem.value,
-    });
+    scheduleStore.updateScheduleItem(currentItem.value);
   }
 }
 function addItem() {
@@ -61,10 +58,9 @@ function addItem() {
   }
 }
 function deleteItem() {
-  scheduleStore.deleteScheduleItem(selectedIndex.value);
-  if (selectedIndex.value >= schedule.value.length) {
-    selectedIndex.value = -1;
-  }
+  const selectedIndex = currentIndex.value;
+  scheduleStore.deleteScheduleItem(selectedId.value);
+  selectedId.value = schedule.value[selectedIndex]?.id ?? "";
 }
 </script>
 

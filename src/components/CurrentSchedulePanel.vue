@@ -44,9 +44,8 @@ export default defineComponent({
   },
   computed: {
     sortedItems(): Array<TimeSlot> {
-      return [...(this.items as TimeSlot[])].sort(
-        (t1: TimeSlot, t2: TimeSlot) => t1.start.diff(t2.start, "minutes")
-      );
+      // TODO properly type the prop and remove this, now that it's not needed for sorting anymore
+      return (this.items ?? []) as TimeSlot[];
     },
     firstNonPastIndex(): number {
       const foundIndex = this.sortedItems.findIndex((item: TimeSlot) =>

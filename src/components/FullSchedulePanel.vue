@@ -2,13 +2,13 @@
   <main-square>
     <h2>Schedule</h2>
     <div class="schedule-list">
-      <template v-for="(item, index) in enhancedItems" :key="index">
+      <template v-for="(item, index) in enhancedItems" :key="item.id">
         <schedule-card
           class="schedule-entry"
           v-if="showPast || item.end.isAfter(appTime, 'minute')"
-          :class="{ selected: index === selected }"
+          :class="{ selected: item.id === selected }"
           :style="{ marginBottom: pauseMargin(item.pause) }"
-          @click="$emit('update:selected', index === selected ? -1 : index)"
+          @click="$emit('update:selected', item.id === selected ? '' : item.id)"
         >
           <label v-if="numbered">{{ index }}</label>
           <schedule-item v-bind="item" />
@@ -31,7 +31,7 @@ export default defineComponent({
   components: { MainSquare, ScheduleItem, ScheduleCard },
   props: {
     items: Array,
-    selected: Number,
+    selected: String,
     numbered: Boolean,
     showPast: { type: Boolean, default: true },
   },
@@ -42,7 +42,7 @@ export default defineComponent({
     durationSum(): number {
       return this.items?.length
         ? (this.items as TimeSlot[])
-            .map((t) => t.end.diff(t.start, "minutes"))
+            .map((t) => Math.abs(t.end.diff(t.start, "minutes")))
             .reduce(
               (previousValue, currentValue) => previousValue + currentValue
             )

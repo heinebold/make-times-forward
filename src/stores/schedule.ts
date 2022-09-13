@@ -12,12 +12,14 @@ function generateId() {
   )}-${Math.round(Math.random() * 10000)}`;
 }
 
-function readRawStoredSchedule(): object[] {
+type TimeSlotJson = { [key in keyof TimeSlot]: string };
+
+function readRawStoredSchedule(): TimeSlotJson[] {
   try {
     const parsedJSON = JSON.parse(
       localStorage.getItem("schedule") || "",
       (k, v) => {
-        return k === "start" || k === "end" ? dayjs(v) : v;
+        return v === null ? undefined : v;
       }
     );
     return Array.isArray(parsedJSON) ? parsedJSON : [];
@@ -27,12 +29,16 @@ function readRawStoredSchedule(): object[] {
 }
 
 function readStoredSchedule(): TimeSlot[] {
-  return readRawStoredSchedule().map((v: Partial<TimeSlot>) => ({
-    title: v.title ?? "",
-    start: v.start ?? dayjs(),
-    end: v.end ?? v.start ?? dayjs(),
-    id: generateId(),
-  }));
+  return readRawStoredSchedule().map((v: TimeSlotJson) => {
+    const id = generateId();
+    const title = v.title?.trim() ?? "";
+    const loadedStart = dayjs(v.start ?? v.end);
+    const loadedEnd = dayjs(v.end ?? v.start);
+    const correctDateOrder = !loadedStart.isAfter(loadedEnd, "minute");
+    const start = correctDateOrder ? loadedStart : loadedEnd;
+    const end = correctDateOrder ? loadedEnd : loadedStart;
+    return { title, start, end, id };
+  });
 }
 
 function saveSchedule(schedule: TimeSlot[]) {
@@ -42,10 +48,15 @@ function saveSchedule(schedule: TimeSlot[]) {
   );
 }
 
+const byStart = (t1: TimeSlot, t2: TimeSlot) =>
+  t1.start.diff(t2.start, "minutes");
+
+function replaceId(timeSlot: TimeSlot): TimeSlot {
+  return { ...timeSlot, id: generateId() };
+}
+
 function enforceId(timeSlot: TimeSlot): TimeSlot {
-  return timeSlot.id.trim().length
-    ? timeSlot
-    : { ...timeSlot, id: generateId() };
+  return timeSlot.id.trim().length ? timeSlot : replaceId(timeSlot);
 }
 
 export const useScheduleStore = defineStore("schedule", {
@@ -53,17 +64,24 @@ export const useScheduleStore = defineStore("schedule", {
     schedule: readStoredSchedule(),
   }),
   actions: {
-    updateScheduleItem(payload: { index: number; newItem: TimeSlot }) {
-      this.schedule[payload.index] = enforceId(payload.newItem);
-      saveSchedule(this.schedule);
+    updateScheduleItem(changedItem: TimeSlot) {
+      const index = this.schedule.findIndex((t) => t.id === changedItem.id);
+      if (index < 0) {
+        throw `No such item: ${changedItem.id}`;
+      }
+      this.schedule[index] = enforceId(changedItem);
+      saveSchedule(this.schedule.sort(byStart));
     },
     addScheduleItem(newItem: TimeSlot) {
-      this.schedule[this.schedule.length] = enforceId(newItem);
-      saveSchedule(this.schedule);
+      this.schedule[this.schedule.length] = replaceId(newItem);
+      saveSchedule(this.schedule.sort(byStart));
     },
-    deleteScheduleItem(index: number) {
-      this.schedule.splice(index, 1);
-      saveSchedule(this.schedule);
+    deleteScheduleItem(id: string) {
+      const index = this.schedule.findIndex((t) => t.id === id);
+      if (index >= 0) {
+        this.schedule.splice(index, 1);
+        saveSchedule(this.schedule);
+      }
     },
   },
 });
