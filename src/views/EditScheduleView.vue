@@ -11,6 +11,9 @@
         </button>
         <button @click="deleteItem">Delete #{{ currentIndex }}</button>
       </template>
+      <button :disabled="!currentItem?.title" @click="addItem">
+        {{ selectedId ? "Copy" : "Add" }}
+      </button>
     </div>
   </main-square>
 

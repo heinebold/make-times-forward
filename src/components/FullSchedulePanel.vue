@@ -88,6 +88,7 @@ h2 {
 .schedule-entry {
   display: flex;
   align-items: center;
+  gap: 0.5em;
 }
 .schedule-entry > * {
   flex-grow: 1;
