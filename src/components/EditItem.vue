@@ -8,7 +8,8 @@
 
 <script setup lang="ts">
 import type { TimeSlot } from "@/model/TimeSlot";
-import { computed, Ref } from "vue";
+import { computed } from "vue";
+import type { Ref } from "vue";
 import dayjs from "dayjs";
 
 const props = defineProps<{ modelValue?: TimeSlot }>();

@@ -7,7 +7,10 @@ const dummyClock = () => dayjs("1970-01-01T13:37:42.999Z");
 let appClock: ClockFunction = dummyClock;
 const time = ref(appClock());
 
-const timer: { interval?: number; timeout?: number } = {};
+const timer: {
+  interval?: ReturnType<typeof setInterval>;
+  timeout?: ReturnType<typeof setTimeout>;
+} = {};
 function clearTimer() {
   clearInterval(timer.interval);
   clearTimeout(timer.timeout);
