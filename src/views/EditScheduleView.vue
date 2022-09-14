@@ -44,6 +44,7 @@ import type { TimeSlot } from "@/model/TimeSlot";
 import { useScheduleStore } from "@/stores/schedule";
 import EditItem from "@/components/EditItem.vue";
 import FileSelector from "@/components/FileSelector.vue";
+import { saveAs } from "file-saver";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
@@ -94,12 +95,10 @@ function importFile(files: FileList) {
 }
 
 function exportFile() {
-  const url = URL.createObjectURL(
-    new Blob([JSON.stringify(schedule.value, undefined, 2)], {
-      type: "application/json",
-    })
-  );
-  window.open(url, "_blank");
+  const data = new Blob([JSON.stringify(schedule.value, undefined, 2)], {
+    type: "text/json",
+  });
+  saveAs(data, "schedule.json");
 }
 </script>
 
