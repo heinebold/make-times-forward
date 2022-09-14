@@ -4,7 +4,7 @@
       <edit-item v-model:model-value="currentItem" />
     </schedule-card>
 
-    <div>
+    <schedule-card class="button-panel">
       <template v-if="selectedId">
         <button :disabled="!currentItem?.title" @click="updateItem">
           Update
@@ -14,7 +14,17 @@
       <button :disabled="!currentItem?.title" @click="addItem">
         {{ selectedId ? "Copy" : "Add" }}
       </button>
-    </div>
+    </schedule-card>
+
+    <schedule-card class="file-area">
+      <h3>File Import/Export</h3>
+      <div>
+        <file-selector @select-files="importFile" />
+      </div>
+      <div>
+        <button @click="exportFile">Export</button>
+      </div>
+    </schedule-card>
   </main-square>
 
   <full-schedule-panel
@@ -33,6 +43,7 @@ import MainSquare from "@/components/MainSquare.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { useScheduleStore } from "@/stores/schedule";
 import EditItem from "@/components/EditItem.vue";
+import FileSelector from "@/components/FileSelector.vue";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
@@ -65,6 +76,31 @@ function deleteItem() {
   scheduleStore.deleteScheduleItem(selectedId.value);
   selectedId.value = schedule.value[selectedIndex]?.id ?? "";
 }
+
+function importFile(files: FileList) {
+  files[0]
+    .text()
+    .then(JSON.parse)
+    .then((text) =>
+      window.alert(
+        `Not implemented yet. I would import\n\n${JSON.stringify(
+          text,
+          undefined,
+          2
+        )}`
+      )
+    )
+    .catch(() => window.alert("Not implemented yet, also the file is bogus"));
+}
+
+function exportFile() {
+  const url = URL.createObjectURL(
+    new Blob([JSON.stringify(schedule.value, undefined, 2)], {
+      type: "application/json",
+    })
+  );
+  window.open(url, "_blank");
+}
 </script>
 
 <style scoped>
@@ -80,6 +116,27 @@ function deleteItem() {
 .edit-section {
   justify-content: space-evenly;
 }
+.button-panel {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 1em;
+  padding: 0.5em 2em;
+}
+.file-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+h3 {
+  font-size: 80%;
+}
+
 .selected-item {
   display: flex;
   flex-direction: column;
