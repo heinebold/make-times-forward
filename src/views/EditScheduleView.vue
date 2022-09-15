@@ -55,11 +55,16 @@ const currentIndex = computed(() =>
   schedule.value.findIndex((t) => t.id === selectedId.value)
 );
 
-watch(selectedId, (newSelectedId: string) => {
-  if (newSelectedId.length) {
-    currentItem.value = schedule.value.find((t) => t.id === newSelectedId);
-  } else if (currentItem.value) {
-    currentItem.value = { ...currentItem.value, id: "" };
+watch(currentIndex, (newIndex) => {
+  if (newIndex >= 0) {
+    currentItem.value = schedule.value[newIndex];
+  } else {
+    if (currentItem.value) {
+      currentItem.value = { ...currentItem.value, id: "" };
+    }
+    if (selectedId.value.length) {
+      selectedId.value = "";
+    }
   }
 });
 
