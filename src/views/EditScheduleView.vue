@@ -19,7 +19,7 @@
     <schedule-card class="file-area">
       <h3>File Import/Export</h3>
       <div>
-        <file-selector @select-files="importFile" />
+        <file-selector @import-file="importFile" />
       </div>
       <div>
         <button @click="exportFile">Export</button>
@@ -45,6 +45,7 @@ import { useScheduleStore } from "@/stores/schedule";
 import EditItem from "@/components/EditItem.vue";
 import FileSelector from "@/components/FileSelector.vue";
 import { saveAs } from "file-saver";
+import { stringifySchedule } from "@/model/TimeSlot";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
@@ -78,24 +79,12 @@ function deleteItem() {
   selectedId.value = schedule.value[selectedIndex]?.id ?? "";
 }
 
-function importFile(files: FileList) {
-  files[0]
-    .text()
-    .then(JSON.parse)
-    .then((text) =>
-      window.alert(
-        `Not implemented yet. I would import\n\n${JSON.stringify(
-          text,
-          undefined,
-          2
-        )}`
-      )
-    )
-    .catch(() => window.alert("Not implemented yet, also the file is bogus"));
+function importFile(data: TimeSlot[]) {
+  window.alert(`Not implemented yet (${data})`);
 }
 
 function exportFile() {
-  const data = new Blob([JSON.stringify(schedule.value, undefined, 2)], {
+  const data = new Blob([stringifySchedule(schedule.value, 2)], {
     type: "text/json",
   });
   saveAs(data, "schedule.json");

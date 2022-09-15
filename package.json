@@ -19,6 +19,7 @@
     "file-saver": "^2.0.5",
     "pinia": "^2.0.14",
     "vue": "^3.2.36",
+    "vue-final-modal": "^3.4.4",
     "vue-router": "^4.0.15"
   },
   "devDependencies": {
