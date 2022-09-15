@@ -25,7 +25,8 @@ export function parseSchedule(text: string): TimeSlot[] | null {
 
         return { title, start, end, id };
       })
-      .filter((t) => !isNaN(t.start.minute())) ?? null
+      .filter((t) => !isNaN(t.start.minute()))
+      .sort(byStart) ?? null
   );
 }
 
@@ -40,6 +41,10 @@ export function generateId() {
   return `${Math.round(Math.random() * 10000)}-${Math.round(
     Math.random() * 100000
   )}-${Math.round(Math.random() * 10000)}`;
+}
+
+export function byStart(t1: TimeSlot, t2: TimeSlot) {
+  return t1.start.diff(t2.start, "minutes");
 }
 
 type TimeSlotJson = { [key in keyof TimeSlot]?: string };

@@ -80,7 +80,7 @@ function deleteItem() {
 }
 
 function importFile(data: TimeSlot[]) {
-  window.alert(`Not implemented yet (${data})`);
+  scheduleStore.replaceSchedule(data);
 }
 
 function exportFile() {
