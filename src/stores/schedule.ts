@@ -1,63 +1,25 @@
-import dayjs from "dayjs";
 import { defineStore } from "pinia";
 import type { TimeSlot } from "@/model/TimeSlot";
+import { generateId, parseSchedule, stringifySchedule } from "@/model/TimeSlot";
 
 interface State {
   schedule: TimeSlot[];
 }
 
-function generateId() {
-  return `${Math.round(Math.random() * 10000)}-${Math.round(
-    Math.random() * 100000
-  )}-${Math.round(Math.random() * 10000)}`;
-}
-
-type TimeSlotJson = { [key in keyof TimeSlot]: string };
-
-function readRawStoredSchedule(): TimeSlotJson[] {
+function readStoredSchedule(): TimeSlot[] {
   try {
-    const parsedJSON = JSON.parse(
-      localStorage.getItem("schedule") || "",
-      (k, v) => {
-        return v === null ? undefined : v;
-      }
-    );
-    return Array.isArray(parsedJSON) ? parsedJSON : [];
+    return parseSchedule(localStorage.getItem("schedule") ?? "") ?? [];
   } catch (e) {
     return [];
   }
 }
 
-function readStoredSchedule(): TimeSlot[] {
-  return readRawStoredSchedule().map((v: TimeSlotJson) => {
-    const id = generateId();
-    const title = v.title?.trim() ?? "";
-    const loadedStart = dayjs(v.start ?? v.end);
-    const loadedEnd = dayjs(v.end ?? v.start);
-    const correctDateOrder = !loadedStart.isAfter(loadedEnd, "minute");
-    const start = correctDateOrder ? loadedStart : loadedEnd;
-    const end = correctDateOrder ? loadedEnd : loadedStart;
-    return { title, start, end, id };
-  });
-}
-
 function saveSchedule(schedule: TimeSlot[]) {
-  localStorage.setItem(
-    "schedule",
-    JSON.stringify(schedule, ["title", "start", "end"])
-  );
+  localStorage.setItem("schedule", stringifySchedule(schedule));
 }
 
 const byStart = (t1: TimeSlot, t2: TimeSlot) =>
   t1.start.diff(t2.start, "minutes");
-
-function replaceId(timeSlot: TimeSlot): TimeSlot {
-  return { ...timeSlot, id: generateId() };
-}
-
-function enforceId(timeSlot: TimeSlot): TimeSlot {
-  return timeSlot.id.trim().length ? timeSlot : replaceId(timeSlot);
-}
 
 export const useScheduleStore = defineStore("schedule", {
   state: (): State => ({
@@ -69,11 +31,11 @@ export const useScheduleStore = defineStore("schedule", {
       if (index < 0) {
         throw `No such item: ${changedItem.id}`;
       }
-      this.schedule[index] = enforceId(changedItem);
+      this.schedule[index] = changedItem;
       saveSchedule(this.schedule.sort(byStart));
     },
     addScheduleItem(newItem: TimeSlot) {
-      this.schedule[this.schedule.length] = replaceId(newItem);
+      this.schedule[this.schedule.length] = { ...newItem, id: generateId() };
       saveSchedule(this.schedule.sort(byStart));
     },
     deleteScheduleItem(id: string) {
