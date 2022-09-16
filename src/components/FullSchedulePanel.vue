@@ -1,34 +1,30 @@
 <template>
-  <main-square>
-    <h2>Schedule</h2>
-    <div class="schedule-list">
-      <template v-for="(item, index) in enhancedItems" :key="item.id">
-        <schedule-card
-          class="schedule-entry"
-          v-if="showPast || item.end.isAfter(appTime, 'minute')"
-          :class="{ selected: item.id === selected }"
-          :style="{ marginBottom: pauseMargin(item.pause) }"
-          @click="$emit('update:selected', item.id === selected ? '' : item.id)"
-        >
-          <label v-if="numbered">{{ index }}</label>
-          <schedule-item v-bind="item" />
-        </schedule-card>
-      </template>
-    </div>
-  </main-square>
+  <div class="schedule-list">
+    <template v-for="(item, index) in enhancedItems" :key="item.id">
+      <schedule-card
+        class="schedule-entry"
+        v-if="showPast || item.end.isAfter(appTime, 'minute')"
+        :class="{ selected: item.id === selected }"
+        :style="{ marginBottom: pauseMargin(item.pause) }"
+        @click="$emit('update:selected', item.id === selected ? '' : item.id)"
+      >
+        <label v-if="numbered">{{ index }}</label>
+        <schedule-item v-bind="item" />
+      </schedule-card>
+    </template>
+  </div>
 </template>
 
 <script lang="ts">
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import ScheduleItem from "@/components/ScheduleItem.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
-import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
 import { useClock } from "@/composables/clock";
 
 export default defineComponent({
   name: "FullSchedulePanel",
-  components: { MainSquare, ScheduleItem, ScheduleCard },
+  components: { ScheduleItem, ScheduleCard },
   props: {
     items: Array,
     selected: String,
@@ -81,10 +77,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-h2 {
-  font-size: 100%;
-}
-
 .schedule-entry {
   display: flex;
   align-items: center;

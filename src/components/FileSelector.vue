@@ -11,11 +11,14 @@
     <template #title>Import JSON File</template>
     <template v-slot="{ params }">
       <p v-if="params.text" class="modal-text">{{ params.text }}</p>
-      <full-schedule-panel
-        v-if="params.data"
-        :items="params.data"
-        :numbered="true"
-      />
+      <main-square v-if="params.data">
+        <p class="modal-text">The following schedule can be imported:</p>
+        <full-schedule-panel
+          class="schedule-preview"
+          :items="params.data"
+          :numbered="true"
+        />
+      </main-square>
     </template>
     <template #cancel>❌ Cancel</template>
     <template #confirm>✅ Import</template>
@@ -28,6 +31,7 @@ import { $vfm as vueFinalModal } from "vue-final-modal";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { parseSchedule, TimeSlot } from "@/model/TimeSlot";
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
+import MainSquare from "@/components/MainSquare.vue";
 
 const emit = defineEmits<{ (e: "import-file", p: TimeSlot[]): void }>();
 const showModal = ref(false);
@@ -68,5 +72,9 @@ function closePreview() {
 .modal-text {
   font-size: 75%;
   margin-top: 1em;
+}
+.schedule-preview {
+  margin-top: 0.8em;
+  font-size: 120%;
 }
 </style>

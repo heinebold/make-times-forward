@@ -132,3 +132,8 @@ button:active {
   background-color: var(--color-accent-bg);
   border-color: var(--color-border);
 }
+
+
+h2 {
+  font-size: 100%;
+}

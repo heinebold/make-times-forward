@@ -1,22 +1,20 @@
 <template>
-  <main-square class="current-schedule">
-    <schedule-card class="previous" :class="{ placeholder: !previousItem }">
-      <current-item v-if="previousItem" v-bind="previousItem" />
-    </schedule-card>
+  <schedule-card class="previous" :class="{ placeholder: !previousItem }">
+    <current-item v-if="previousItem" v-bind="previousItem" />
+  </schedule-card>
 
-    <schedule-card class="current" :class="{ placeholder: !scheduleIsOngoing }">
-      <current-item v-if="currentItem" v-bind="currentItem" />
-      <progress
-        v-else-if="scheduleIsOngoing"
-        :max="nextItem.start.diff(previousItem.end, 'seconds')"
-        :value="appTime.diff(previousItem.end, 'seconds')"
-      />
-    </schedule-card>
+  <schedule-card class="current" :class="{ placeholder: !scheduleIsOngoing }">
+    <current-item v-if="currentItem" v-bind="currentItem" />
+    <progress
+      v-else-if="scheduleIsOngoing"
+      :max="nextItem.start.diff(previousItem.end, 'seconds')"
+      :value="appTime.diff(previousItem.end, 'seconds')"
+    />
+  </schedule-card>
 
-    <schedule-card class="next" :class="{ placeholder: !nextItem }">
-      <current-item v-if="nextItem" v-bind="nextItem" />
-    </schedule-card>
-  </main-square>
+  <schedule-card class="next" :class="{ placeholder: !nextItem }">
+    <current-item v-if="nextItem" v-bind="nextItem" />
+  </schedule-card>
 </template>
 
 <script lang="ts">
@@ -24,7 +22,6 @@ import ScheduleCard from "@/components/ScheduleCard.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { mapState } from "pinia";
 import CurrentItem from "@/components/CurrentItem.vue";
-import MainSquare from "@/components/MainSquare.vue";
 import { defineComponent } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useClock } from "@/composables/clock";
@@ -32,7 +29,7 @@ import { useSound } from "@/composables/sound";
 
 export default defineComponent({
   name: "CurrentSchedulePanel",
-  components: { MainSquare, CurrentItem, ScheduleCard },
+  components: { CurrentItem, ScheduleCard },
   props: {
     items: Array,
   },
@@ -91,10 +88,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.current-schedule {
-  justify-content: space-evenly;
-}
-
 .current {
   font-family: "DejaVu Sans", serif;
   font-size: 2.5vmax;

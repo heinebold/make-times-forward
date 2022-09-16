@@ -26,12 +26,14 @@
       </div>
     </schedule-card>
   </main-square>
-
-  <full-schedule-panel
-    numbered
-    :items="schedule"
-    v-model:selected="selectedId"
-  />
+  <main-square>
+    <h2>Schedule</h2>
+    <full-schedule-panel
+      numbered
+      :items="schedule"
+      v-model:selected="selectedId"
+    />
+  </main-square>
 </template>
 
 <script setup lang="ts">
