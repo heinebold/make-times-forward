@@ -4,13 +4,16 @@
       <edit-item v-model:model-value="currentItem" />
       <div class="actions-panel">
         <template v-if="selectedId">
-          <button :disabled="currentItemIncomplete" @click="updateItem">
+          <button
+            :disabled="currentItemIncomplete || !currentItemModified"
+            @click="updateItem"
+          >
             Update
           </button>
           <button @click="deleteItem">Delete #{{ currentIndex }}</button>
         </template>
         <button :disabled="currentItemIncomplete" @click="addItem">
-          {{ selectedId ? "Copy" : "Add" }}
+          {{ currentItemModified ? "Add" : "Copy" }}
         </button>
       </div>
     </schedule-card>
@@ -82,6 +85,14 @@ const currentItemIncomplete = computed(
     (isNaN(currentItem.value?.start.minute()) &&
       isNaN(currentItem.value?.end.minute()))
 );
+const currentItemModified = computed(() => {
+  const currentSelected = schedule.value[currentIndex.value];
+  return !(
+    currentItem.value?.title === currentSelected?.title &&
+    currentItem.value?.start.isSame(currentSelected?.start, "minute") &&
+    currentItem.value?.end.isSame(currentSelected?.end, "minute")
+  );
+});
 const showModal = ref(false);
 
 watch(currentIndex, updateSelection);
@@ -167,7 +178,7 @@ function exportFile() {
   align-content: center;
   justify-content: center;
   gap: 1em;
-  padding: 0.5em 2em;
+  margin: 0.5em 0;
 }
 .file-panel {
   display: flex;
@@ -177,10 +188,11 @@ function exportFile() {
   justify-content: center;
 }
 
-button {
+.actions-panel button {
   font-size: 67%;
   padding: 0.334em 0.667em;
   white-space: nowrap;
+  min-width: 5em;
 }
 
 h3 {
