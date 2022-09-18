@@ -11,23 +11,29 @@ export type TimeSlot = {
 export function parseSchedule(text: string): TimeSlot[] | null {
   return (
     readRawStoredSchedule(text)
-      ?.map((raw: TimeSlotJson) => {
-        const rawStart = dayjs(raw.start ?? raw.end ?? null);
-        const rawEnd = dayjs(raw.end ?? raw.start ?? null);
-        const loadedStart = isNaN(rawStart.minute()) ? rawEnd : rawStart;
-        const loadedEnd = isNaN(rawEnd.minute()) ? rawStart : rawEnd;
-        const correctDateOrder = !loadedStart.isAfter(loadedEnd, "minute");
-
-        const title = raw.title?.trim() ?? "";
-        const start = correctDateOrder ? loadedStart : loadedEnd;
-        const end = correctDateOrder ? loadedEnd : loadedStart;
+      ?.map((json: TimeSlotJson) => {
+        const start = dayjs(json.start ?? json.end ?? null);
+        const end = dayjs(json.end ?? json.start ?? null);
+        const title = json.title ?? "";
         const id = generateId();
-
-        return { title, start, end, id };
+        return normalizeTimeSlot({ title, start, end, id });
       })
       .filter((t) => !isNaN(t.start.minute()))
       .sort(byStart) ?? null
   );
+}
+
+export function normalizeTimeSlot(raw: TimeSlot) {
+  const normalizedStart = isNaN(raw.start.minute()) ? raw.end : raw.start;
+  const normalizedEnd = isNaN(raw.end.minute()) ? raw.start : raw.end;
+  const correctDateOrder = !normalizedStart.isAfter(normalizedEnd, "minute");
+
+  const title = raw.title.trim();
+  const start = correctDateOrder ? normalizedStart : normalizedEnd;
+  const end = correctDateOrder ? normalizedEnd : normalizedStart;
+  const id = raw.id.trim() || generateId();
+
+  return { title, start, end, id };
 }
 
 export function stringifySchedule(

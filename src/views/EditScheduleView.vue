@@ -4,12 +4,12 @@
       <edit-item v-model:model-value="currentItem" />
       <div class="actions-panel">
         <template v-if="selectedId">
-          <button :disabled="!currentItem?.title" @click="updateItem">
+          <button :disabled="currentItemIncomplete" @click="updateItem">
             Update
           </button>
           <button @click="deleteItem">Delete #{{ currentIndex }}</button>
         </template>
-        <button :disabled="!currentItem?.title" @click="addItem">
+        <button :disabled="currentItemIncomplete" @click="addItem">
           {{ selectedId ? "Copy" : "Add" }}
         </button>
       </div>
@@ -75,6 +75,12 @@ const selectedId = ref("");
 const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
 const currentIndex = computed(() =>
   schedule.value.findIndex((t) => t.id === selectedId.value)
+);
+const currentItemIncomplete = computed(
+  () =>
+    !currentItem.value?.title ||
+    (isNaN(currentItem.value?.start.minute()) &&
+      isNaN(currentItem.value?.end.minute()))
 );
 const showModal = ref(false);
 

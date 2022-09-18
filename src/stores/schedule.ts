@@ -3,6 +3,7 @@ import type { TimeSlot } from "@/model/TimeSlot";
 import {
   byStart,
   generateId,
+  normalizeTimeSlot,
   parseSchedule,
   stringifySchedule,
 } from "@/model/TimeSlot";
@@ -29,19 +30,21 @@ export const useScheduleStore = defineStore("schedule", {
   }),
   actions: {
     updateScheduleItem(changedItem: TimeSlot) {
-      const index = this.schedule.findIndex((t) => t.id === changedItem.id);
+      const timeSlot = normalizeTimeSlot(changedItem);
+      const index = this.schedule.findIndex((t) => t.id === timeSlot.id);
       if (index < 0) {
-        throw `No such item: ${changedItem.id}`;
+        throw `No such item: ${timeSlot.id}`;
       }
-      this.schedule[index] = changedItem;
+      this.schedule[index] = timeSlot;
       saveSchedule(this.schedule.sort(byStart));
     },
     addScheduleItem(newItem: TimeSlot) {
-      this.schedule[this.schedule.length] = { ...newItem, id: generateId() };
+      const copiedTimeSlot = { ...newItem, id: generateId() };
+      this.schedule[this.schedule.length] = normalizeTimeSlot(copiedTimeSlot);
       saveSchedule(this.schedule.sort(byStart));
     },
     deleteScheduleItem(id: string) {
-      const index = this.schedule.findIndex((t) => t.id === id);
+      const index = this.schedule.findIndex((t) => t.id === id.trim());
       if (index >= 0) {
         this.schedule.splice(index, 1);
         saveSchedule(this.schedule);
