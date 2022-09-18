@@ -1,10 +1,10 @@
 <template>
   <main-square class="edit-section">
-    <schedule-card class="selected-item">
+    <schedule-card class="item-panel">
       <edit-item v-model:model-value="currentItem" />
     </schedule-card>
 
-    <schedule-card class="button-panel">
+    <schedule-card class="actions-panel">
       <template v-if="selectedId">
         <button :disabled="!currentItem?.title" @click="updateItem">
           Update
@@ -16,7 +16,7 @@
       </button>
     </schedule-card>
 
-    <schedule-card class="file-area">
+    <schedule-card class="file-panel">
       <h3>File Import/Export</h3>
       <div>
         <file-selector @import-file="importFile" />
@@ -33,6 +33,29 @@
       :items="schedule"
       v-model:selected="selectedId"
     />
+
+    <confirmation-modal
+      name="importDialog"
+      v-model="showModal"
+      :click-to-close="false"
+      :esc-to-close="true"
+      @confirm="confirmImport"
+    >
+      <template #title>Import JSON File</template>
+      <template v-slot="{ params }">
+        <main-square class="preview-area">
+          <p v-if="params.text" class="modal-text">{{ params.text }}</p>
+          <full-schedule-panel
+            v-if="params.data"
+            class="schedule-preview"
+            :items="params.data"
+            :numbered="true"
+          />
+        </main-square>
+      </template>
+      <template #cancel>❌ Cancel</template>
+      <template #confirm>✅ Import</template>
+    </confirmation-modal>
   </main-square>
 </template>
 
@@ -47,7 +70,9 @@ import { useScheduleStore } from "@/stores/schedule";
 import EditItem from "@/components/EditItem.vue";
 import FileSelector from "@/components/FileSelector.vue";
 import { saveAs } from "file-saver";
-import { stringifySchedule } from "@/model/TimeSlot";
+import { $vfm as vueFinalModal } from "vue-final-modal";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
+import { parseSchedule, stringifySchedule } from "@/model/TimeSlot";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
@@ -56,6 +81,7 @@ const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
 const currentIndex = computed(() =>
   schedule.value.findIndex((t) => t.id === selectedId.value)
 );
+const showModal = ref(false);
 
 watch(currentIndex, (newIndex) => {
   if (newIndex >= 0) {
@@ -86,8 +112,26 @@ function deleteItem() {
   selectedId.value = schedule.value[selectedIndex]?.id ?? "";
 }
 
-function importFile(data: TimeSlot[]) {
-  scheduleStore.replaceSchedule(data);
+function importFile(file: File) {
+  file
+    ?.text()
+    .then(parseSchedule)
+    .then((schedule) =>
+      vueFinalModal.show("importDialog", {
+        text: "The following schedule can be imported:",
+        data: schedule,
+      })
+    )
+    .catch(() =>
+      vueFinalModal.show("importDialog", {
+        text: "The selected file does not contain valid schedule data.",
+        canConfirm: false,
+      })
+    );
+}
+
+function confirmImport(params: { text: string; data: TimeSlot[] }) {
+  scheduleStore.replaceSchedule(params.data as TimeSlot[]);
 }
 
 function exportFile() {
@@ -111,7 +155,7 @@ function exportFile() {
 .edit-section {
   justify-content: space-evenly;
 }
-.button-panel {
+.actions-panel {
   display: flex;
   align-items: center;
   align-content: center;
@@ -119,7 +163,7 @@ function exportFile() {
   gap: 1em;
   padding: 0.5em 2em;
 }
-.file-area {
+.file-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,13 +172,31 @@ function exportFile() {
   gap: 1em;
 }
 
+button {
+  font-size: 67%;
+  padding: 0.334em 0.667em;
+}
+
 h3 {
   font-size: 80%;
 }
 
-.selected-item {
+.item-panel {
   display: flex;
   flex-direction: column;
   font-size: var(--edit-font-size);
+}
+
+.modal-text {
+  font-size: 75%;
+  margin-top: 1em;
+}
+.preview-area {
+  height: max-content;
+  padding: 1em 0;
+}
+.schedule-preview {
+  margin-top: 0.8em;
+  font-size: 120%;
 }
 </style>

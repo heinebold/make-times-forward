@@ -9,7 +9,7 @@
       (e) => (confirmed ? emit('confirm', e.ref.params.value) : emit('cancel'))
     "
   >
-    <span class="modal__title"> <slot name="title" /> </span>
+    <h2 class="modal__title"><slot name="title" /></h2>
     <div class="modal__content"><slot :params="params" /></div>
     <div class="modal__action">
       <button @click="close"><slot name="cancel">Cancel</slot></button>
