@@ -2,18 +2,17 @@
   <main-square class="edit-section">
     <schedule-card class="item-panel">
       <edit-item v-model:model-value="currentItem" />
-    </schedule-card>
-
-    <schedule-card class="actions-panel">
-      <template v-if="selectedId">
-        <button :disabled="!currentItem?.title" @click="updateItem">
-          Update
+      <div class="actions-panel">
+        <template v-if="selectedId">
+          <button :disabled="!currentItem?.title" @click="updateItem">
+            Update
+          </button>
+          <button @click="deleteItem">Delete #{{ currentIndex }}</button>
+        </template>
+        <button :disabled="!currentItem?.title" @click="addItem">
+          {{ selectedId ? "Copy" : "Add" }}
         </button>
-        <button @click="deleteItem">Delete #{{ currentIndex }}</button>
-      </template>
-      <button :disabled="!currentItem?.title" @click="addItem">
-        {{ selectedId ? "Copy" : "Add" }}
-      </button>
+      </div>
     </schedule-card>
 
     <schedule-card class="file-panel">
@@ -142,11 +141,11 @@ function exportFile() {
 
 <style scoped>
 .edit-section {
-  --edit-font-size: 2.5vmax;
+  --edit-font-size: 2vmax;
 }
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
   .edit-section {
-    --edit-font-size: 5vmin;
+    --edit-font-size: 4vmin;
   }
 }
 
@@ -172,6 +171,7 @@ function exportFile() {
 button {
   font-size: 67%;
   padding: 0.334em 0.667em;
+  white-space: nowrap;
 }
 
 h3 {
