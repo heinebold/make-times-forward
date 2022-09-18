@@ -14,7 +14,6 @@
         </button>
       </div>
     </schedule-card>
-
     <schedule-card class="file-panel">
       <h3>File Import/Export</h3>
       <div class="actions-panel">
@@ -80,18 +79,7 @@ const currentIndex = computed(() =>
 );
 const showModal = ref(false);
 
-watch(currentIndex, (newIndex) => {
-  if (newIndex >= 0) {
-    currentItem.value = schedule.value[newIndex];
-  } else {
-    if (currentItem.value) {
-      currentItem.value = { ...currentItem.value, id: "" };
-    }
-    if (selectedId.value.length) {
-      selectedId.value = "";
-    }
-  }
-});
+watch(currentIndex, updateSelection);
 
 function updateItem() {
   if (currentItem.value) {
@@ -106,7 +94,21 @@ function addItem() {
 function deleteItem() {
   const selectedIndex = currentIndex.value;
   scheduleStore.deleteScheduleItem(selectedId.value);
-  selectedId.value = schedule.value[selectedIndex]?.id ?? "";
+  updateSelection(selectedIndex);
+}
+
+function updateSelection(index: number) {
+  if (index >= 0) {
+    currentItem.value = schedule.value[index];
+    selectedId.value = currentItem.value?.id ?? "";
+  } else {
+    if (currentItem.value) {
+      currentItem.value = { ...currentItem.value, id: "" };
+    }
+    if (selectedId.value.length) {
+      selectedId.value = "";
+    }
+  }
 }
 
 function importFile(file: File) {
@@ -128,6 +130,8 @@ function importFile(file: File) {
 }
 
 function confirmImport(params: { text: string; data: TimeSlot[] }) {
+  currentItem.value = undefined;
+  updateSelection(-1);
   scheduleStore.replaceSchedule(params.data as TimeSlot[]);
 }
 
