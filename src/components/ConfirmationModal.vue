@@ -6,11 +6,7 @@
     content-class="modal-content"
     @before-open="confirmed = false"
     @before-close="
-      (event) => {
-        confirmed
-          ? emit('confirm', event.ref.params.value.data)
-          : emit('cancel');
-      }
+      (e) => (confirmed ? emit('confirm', e.ref.params.value) : emit('cancel'))
     "
   >
     <span class="modal__title"> <slot name="title" /> </span>
