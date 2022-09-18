@@ -17,11 +17,20 @@
         </button>
       </div>
     </schedule-card>
-    <schedule-card class="file-panel">
+    <schedule-card class="controls-panel">
       <h3>File Import/Export</h3>
       <div class="actions-panel">
         <file-selector @import-file="importFile" />
         <button @click="exportFile">Export</button>
+      </div>
+    </schedule-card>
+    <schedule-card class="controls-panel">
+      <h3>Schedule Date</h3>
+      <div class="actions-panel">
+        <input type="date" v-model="dateOverrideString" />
+        <button @click="overrideDate" :disabled="noValidDateOverride">
+          Set Date
+        </button>
       </div>
     </schedule-card>
   </main-square>
@@ -71,6 +80,7 @@ import { saveAs } from "file-saver";
 import { $vfm as vueFinalModal } from "vue-final-modal";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { parseSchedule, stringifySchedule } from "@/model/TimeSlot";
+import dayjs from "dayjs";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
@@ -93,6 +103,14 @@ const currentItemModified = computed(() => {
     currentItem.value?.end.isSame(currentSelected?.end, "minute")
   );
 });
+const dateOverride = ref(dayjs());
+const dateOverrideString = computed({
+  get: () => dateOverride.value.format("YYYY-MM-DD"),
+  set: (newValue: string) => {
+    dateOverride.value = dayjs(`${newValue}T00:00:00Z`);
+  },
+});
+const noValidDateOverride = computed(() => isNaN(dateOverride.value.day()));
 const showModal = ref(false);
 
 watch(currentIndex, updateSelection);
@@ -157,6 +175,18 @@ function exportFile() {
   });
   saveAs(data, "schedule.json");
 }
+
+function overrideDate() {
+  if (schedule.value.length < 1 || noValidDateOverride.value) {
+    return;
+  }
+  const diff = dateOverride.value.diff(schedule.value[0].start, "days");
+  schedule.value.forEach((timeSlot) => {
+    timeSlot.start = timeSlot.start.add(diff, "days");
+    timeSlot.end = timeSlot.end.add(diff, "days");
+  });
+  scheduleStore.replaceSchedule(schedule.value);
+}
 </script>
 
 <style scoped>
@@ -180,7 +210,7 @@ function exportFile() {
   gap: 1em;
   margin: 0.5em 0;
 }
-.file-panel {
+.controls-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -188,7 +218,8 @@ function exportFile() {
   justify-content: center;
 }
 
-.actions-panel button {
+.actions-panel button,
+.actions-panel input {
   font-size: 67%;
   padding: 0.334em 0.667em;
   white-space: nowrap;
