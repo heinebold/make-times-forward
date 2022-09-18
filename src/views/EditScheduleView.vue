@@ -128,10 +128,10 @@ function importFile(file: File) {
     );
 }
 
-function confirmImport(params: { text: string; data: TimeSlot[] }) {
+function confirmImport(params?: { data?: TimeSlot[] }) {
   currentItem.value = undefined;
   updateSelection(-1);
-  scheduleStore.replaceSchedule(params.data as TimeSlot[]);
+  scheduleStore.replaceSchedule(params?.data ?? []);
 }
 
 function exportFile() {

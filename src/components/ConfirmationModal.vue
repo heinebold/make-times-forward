@@ -6,7 +6,7 @@
     content-class="modal-content"
     @before-open="confirmed = false"
     @before-close="
-      (e) => (confirmed ? emit('confirm', e.ref.params.value) : emit('cancel'))
+      confirmed ? emit('confirm', $event.ref.params.value) : emit('cancel')
     "
   >
     <div class="modal__content"><slot :params="params" /></div>
@@ -27,7 +27,7 @@ import { ref } from "vue";
 
 const emit = defineEmits<{
   (e: "cancel"): void;
-  (e: "confirm", p: unknown): void;
+  (e: "confirm", p: object): void;
 }>();
 const confirmed = ref(false);
 </script>
