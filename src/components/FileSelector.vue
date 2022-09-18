@@ -1,5 +1,8 @@
 <template>
-  <input ref="fileInput" type="file" @change="fileInputChange" />
+  <button @click="$refs.fileInput.click">
+    <slot>Import</slot
+    ><input ref="fileInput" type="file" @change="fileInputChange" />
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -23,3 +26,9 @@ function clearInput(inputElement: HTMLInputElement) {
   inputElement.files = null;
 }
 </script>
+
+<style>
+button input[type="file"] {
+  display: none;
+}
+</style>

@@ -18,10 +18,8 @@
 
     <schedule-card class="file-panel">
       <h3>File Import/Export</h3>
-      <div>
+      <div class="actions-panel">
         <file-selector @import-file="importFile" />
-      </div>
-      <div>
         <button @click="exportFile">Export</button>
       </div>
     </schedule-card>
@@ -169,7 +167,6 @@ function exportFile() {
   align-items: center;
   align-content: center;
   justify-content: center;
-  gap: 1em;
 }
 
 button {
