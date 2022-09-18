@@ -1,112 +1,216 @@
 <template>
   <main-square class="edit-section">
-    <schedule-card class="selected-item">
-      <label>Title <input v-model="title" type="text" /></label>
-      <label>Start <input v-model="start" type="datetime-local" /></label>
-      <label>End <input v-model="end" type="datetime-local" /></label>
-    </schedule-card>
-
-    <div>
-      <template v-if="selectedIndex < 0">
-        <button @click="addItem">Add</button>
-      </template>
-      <template v-else>
-        <button @click="updateItem(selectedIndex)">Update</button>
-        <button @click="deleteItem(selectedIndex)">
-          Delete #{{ selectedIndex }}
+    <schedule-card class="item-panel">
+      <edit-item v-model:model-value="currentItem" />
+      <div class="actions-panel">
+        <template v-if="selectedId">
+          <button :disabled="currentItemIncomplete" @click="updateItem">
+            Update
+          </button>
+          <button @click="deleteItem">Delete #{{ currentIndex }}</button>
+        </template>
+        <button :disabled="currentItemIncomplete" @click="addItem">
+          {{ selectedId ? "Copy" : "Add" }}
         </button>
-      </template>
-    </div>
+      </div>
+    </schedule-card>
+    <schedule-card class="file-panel">
+      <h3>File Import/Export</h3>
+      <div class="actions-panel">
+        <file-selector @import-file="importFile" />
+        <button @click="exportFile">Export</button>
+      </div>
+    </schedule-card>
   </main-square>
-
-  <full-schedule-panel
-    numbered
-    :items="schedule"
-    :selected="selectedIndex"
-    @select-item="selectItem"
-  />
+  <main-square>
+    <h2>Schedule</h2>
+    <full-schedule-panel
+      numbered
+      :items="schedule"
+      v-model:selected="selectedId"
+    />
+  </main-square>
+  <confirmation-modal
+    name="importDialog"
+    v-model="showModal"
+    :click-to-close="false"
+    :esc-to-close="true"
+    @confirm="confirmImport"
+  >
+    <template v-slot="{ params }">
+      <main-square class="preview-area">
+        <h2>Import JSON File</h2>
+        <p v-if="params.text" class="modal-text">{{ params.text }}</p>
+        <full-schedule-panel
+          v-if="params.data"
+          class="schedule-preview"
+          :items="params.data"
+          :numbered="true"
+        />
+      </main-square>
+    </template>
+    <template #cancel>❌ Cancel</template>
+    <template #confirm>✅ Import</template>
+  </confirmation-modal>
 </template>
 
 <script setup lang="ts">
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
 import type { Ref } from "vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import ScheduleCard from "@/components/ScheduleCard.vue";
 import MainSquare from "@/components/MainSquare.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
-import dayjs from "dayjs";
 import { useScheduleStore } from "@/stores/schedule";
+import EditItem from "@/components/EditItem.vue";
+import FileSelector from "@/components/FileSelector.vue";
+import { saveAs } from "file-saver";
+import { $vfm as vueFinalModal } from "vue-final-modal";
+import ConfirmationModal from "@/components/ConfirmationModal.vue";
+import { parseSchedule, stringifySchedule } from "@/model/TimeSlot";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
+const selectedId = ref("");
+const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
+const currentIndex = computed(() =>
+  schedule.value.findIndex((t) => t.id === selectedId.value)
+);
+const currentItemIncomplete = computed(
+  () =>
+    !currentItem.value?.title ||
+    (isNaN(currentItem.value?.start.minute()) &&
+      isNaN(currentItem.value?.end.minute()))
+);
+const showModal = ref(false);
 
-const selectedIndex: Ref<number> = ref(-1);
+watch(currentIndex, updateSelection);
 
-const title: Ref<string> = ref("");
-const start: Ref<string | undefined> = ref(undefined);
-const end: Ref<string | undefined> = ref(undefined);
-
-function selectItem(index: number) {
-  selectedIndex.value = index === selectedIndex.value ? -1 : index;
-  if (selectedIndex.value >= 0) {
-    title.value = schedule.value[selectedIndex.value].title;
-    start.value =
-      schedule.value[selectedIndex.value].start.format("YYYY-MM-DDTHH:mm");
-    end.value =
-      schedule.value[selectedIndex.value].end.format("YYYY-MM-DDTHH:mm");
+function updateItem() {
+  if (currentItem.value) {
+    scheduleStore.updateScheduleItem(currentItem.value);
   }
-}
-
-function updateItem(index: number) {
-  const newItem: TimeSlot = {
-    title: title.value,
-    start: dayjs(start.value),
-    end: dayjs(end.value || start.value),
-  };
-  scheduleStore.updateScheduleItem({ index, newItem });
 }
 function addItem() {
-  const newItem: TimeSlot = {
-    title: title.value,
-    start: dayjs(start.value),
-    end: dayjs(end.value || start.value),
-  };
-  scheduleStore.addScheduleItem(newItem);
-}
-function deleteItem(index: number) {
-  scheduleStore.deleteScheduleItem(index);
-  if (selectedIndex.value >= schedule.value.length) {
-    selectItem(selectedIndex.value);
+  if (currentItem.value) {
+    scheduleStore.addScheduleItem(currentItem.value);
   }
+}
+function deleteItem() {
+  const selectedIndex = currentIndex.value;
+  scheduleStore.deleteScheduleItem(selectedId.value);
+  updateSelection(selectedIndex);
+}
+
+function updateSelection(index: number) {
+  if (index >= 0) {
+    currentItem.value = schedule.value[index];
+    selectedId.value = currentItem.value?.id ?? "";
+  } else {
+    if (currentItem.value) {
+      currentItem.value = { ...currentItem.value, id: "" };
+    }
+    if (selectedId.value.length) {
+      selectedId.value = "";
+    }
+  }
+}
+
+function importFile(file: File) {
+  file
+    ?.text()
+    .then(parseSchedule)
+    .then((schedule) =>
+      vueFinalModal.show("importDialog", {
+        text: "The following schedule can be imported:",
+        data: schedule,
+      })
+    )
+    .catch(() =>
+      vueFinalModal.show("importDialog", {
+        text: "The selected file does not contain valid schedule data.",
+        canConfirm: false,
+      })
+    );
+}
+
+function confirmImport(params?: { data?: TimeSlot[] }) {
+  currentItem.value = undefined;
+  updateSelection(-1);
+  scheduleStore.replaceSchedule(params?.data ?? []);
+}
+
+function exportFile() {
+  const data = new Blob([stringifySchedule(schedule.value, 2)], {
+    type: "text/json",
+  });
+  saveAs(data, "schedule.json");
 }
 </script>
 
 <style scoped>
 .edit-section {
-  --edit-font-size: 2.5vmax;
+  --edit-font-size: 2vmax;
 }
 @media (min-aspect-ratio: 2/1), (max-aspect-ratio: 1/2) {
   .edit-section {
-    --edit-font-size: 5vmin;
+    --edit-font-size: 4vmin;
   }
 }
 
 .edit-section {
   justify-content: space-evenly;
 }
-.selected-item {
+.actions-panel {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 1em;
+  padding: 0.5em 2em;
+}
+.file-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+button {
+  font-size: 67%;
+  padding: 0.334em 0.667em;
+  white-space: nowrap;
+}
+
+h3 {
+  font-size: 80%;
+}
+
+.item-panel {
   display: flex;
   flex-direction: column;
   font-size: var(--edit-font-size);
 }
-.selected-item label {
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--edit-font-size);
+
+.modal-text {
+  font-size: 75%;
+  margin-top: 1em;
 }
-.selected-item label input {
-  width: 14em;
-  max-width: 14em;
-  font-size: var(--edit-font-size);
+.preview-area {
+  height: max-content;
+  padding: 0 0 1em;
+}
+.preview-area > h2,
+.preview-area > p {
+  width: 100%;
+  text-align: left;
+}
+.preview-area > h2 {
+  margin: 0;
+}
+.schedule-preview {
+  margin-top: 0.8em;
+  font-size: 120%;
 }
 </style>

@@ -9,16 +9,19 @@ import { setAppClock } from "../../composables/clock";
 
 const simpleSchedule: TimeSlot[] = [
   {
+    id: "past",
     title: "Past",
     start: dayjs("2020-03-01T12:00Z"),
     end: dayjs("2020-03-01T13:30Z"),
   },
   {
+    id: "present",
     title: "Present",
     start: dayjs("2020-03-01T13:37Z"),
     end: dayjs("2020-03-01T14:20Z"),
   },
   {
+    id: "future",
     title: "Future",
     start: dayjs("2020-03-01T23:00Z"),
     end: dayjs("2020-03-02T00:42Z"),
@@ -94,13 +97,13 @@ describe("The FullSchedulePanel component", () => {
 
   it("Numbers the items correctly when told to", () => {
     const wrapper = mountPanel({ showPast: false, numbered: true });
-    expect(wrapper.findAll("i").map((e) => e.text())).toEqual(["1", "2"]);
+    expect(wrapper.findAll("label").map((e) => e.text())).toEqual(["1", "2"]);
     expect(wrapper.text()).toMatch(/1\s*Present.*2\s*Future/);
   });
 
   it("Doesn't show numbers unless told so", () => {
     const wrapper = mountPanel({ showPast: false });
-    expect(wrapper.findAll("i").length).toEqual(0);
+    expect(wrapper.findAll("label").length).toEqual(0);
   });
 
   it("Doesn't select on click", () => {
