@@ -29,30 +29,29 @@
       :items="schedule"
       v-model:selected="selectedId"
     />
-
-    <confirmation-modal
-      name="importDialog"
-      v-model="showModal"
-      :click-to-close="false"
-      :esc-to-close="true"
-      @confirm="confirmImport"
-    >
-      <template #title>Import JSON File</template>
-      <template v-slot="{ params }">
-        <main-square class="preview-area">
-          <p v-if="params.text" class="modal-text">{{ params.text }}</p>
-          <full-schedule-panel
-            v-if="params.data"
-            class="schedule-preview"
-            :items="params.data"
-            :numbered="true"
-          />
-        </main-square>
-      </template>
-      <template #cancel>❌ Cancel</template>
-      <template #confirm>✅ Import</template>
-    </confirmation-modal>
   </main-square>
+  <confirmation-modal
+    name="importDialog"
+    v-model="showModal"
+    :click-to-close="false"
+    :esc-to-close="true"
+    @confirm="confirmImport"
+  >
+    <template v-slot="{ params }">
+      <main-square class="preview-area">
+        <h2>Import JSON File</h2>
+        <p v-if="params.text" class="modal-text">{{ params.text }}</p>
+        <full-schedule-panel
+          v-if="params.data"
+          class="schedule-preview"
+          :items="params.data"
+          :numbered="true"
+        />
+      </main-square>
+    </template>
+    <template #cancel>❌ Cancel</template>
+    <template #confirm>✅ Import</template>
+  </confirmation-modal>
 </template>
 
 <script setup lang="ts">
@@ -194,7 +193,15 @@ h3 {
 }
 .preview-area {
   height: max-content;
-  padding: 1em 0;
+  padding: 0 0 1em;
+}
+.preview-area > h2,
+.preview-area > p {
+  width: 100%;
+  text-align: left;
+}
+.preview-area > h2 {
+  margin: 0;
 }
 .schedule-preview {
   margin-top: 0.8em;

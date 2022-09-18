@@ -9,7 +9,6 @@
       (e) => (confirmed ? emit('confirm', e.ref.params.value) : emit('cancel'))
     "
   >
-    <h2 class="modal__title"><slot name="title" /></h2>
     <div class="modal__content"><slot :params="params" /></div>
     <div class="modal__action">
       <button @click="close"><slot name="cancel">Cancel</slot></button>
@@ -49,9 +48,6 @@ const confirmed = ref(false);
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
   background: var(--color-background);
-}
-.modal__title {
-  margin: 0 2rem 0 0;
 }
 .modal__content {
   flex-grow: 1;
