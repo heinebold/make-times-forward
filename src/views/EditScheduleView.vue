@@ -28,14 +28,21 @@
       <h3>Schedule Date</h3>
       <div class="actions-panel">
         <input type="date" v-model="dateOverrideString" />
-        <button @click="overrideDate" :disabled="noValidDateOverride">
-          Set Date
+      </div>
+      <div class="actions-panel">
+        <button @click="overrideStartDate" :disabled="noValidDateOverride">
+          Set Start
+        </button>
+        <button @click="overrideEndDate" :disabled="noValidDateOverride">
+          Set End</button
+        ><button @click="overrideAllDate" :disabled="noValidDateOverride">
+          Override All
         </button>
       </div>
     </schedule-card>
   </main-square>
   <main-square>
-    <h2>Schedule</h2>
+    <h2 v-text="scheduleHeading" />
     <full-schedule-panel
       numbered
       :items="schedule"
@@ -113,7 +120,35 @@ const dateOverrideString = computed({
 const noValidDateOverride = computed(() => isNaN(dateOverride.value.day()));
 const showModal = ref(false);
 
+const scheduleStart = computed(() => schedule.value[0]?.start);
+const scheduleEnd = computed(() => {
+  if (!schedule.value?.length) {
+    return undefined;
+  }
+  return schedule.value.reduce((acc: TimeSlot, current: TimeSlot) =>
+    current.end.isAfter(acc.end, "date") ? current : acc
+  ).end;
+});
+
+const scheduleHeading = computed(() => {
+  if (schedule.value.length < 1) {
+    return "Schedule";
+  }
+  const start = scheduleStart.value?.format("YYYY-MM-DD") ?? "";
+  const end = scheduleEnd.value?.format("YYYY-MM-DD") ?? "";
+  if (start === end) {
+    return start;
+  }
+  return `${start} - ${end}`;
+});
+
 watch(currentIndex, updateSelection);
+watch(scheduleStart, () =>
+  console.log(
+    scheduleStart.value?.toISOString(),
+    scheduleEnd.value?.toISOString()
+  )
+);
 
 function updateItem() {
   if (currentItem.value) {
@@ -176,14 +211,46 @@ function exportFile() {
   saveAs(data, "schedule.json");
 }
 
-function overrideDate() {
-  if (schedule.value.length < 1 || noValidDateOverride.value) {
+function overrideStartDate() {
+  if (noValidDateOverride.value || !scheduleStart.value) {
+    console.log("bah");
     return;
   }
-  const diff = dateOverride.value.diff(schedule.value[0].start, "days");
+  const diff = dateOverride.value
+    .startOf("day")
+    .diff(scheduleStart.value.startOf("day"), "days");
   schedule.value.forEach((timeSlot) => {
     timeSlot.start = timeSlot.start.add(diff, "days");
     timeSlot.end = timeSlot.end.add(diff, "days");
+  });
+  scheduleStore.replaceSchedule(schedule.value);
+}
+function overrideEndDate() {
+  if (noValidDateOverride.value || !scheduleEnd.value) {
+    return;
+  }
+  const diff = dateOverride.value
+    .startOf("day")
+    .diff(scheduleEnd.value.startOf("day"), "days");
+  schedule.value.forEach((timeSlot) => {
+    timeSlot.start = timeSlot.start.add(diff, "days");
+    timeSlot.end = timeSlot.end.add(diff, "days");
+  });
+  scheduleStore.replaceSchedule(schedule.value);
+}
+function overrideAllDate() {
+  if (noValidDateOverride.value) {
+    return;
+  }
+  schedule.value.forEach((timeSlot) => {
+    timeSlot.start = timeSlot.start
+      .set("year", dateOverride.value.year())
+      .set("month", dateOverride.value.month())
+      .set("date", dateOverride.value.date());
+    timeSlot.end = timeSlot.end
+      .set("year", dateOverride.value.year())
+      .set("month", dateOverride.value.month())
+      .set("date", dateOverride.value.date());
   });
   scheduleStore.replaceSchedule(schedule.value);
 }
