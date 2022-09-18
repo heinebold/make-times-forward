@@ -47,6 +47,7 @@ label {
 label input {
   width: 14em;
   max-width: 14em;
+  margin-left: 0.2em;
   font-size: var(--edit-font-size);
 }
 </style>
