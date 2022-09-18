@@ -13,16 +13,23 @@
           >Single Ding Dong Tubular Bell by Alexander - Orange Free Sounds</a
         >
       </p>
-      <p>
-        This app uses vue 3, vue-router 4, and dayjs, which all are under MIT
-        license.
-      </p>
+      <h3>Open Source projects (all MIT license):</h3>
+      <ul>
+        <li><a href="https://vuejs.org/">Vue 3</a></li>
+        <li><a href="https://router.vuejs.org/">vue-router</a></li>
+        <li><a href="https://pinia.vuejs.org/">pinia</a></li>
+        <li><a href="https://day.js.org/">dayjs</a></li>
+        <li><a href="https://vue-final-modal.org/">vue-final-modal</a></li>
+        <li>
+          <a href="https://github.com/eligrey/FileSaver.js">file-saver</a>
+        </li>
+      </ul>
     </section>
     <section>
       <h3>Disclaimer</h3>
       <p>
         This is a private page, I do not earn any money with it and only intend
-        to use it myself. The only reason you find it in the internet is because
+        to use it myself. The only reason you find it on the internet is because
         I want to access it with my phone.
       </p>
       <p>
