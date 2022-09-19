@@ -4,6 +4,7 @@ interface State {
   use12hTime: boolean;
   showPastInList: boolean;
   playSounds: boolean;
+  alwaysToday: boolean;
 }
 
 export const useSettingsStore = defineStore("settings", {
@@ -11,6 +12,7 @@ export const useSettingsStore = defineStore("settings", {
     use12hTime: localStorage.getItem("timeDisplayMode") === "12h",
     showPastInList: !!localStorage.getItem("showPastInList"),
     playSounds: !!localStorage.getItem("playSounds"),
+    alwaysToday: !!localStorage.getItem("alwaysToday"),
   }),
   actions: {
     set12hTime(use12h: boolean) {
@@ -31,6 +33,14 @@ export const useSettingsStore = defineStore("settings", {
         localStorage.setItem("playSounds", "playSounds");
       } else {
         localStorage.removeItem("playSounds");
+      }
+    },
+    setAlwaysToday(alwaysToday: boolean) {
+      this.alwaysToday = alwaysToday;
+      if (alwaysToday) {
+        localStorage.setItem("alwaysToday", "alwaysToday");
+      } else {
+        localStorage.removeItem("alwaysToday");
       }
     },
   },

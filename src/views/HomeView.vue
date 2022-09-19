@@ -12,15 +12,51 @@
 <script setup lang="ts">
 import CurrentSchedulePanel from "@/components/CurrentSchedulePanel.vue";
 import FullSchedulePanel from "@/components/FullSchedulePanel.vue";
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useScheduleStore } from "@/stores/schedule";
 import MainSquare from "@/components/MainSquare.vue";
+import { useClock } from "@/composables/clock";
+import { Dayjs } from "dayjs";
+import type { TimeSlot } from "@/model/TimeSlot";
 
 const scheduleStore = useScheduleStore();
 const settingsStore = useSettingsStore();
-const schedule = computed(() => scheduleStore.schedule);
+const appTime = useClock();
 const showPast = computed(() => settingsStore.showPastInList);
+const alwaysToday = computed(() => settingsStore.alwaysToday);
+
+const today = ref(appTime.value.startOf("day"));
+watch(
+  () => appTime.value.startOf("day"),
+  (newToday: Dayjs, oldToday: Dayjs) => {
+    if (!newToday.isSame(oldToday, "date")) {
+      today.value = newToday;
+    }
+  }
+);
+
+const schedule = computed(() =>
+  alwaysToday.value
+    ? adjustedSchedule(scheduleStore.schedule)
+    : scheduleStore.schedule
+);
+
+function adjustedSchedule(schedule: TimeSlot[]) {
+  const dateOverride = today.value;
+  return schedule.map((item) => ({
+    id: item.id,
+    title: item.title,
+    start: item.start
+      .set("year", dateOverride.year())
+      .set("month", dateOverride.month())
+      .set("date", dateOverride.date()),
+    end: item.end
+      .set("year", dateOverride.year())
+      .set("month", dateOverride.month())
+      .set("date", dateOverride.date()),
+  }));
+}
 </script>
 
 <style scoped>
