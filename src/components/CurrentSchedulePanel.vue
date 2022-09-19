@@ -26,6 +26,7 @@ import { defineComponent } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useClock } from "@/composables/clock";
 import { useSound } from "@/composables/sound";
+import type { Schedule } from "@/model/Schedule";
 
 export default defineComponent({
   name: "CurrentSchedulePanel",
@@ -40,9 +41,9 @@ export default defineComponent({
     };
   },
   computed: {
-    sortedItems(): Array<TimeSlot> {
+    sortedItems(): Schedule {
       // TODO properly type the prop and remove this, now that it's not needed for sorting anymore
-      return (this.items ?? []) as TimeSlot[];
+      return (this.items ?? []) as Schedule;
     },
     firstNonPastIndex(): number {
       const foundIndex = this.sortedItems.findIndex((item: TimeSlot) =>

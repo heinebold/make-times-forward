@@ -96,7 +96,8 @@ import FileSelector from "@/components/FileSelector.vue";
 import { saveAs } from "file-saver";
 import { $vfm as vueFinalModal } from "vue-final-modal";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
-import { parseSchedule, stringifySchedule } from "@/model/TimeSlot";
+import { parseSchedule, stringifySchedule } from "@/model/Schedule";
+import type { Schedule } from "@/model/Schedule";
 import dayjs from "dayjs";
 
 const scheduleStore = useScheduleStore();
@@ -208,7 +209,7 @@ function importFile(file: File) {
     );
 }
 
-function confirmImport(params?: { data?: TimeSlot[] }) {
+function confirmImport(params?: { data?: Schedule }) {
   currentItem.value = undefined;
   updateSelection(-1);
   scheduleStore.replaceSchedule(params?.data ?? []);

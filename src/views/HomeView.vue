@@ -17,8 +17,8 @@ import { useSettingsStore } from "@/stores/settings";
 import { useScheduleStore } from "@/stores/schedule";
 import MainSquare from "@/components/MainSquare.vue";
 import { useClock } from "@/composables/clock";
-import { Dayjs } from "dayjs";
-import type { TimeSlot } from "@/model/TimeSlot";
+import type { Dayjs } from "dayjs";
+import type { Schedule } from "@/model/Schedule";
 
 const scheduleStore = useScheduleStore();
 const settingsStore = useSettingsStore();
@@ -42,7 +42,7 @@ const schedule = computed(() =>
     : scheduleStore.schedule
 );
 
-function adjustedSchedule(schedule: TimeSlot[]) {
+function adjustedSchedule(schedule: Schedule) {
   const dateOverride = today.value;
   return schedule.map((item) => ({
     id: item.id,

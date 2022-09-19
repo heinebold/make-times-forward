@@ -1,18 +1,14 @@
 import { defineStore } from "pinia";
 import type { TimeSlot } from "@/model/TimeSlot";
-import {
-  byStart,
-  generateId,
-  normalizeTimeSlot,
-  parseSchedule,
-  stringifySchedule,
-} from "@/model/TimeSlot";
+import { byStart, generateId, normalizeTimeSlot } from "@/model/TimeSlot";
+import { parseSchedule, stringifySchedule } from "@/model/Schedule";
+import type { Schedule } from "@/model/Schedule";
 
 interface State {
-  schedule: TimeSlot[];
+  schedule: Schedule;
 }
 
-function readStoredSchedule(): TimeSlot[] {
+function readStoredSchedule(): Schedule {
   try {
     return parseSchedule(localStorage.getItem("schedule") ?? "") ?? [];
   } catch (e) {
@@ -20,7 +16,7 @@ function readStoredSchedule(): TimeSlot[] {
   }
 }
 
-function saveSchedule(schedule: TimeSlot[]) {
+function saveSchedule(schedule: Schedule) {
   localStorage.setItem("schedule", stringifySchedule(schedule));
 }
 
@@ -50,7 +46,7 @@ export const useScheduleStore = defineStore("schedule", {
         saveSchedule(this.schedule);
       }
     },
-    replaceSchedule(newSchedule: TimeSlot[]) {
+    replaceSchedule(newSchedule: Schedule) {
       this.schedule = newSchedule.sort(byStart);
       saveSchedule(this.schedule);
     },

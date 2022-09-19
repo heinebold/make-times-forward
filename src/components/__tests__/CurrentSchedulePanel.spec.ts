@@ -9,10 +9,10 @@ import { mount } from "@vue/test-utils";
 import CurrentSchedulePanel from "../CurrentSchedulePanel.vue";
 import dayjs from "dayjs";
 import { createTestingPinia } from "@pinia/testing";
-import type { TimeSlot } from "../../model/TimeSlot";
+import type { Schedule } from "../../model/Schedule";
 import { setAppClock } from "../../composables/clock";
 
-function mountPanel(items: TimeSlot[]) {
+function mountPanel(items: Schedule) {
   return mount(CurrentSchedulePanel, {
     props: { items },
     global: {
@@ -51,7 +51,7 @@ describe("The CurrentSchedulePanel component", () => {
     start: dayjs("2020-03-02T01:23Z"),
     end: dayjs("2020-03-02T02:34Z"),
   };
-  const simpleSchedule: TimeSlot[] = [past, present, future];
+  const simpleSchedule: Schedule = [past, present, future];
 
   beforeAll(() => {
     vi.mock("@/composables/sound", () => ({ useSound: mockUseSound }));
@@ -63,18 +63,8 @@ describe("The CurrentSchedulePanel component", () => {
     vi.unmock("@/composables/sound");
   });
 
-  it("sorts the items", () => {
-    const mount1 = mountPanel(simpleSchedule);
-    const mount2 = mountPanel([future, past, present]);
-    const mount3 = mountPanel([present, past, future]);
-
-    expect(mount2.html()).toEqual(mount1.html());
-    expect(mount3.html()).toEqual(mount1.html());
-  });
-
   it("shows a bunch of placeholders when there's no schedule", () => {
     const wrapper = mountPanel([]);
-    expect(wrapper.findAll(".current-schedule > *").length).toEqual(3);
     expect(wrapper.findAll(".placeholder").length).toEqual(3);
   });
 
