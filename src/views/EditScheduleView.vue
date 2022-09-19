@@ -30,14 +30,24 @@
         <input type="date" v-model="dateOverrideString" />
       </div>
       <div class="actions-panel">
-        <button @click="overrideStartDate" :disabled="noValidDateOverride">
-          Set Start
+        <button
+          v-if="scheduleStart?.isSame(scheduleEnd, 'date')"
+          @click="overrideAllDate"
+          :disabled="noValidDateOverride"
+        >
+          Set Date
         </button>
-        <button @click="overrideEndDate" :disabled="noValidDateOverride">
-          Set End</button
-        ><button @click="overrideAllDate" :disabled="noValidDateOverride">
-          Override All
-        </button>
+        <template v-else>
+          <button @click="overrideStartDate" :disabled="noValidDateOverride">
+            Set Start
+          </button>
+          <button @click="overrideEndDate" :disabled="noValidDateOverride">
+            Set End
+          </button>
+          <button @click="overrideAllDate" :disabled="noValidDateOverride">
+            Override All
+          </button>
+        </template>
       </div>
     </schedule-card>
   </main-square>
