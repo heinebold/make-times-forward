@@ -38,24 +38,29 @@ watch(
 
 const schedule = computed(() =>
   alwaysToday.value
-    ? adjustedSchedule(scheduleStore.schedule)
+    ? adjustedSchedule(scheduleStore.schedule, today.value)
     : scheduleStore.schedule
 );
 
-function adjustedSchedule(schedule: Schedule) {
-  const dateOverride = today.value;
-  return schedule.map((item) => ({
-    id: item.id,
-    title: item.title,
-    start: item.start
-      .set("year", dateOverride.year())
-      .set("month", dateOverride.month())
-      .set("date", dateOverride.date()),
-    end: item.end
-      .set("year", dateOverride.year())
-      .set("month", dateOverride.month())
-      .set("date", dateOverride.date()),
-  }));
+function adjustedSchedule(schedule: Schedule, date: Dayjs): Schedule {
+  if (schedule.length < 1) {
+    return schedule;
+  }
+  const diff = date
+    .subtract(1, "day")
+    .diff(schedule[0].start.startOf("day"), "days");
+
+  const result = schedule.map((item) => {
+    const start = item.start.add(diff, "days");
+    const end = item.end.add(diff, "days");
+    const id = item.id;
+    const title = item.title;
+    return { id, title, start, end };
+  });
+
+  return result[result.length - 1].end.isBefore(appTime.value)
+    ? adjustedSchedule(schedule, date.add(1, "day"))
+    : result;
 }
 </script>
 

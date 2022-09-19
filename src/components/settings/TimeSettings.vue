@@ -10,8 +10,7 @@
       always assume today</label
     >
     <br /><small
-      >This only yields usable results for schedules that don't cross
-      midnight</small
+      >This only yields satisfying results for schedules that span ≤24h</small
     >
   </p>
 </template>
