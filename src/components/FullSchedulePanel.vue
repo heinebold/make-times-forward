@@ -84,7 +84,10 @@ export default defineComponent({
   gap: 0.5em;
 }
 .schedule-entry > * {
-  flex-grow: 1;
+  flex: 1;
+}
+.schedule-entry > label {
+  flex: 0 1 min-content;
 }
 .schedule-entry label {
   font-size: 70%;
