@@ -1,24 +1,16 @@
 <template>
-  <div class="schedule-item">
-    <div class="title" :title="title">{{ title }}</div>
+  <div class="schedule-item" :title="title">
+    <text-clamp class="title" :text="title" :max-lines="2" />
     <duration-info class="info" :start="start" :end="end" />
   </div>
 </template>
 
-<script lang="ts">
-import dayjs from "dayjs";
+<script setup lang="ts">
+import type { Dayjs } from "dayjs";
+import TextClamp from "vue3-text-clamp";
 import DurationInfo from "@/components/DurationInfo.vue";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-  name: "ScheduleItem",
-  components: { DurationInfo },
-  props: {
-    start: { type: dayjs, required: true },
-    end: { type: dayjs, required: true },
-    title: String,
-  },
-});
+defineProps<{ start: Dayjs; end: Dayjs; title: string }>();
 </script>
 
 <style scoped>
@@ -33,11 +25,9 @@ div.schedule-item {
   align-items: center;
 }
 
-div.title {
+.title {
   font-size: 66%;
-  text-overflow: ellipsis;
   line-height: 1.2em;
-  max-height: 2.4em;
 }
 
 .info {
