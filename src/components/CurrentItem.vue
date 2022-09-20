@@ -1,6 +1,6 @@
 <template>
-  <div class="schedule-item">
-    <div class="title" :title="title">{{ title }}</div>
+  <div class="schedule-item" :title="title">
+    <text-clamp class="title" :text="title" :max-lines="2" />
     <div class="main">
       <duration-info class="duration-info" :start="start" :end="end" />
       <div class="countdown">
@@ -21,40 +21,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import dayjs, { Dayjs } from "dayjs";
+<script setup lang="ts">
+import type { Dayjs } from "dayjs";
+import TextClamp from "vue3-text-clamp";
 import CountdownClock from "@/components/CountdownClock.vue";
 import ElapsedSecondsMeter from "@/components/ElapsedSecondsMeter.vue";
 import DurationInfo from "@/components/DurationInfo.vue";
-import { defineComponent } from "vue";
+import { computed } from "vue";
 import { useClock } from "@/composables/clock";
 
-export default defineComponent({
-  name: "CurrentItem",
-  components: { DurationInfo, ElapsedSecondsMeter, CountdownClock },
-  props: {
-    start: { type: dayjs, required: true },
-    end: { type: dayjs, required: true },
-    title: String,
-  },
-  setup() {
-    return { appTime: useClock() };
-  },
-  computed: {
-    durationSeconds(): number {
-      return (this.end as Dayjs).diff(this.start as Dayjs, "seconds");
-    },
-    elapsedSeconds(): number {
-      return (this.appTime as Dayjs).diff(this.start as Dayjs, "seconds");
-    },
-    hasStarted(): boolean {
-      return !(this.appTime as Dayjs).isBefore(this.start as Dayjs, "second");
-    },
-    hasEnded(): boolean {
-      return (this.appTime as Dayjs).isAfter(this.end as Dayjs, "second");
-    },
-  },
-});
+const appTime = useClock();
+const props = defineProps<{ start: Dayjs; end: Dayjs; title: string }>();
+
+const durationSeconds = computed(() => props.end.diff(props.start, "seconds"));
+const elapsedSeconds = computed(() =>
+  appTime.value.diff(props.start, "seconds")
+);
+const hasStarted = computed(
+  () => !appTime.value.isBefore(props.start, "second")
+);
+const hasEnded = computed(() => appTime.value.isAfter(props.end, "second"));
 </script>
 
 <style scoped>
@@ -74,11 +60,9 @@ div.schedule-item {
 div.countdown {
   font-size: 120%;
 }
-div.title {
+.title {
   font-size: 100%;
-  text-overflow: ellipsis;
   line-height: 1.2em;
-  max-height: 2.4em;
   margin-bottom: 0.33em;
 }
 
