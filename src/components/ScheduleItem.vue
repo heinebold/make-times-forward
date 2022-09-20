@@ -42,7 +42,7 @@ div.title {
 
 .info {
   font-size: 50%;
-  width: 7em;
   text-align: center;
+  flex-shrink: 0;
 }
 </style>
