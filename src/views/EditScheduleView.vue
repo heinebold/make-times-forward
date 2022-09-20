@@ -17,16 +17,42 @@
         </button>
       </div>
     </schedule-card>
-    <schedule-card class="file-panel">
+    <schedule-card class="controls-panel">
       <h3>File Import/Export</h3>
       <div class="actions-panel">
         <file-selector @import-file="importFile" />
         <button @click="exportFile">Export</button>
       </div>
     </schedule-card>
+    <schedule-card class="controls-panel">
+      <h3>Schedule Date</h3>
+      <div class="actions-panel">
+        <input type="date" v-model="dateOverrideString" />
+      </div>
+      <div class="actions-panel">
+        <button
+          v-if="scheduleStart?.isSame(scheduleEnd, 'date')"
+          @click="overrideAllDate"
+          :disabled="noValidDateOverride"
+        >
+          Set Date
+        </button>
+        <template v-else>
+          <button @click="overrideStartDate" :disabled="noValidDateOverride">
+            Set Start
+          </button>
+          <button @click="overrideEndDate" :disabled="noValidDateOverride">
+            Set End
+          </button>
+          <button @click="overrideAllDate" :disabled="noValidDateOverride">
+            Override All
+          </button>
+        </template>
+      </div>
+    </schedule-card>
   </main-square>
   <main-square>
-    <h2>Schedule</h2>
+    <h2 v-text="scheduleHeading" />
     <full-schedule-panel
       numbered
       :items="schedule"
@@ -70,7 +96,9 @@ import FileSelector from "@/components/FileSelector.vue";
 import { saveAs } from "file-saver";
 import { $vfm as vueFinalModal } from "vue-final-modal";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
-import { parseSchedule, stringifySchedule } from "@/model/TimeSlot";
+import { parseSchedule, stringifySchedule } from "@/model/Schedule";
+import type { Schedule } from "@/model/Schedule";
+import dayjs from "dayjs";
 
 const scheduleStore = useScheduleStore();
 const schedule = computed(() => scheduleStore.schedule);
@@ -93,9 +121,45 @@ const currentItemModified = computed(() => {
     currentItem.value?.end.isSame(currentSelected?.end, "minute")
   );
 });
+const dateOverride = ref(dayjs());
+const dateOverrideString = computed({
+  get: () => dateOverride.value.format("YYYY-MM-DD"),
+  set: (newValue: string) => {
+    dateOverride.value = dayjs(`${newValue}T00:00:00Z`);
+  },
+});
+const noValidDateOverride = computed(() => isNaN(dateOverride.value.day()));
 const showModal = ref(false);
 
+const scheduleStart = computed(() => schedule.value[0]?.start);
+const scheduleEnd = computed(() => {
+  if (!schedule.value?.length) {
+    return undefined;
+  }
+  return schedule.value.reduce((acc: TimeSlot, current: TimeSlot) =>
+    current.end.isAfter(acc.end, "date") ? current : acc
+  ).end;
+});
+
+const scheduleHeading = computed(() => {
+  if (schedule.value.length < 1) {
+    return "Schedule";
+  }
+  const start = scheduleStart.value?.format("YYYY-MM-DD") ?? "";
+  const end = scheduleEnd.value?.format("YYYY-MM-DD") ?? "";
+  if (start === end) {
+    return start;
+  }
+  return `${start} - ${end}`;
+});
+
 watch(currentIndex, updateSelection);
+watch(scheduleStart, () =>
+  console.log(
+    scheduleStart.value?.toISOString(),
+    scheduleEnd.value?.toISOString()
+  )
+);
 
 function updateItem() {
   if (currentItem.value) {
@@ -145,7 +209,7 @@ function importFile(file: File) {
     );
 }
 
-function confirmImport(params?: { data?: TimeSlot[] }) {
+function confirmImport(params?: { data?: Schedule }) {
   currentItem.value = undefined;
   updateSelection(-1);
   scheduleStore.replaceSchedule(params?.data ?? []);
@@ -156,6 +220,50 @@ function exportFile() {
     type: "text/json",
   });
   saveAs(data, "schedule.json");
+}
+
+function overrideStartDate() {
+  if (noValidDateOverride.value || !scheduleStart.value) {
+    console.log("bah");
+    return;
+  }
+  const diff = dateOverride.value
+    .startOf("day")
+    .diff(scheduleStart.value.startOf("day"), "days");
+  schedule.value.forEach((timeSlot) => {
+    timeSlot.start = timeSlot.start.add(diff, "days");
+    timeSlot.end = timeSlot.end.add(diff, "days");
+  });
+  scheduleStore.replaceSchedule(schedule.value);
+}
+function overrideEndDate() {
+  if (noValidDateOverride.value || !scheduleEnd.value) {
+    return;
+  }
+  const diff = dateOverride.value
+    .startOf("day")
+    .diff(scheduleEnd.value.startOf("day"), "days");
+  schedule.value.forEach((timeSlot) => {
+    timeSlot.start = timeSlot.start.add(diff, "days");
+    timeSlot.end = timeSlot.end.add(diff, "days");
+  });
+  scheduleStore.replaceSchedule(schedule.value);
+}
+function overrideAllDate() {
+  if (noValidDateOverride.value) {
+    return;
+  }
+  schedule.value.forEach((timeSlot) => {
+    timeSlot.start = timeSlot.start
+      .set("year", dateOverride.value.year())
+      .set("month", dateOverride.value.month())
+      .set("date", dateOverride.value.date());
+    timeSlot.end = timeSlot.end
+      .set("year", dateOverride.value.year())
+      .set("month", dateOverride.value.month())
+      .set("date", dateOverride.value.date());
+  });
+  scheduleStore.replaceSchedule(schedule.value);
 }
 </script>
 
@@ -180,7 +288,7 @@ function exportFile() {
   gap: 1em;
   margin: 0.5em 0;
 }
-.file-panel {
+.controls-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -188,7 +296,8 @@ function exportFile() {
   justify-content: center;
 }
 
-.actions-panel button {
+.actions-panel button,
+.actions-panel input {
   font-size: 67%;
   padding: 0.334em 0.667em;
   white-space: nowrap;

@@ -21,6 +21,7 @@ import ScheduleItem from "@/components/ScheduleItem.vue";
 import type { TimeSlot } from "@/model/TimeSlot";
 import { defineComponent } from "vue";
 import { useClock } from "@/composables/clock";
+import type { Schedule } from "@/model/Schedule";
 
 export default defineComponent({
   name: "FullSchedulePanel",
@@ -37,7 +38,7 @@ export default defineComponent({
   computed: {
     durationSum(): number {
       return this.items?.length
-        ? (this.items as TimeSlot[])
+        ? (this.items as Schedule)
             .map((t) => Math.abs(t.end.diff(t.start, "minutes")))
             .reduce(
               (previousValue, currentValue) => previousValue + currentValue

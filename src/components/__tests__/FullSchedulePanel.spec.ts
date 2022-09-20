@@ -4,10 +4,10 @@ import { mount } from "@vue/test-utils";
 import FullSchedulePanel from "../FullSchedulePanel.vue";
 import dayjs from "dayjs";
 import { createTestingPinia } from "@pinia/testing";
-import type { TimeSlot } from "../../model/TimeSlot";
+import type { Schedule } from "../../model/Schedule";
 import { setAppClock } from "../../composables/clock";
 
-const simpleSchedule: TimeSlot[] = [
+const simpleSchedule: Schedule = [
   {
     id: "past",
     title: "Past",
@@ -31,7 +31,7 @@ const simpleSchedule: TimeSlot[] = [
 function mountPanel(
   props: {
     showPast: boolean;
-    selected?: number | null;
+    selected?: string | null;
     numbered?: boolean | null;
   },
   items = simpleSchedule
@@ -74,7 +74,10 @@ describe("The FullSchedulePanel component", () => {
   it.each([0, 1, 2])(
     "Marks the selected item if it is visible (#%i)",
     (selected) => {
-      const wrapper = mountPanel({ showPast: true, selected });
+      const wrapper = mountPanel({
+        showPast: true,
+        selected: simpleSchedule[selected].id,
+      });
       expect(wrapper.findAll(".selected").length).toBe(1);
       expect(wrapper.find(".selected").text()).toContain(
         wrapper.props()["items"][selected].title
@@ -83,11 +86,11 @@ describe("The FullSchedulePanel component", () => {
   );
 
   it("Marks nothing as selected if selected item is hidden", () => {
-    const wrapper = mountPanel({ showPast: false, selected: 0 });
+    const wrapper = mountPanel({ showPast: false, selected: "past" });
     expect(wrapper.findAll(".selected").length).toBe(0);
   });
 
-  it.each([undefined, null, -1, 42])(
+  it.each([undefined, null, "nope", ""])(
     "Marks nothing (so especially not item #0) as selected if no or an invalid selection index (%s) is given",
     (selected) => {
       const wrapper = mountPanel({ showPast: true, selected });
