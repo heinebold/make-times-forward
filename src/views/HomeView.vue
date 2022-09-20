@@ -36,31 +36,38 @@ watch(
   }
 );
 
-const schedule = computed(() =>
+const scheduleToday = computed(() =>
   alwaysToday.value
     ? adjustedSchedule(scheduleStore.schedule, today.value)
     : scheduleStore.schedule
+);
+const scheduleYesterday = computed(() =>
+  alwaysToday.value
+    ? adjustedSchedule(scheduleStore.schedule, today.value.subtract(1, "day"))
+    : scheduleStore.schedule
+);
+
+const schedule = computed(() =>
+  scheduleYesterday.value[scheduleYesterday.value.length - 1].end.isBefore(
+    appTime.value
+  )
+    ? scheduleToday.value
+    : scheduleYesterday.value
 );
 
 function adjustedSchedule(schedule: Schedule, date: Dayjs): Schedule {
   if (schedule.length < 1) {
     return schedule;
   }
-  const diff = date
-    .subtract(1, "day")
-    .diff(schedule[0].start.startOf("day"), "days");
+  const diff = date.diff(schedule[0].start.startOf("day"), "days");
 
-  const result = schedule.map((item) => {
+  return schedule.map((item) => {
     const start = item.start.add(diff, "days");
     const end = item.end.add(diff, "days");
     const id = item.id;
     const title = item.title;
     return { id, title, start, end };
   });
-
-  return result[result.length - 1].end.isBefore(appTime.value)
-    ? adjustedSchedule(schedule, date.add(1, "day"))
-    : result;
 }
 </script>
 
