@@ -1,10 +1,16 @@
 <template>
   <main-square class="current-schedule">
-    <current-schedule-panel :items="schedule" />
+    <current-schedule-panel :items="schedule" v-if="schedule.length" />
+    <schedule-card class="empty-info" v-else
+      ><h2>The current schedule is empty</h2>
+      <p>
+        Go to the <router-link to="edit-schedule">Edit Section</router-link> to
+        add some items to your schedule or to import them from a file.
+      </p></schedule-card
+    >
   </main-square>
-  <main-square>
+  <main-square v-if="schedule.length">
     <h2>Schedule</h2>
-
     <full-schedule-panel :items="schedule" :show-past="showPast" />
   </main-square>
 </template>
@@ -19,6 +25,7 @@ import MainSquare from "@/components/MainSquare.vue";
 import { useClock } from "@/composables/clock";
 import type { Dayjs } from "dayjs";
 import type { Schedule } from "@/model/Schedule";
+import ScheduleCard from "@/components/ScheduleCard.vue";
 
 const scheduleStore = useScheduleStore();
 const settingsStore = useSettingsStore();
@@ -67,5 +74,13 @@ function adjustedSchedule(schedule: Schedule, date: Dayjs): Schedule {
 <style scoped>
 .current-schedule {
   justify-content: space-evenly;
+}
+.empty-info h2 {
+  text-align: center;
+}
+.empty-info p {
+  font-size: 66%;
+  width: 90%;
+  margin: auto;
 }
 </style>
