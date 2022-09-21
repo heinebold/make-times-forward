@@ -154,12 +154,6 @@ const scheduleHeading = computed(() => {
 });
 
 watch(currentIndex, updateSelection);
-watch(scheduleStart, () =>
-  console.log(
-    scheduleStart.value?.toISOString(),
-    scheduleEnd.value?.toISOString()
-  )
-);
 
 function updateItem() {
   if (currentItem.value) {
@@ -224,7 +218,6 @@ function exportFile() {
 
 function overrideStartDate() {
   if (noValidDateOverride.value || !scheduleStart.value) {
-    console.log("bah");
     return;
   }
   const diff = dateOverride.value
