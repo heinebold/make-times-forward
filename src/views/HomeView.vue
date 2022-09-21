@@ -48,7 +48,7 @@ const scheduleYesterday = computed(() =>
 );
 
 const schedule = computed(() =>
-  scheduleYesterday.value[scheduleYesterday.value.length - 1].end.isBefore(
+  scheduleYesterday.value[scheduleYesterday.value.length - 1]?.end.isBefore(
     appTime.value
   )
     ? scheduleToday.value
@@ -59,7 +59,7 @@ function adjustedSchedule(schedule: Schedule, date: Dayjs): Schedule {
   if (schedule.length < 1) {
     return schedule;
   }
-  const diff = date.diff(schedule[0].start.startOf("day"), "days");
+  const diff = date.diff(schedule[0]?.start.startOf("day"), "days");
 
   return schedule.map((item) => {
     const start = item.start.add(diff, "days");
