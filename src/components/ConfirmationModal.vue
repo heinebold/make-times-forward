@@ -1,10 +1,10 @@
 <template>
   <vue-final-modal
-    :focus-trap="true"
     v-slot="{ params, close }"
     classes="modal-container"
     content-class="modal-content"
     @before-open="confirmed = false"
+    @opened="confirmButton.focus({ focusVisible: true })"
     @before-close="
       confirmed ? emit('confirm', $event.ref.params.value) : emit('cancel')
     "
@@ -14,6 +14,7 @@
       <button @click="close"><slot name="cancel">Cancel</slot></button>
       <button
         v-if="params.canConfirm ?? true"
+        ref="confirmButton"
         @click="(confirmed = true) && close()"
       >
         <slot name="confirm">Confirm</slot>
@@ -30,6 +31,7 @@ const emit = defineEmits<{
   (e: "confirm", p: object): void;
 }>();
 const confirmed = ref(false);
+const confirmButton = ref();
 </script>
 
 <style scoped>
