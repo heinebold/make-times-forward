@@ -11,6 +11,10 @@
         <h4>Schedule</h4>
         <schedule-settings />
       </section>
+      <section>
+        <h4>Layout</h4>
+        <layout-settings />
+      </section>
     </section>
     <section id="notification-settings">
       <h3>Notifications</h3>
@@ -25,6 +29,7 @@
 import TimeSettings from "@/components/settings/TimeSettings.vue";
 import ScheduleSettings from "@/components/settings/ScheduleSettings.vue";
 import SoundSettings from "@/components/settings/SoundSettings.vue";
+import LayoutSettings from "@/components/settings/LayoutSettings.vue";
 </script>
 
 <style scoped>

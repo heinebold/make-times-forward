@@ -5,6 +5,7 @@ interface State {
   showPastInList: boolean;
   playSounds: boolean;
   alwaysToday: boolean;
+  headerAsFooter: boolean;
 }
 
 export const useSettingsStore = defineStore("settings", {
@@ -13,6 +14,7 @@ export const useSettingsStore = defineStore("settings", {
     showPastInList: !!localStorage.getItem("showPastInList"),
     playSounds: !!localStorage.getItem("playSounds"),
     alwaysToday: !!localStorage.getItem("alwaysToday"),
+    headerAsFooter: !!localStorage.getItem("headerAsFooter"),
   }),
   actions: {
     set12hTime(use12h: boolean) {
@@ -41,6 +43,14 @@ export const useSettingsStore = defineStore("settings", {
         localStorage.setItem("alwaysToday", "alwaysToday");
       } else {
         localStorage.removeItem("alwaysToday");
+      }
+    },
+    setHeaderAsFooter(headerAsFooter: boolean) {
+      this.headerAsFooter = headerAsFooter;
+      if (headerAsFooter) {
+        localStorage.setItem("headerAsFooter", "headerAsFooter");
+      } else {
+        localStorage.removeItem("headerAsFooter");
       }
     },
   },
