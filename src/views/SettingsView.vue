@@ -4,12 +4,17 @@
     <section id="display-settings">
       <h3>Display</h3>
       <section>
-        <h4>Time</h4>
+        <h4>Clock</h4>
         <time-settings />
       </section>
       <section>
-        <h4>Schedule View</h4>
-        <list-settings />
+        <h4>Schedule</h4>
+        <schedule-settings />
+      </section>
+    </section>
+    <section id="notification-settings">
+      <h3>Notifications</h3>
+      <section>
         <sound-settings />
       </section>
     </section>
@@ -18,7 +23,7 @@
 
 <script setup lang="ts">
 import TimeSettings from "@/components/settings/TimeSettings.vue";
-import ListSettings from "@/components/settings/ListSettings.vue";
+import ScheduleSettings from "@/components/settings/ScheduleSettings.vue";
 import SoundSettings from "@/components/settings/SoundSettings.vue";
 </script>
 
