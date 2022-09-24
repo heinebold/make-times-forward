@@ -1,5 +1,5 @@
 <template>
-  <button @click="$refs.fileInput.click">
+  <button @click="fileInput.click">
     <slot>Import</slot
     ><input ref="fileInput" type="file" @change="fileInputChange" />
   </button>

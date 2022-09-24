@@ -31,8 +31,8 @@ const simpleSchedule: Schedule = [
 function mountPanel(
   props: {
     showPast: boolean;
-    selected?: string | null;
-    numbered?: boolean | null;
+    selected?: string;
+    numbered?: boolean;
   },
   items = simpleSchedule
 ) {
@@ -90,7 +90,7 @@ describe("The FullSchedulePanel component", () => {
     expect(wrapper.findAll(".selected").length).toBe(0);
   });
 
-  it.each([undefined, null, "nope", ""])(
+  it.each([undefined, "nope", ""])(
     "Marks nothing (so especially not item #0) as selected if no or an invalid selection index (%s) is given",
     (selected) => {
       const wrapper = mountPanel({ showPast: true, selected });

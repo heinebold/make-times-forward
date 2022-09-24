@@ -6,7 +6,7 @@
   <schedule-card class="current" :class="{ placeholder: !scheduleIsOngoing }">
     <current-item v-if="currentItem" v-bind="currentItem" />
     <progress
-      v-else-if="scheduleIsOngoing"
+      v-else-if="nextItem && previousItem"
       :max="nextItem.start.diff(previousItem.end, 'seconds')"
       :value="appTime.diff(previousItem.end, 'seconds')"
     />

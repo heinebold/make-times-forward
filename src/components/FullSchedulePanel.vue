@@ -55,7 +55,7 @@ export default defineComponent({
       if (!this.items) {
         return [];
       }
-      let result = [];
+      const result = [];
       for (let itemIndex = 0; itemIndex < this.items.length; itemIndex++) {
         const item = this.items[itemIndex] as TimeSlot;
         const successor = this.items[itemIndex + 1] as TimeSlot;
