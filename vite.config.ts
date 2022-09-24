@@ -32,8 +32,83 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       vue(),
       VitePWA({
+        manifestFilename: "pwa/manifest.webmanifest",
+        injectRegister: "inline",
+        workbox: {
+          globPatterns: ["**/*.{js,css,html,svg,png}"],
+        },
         manifest: {
-          icons: [{ src: "pwa-256.png", sizes: "256x256", type: "image/png" }],
+          id: "make-times-forward",
+          name: "Make Times Forward",
+          short_name: "Make Times Forward",
+          display_override: [
+            "fullscreen",
+            "window-controls-overlay",
+            "standalone",
+          ],
+          display: "fullscreen",
+          background_color: "#808080",
+          icons: [
+            { src: "icon-32.png", sizes: "32x32", type: "image/png" },
+            { src: "icon-64.png", sizes: "64x64", type: "image/png" },
+            {
+              src: "icon-128.png",
+              sizes: "128x128",
+              type: "image/png",
+            },
+            {
+              src: "icon-256.png",
+              sizes: "256x256",
+              type: "image/png",
+            },
+            {
+              src: "icon-512.png",
+              sizes: "512x512",
+              type: "image/png",
+            },
+            {
+              src: "icon-maskable-48.png",
+              sizes: "48x48",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "icon-maskable-72.png",
+              sizes: "72x72",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "icon-maskable-96.png",
+              sizes: "96x96",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "icon-maskable-128.png",
+              sizes: "128x128",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "icon-maskable-192.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "icon-maskable-384.png",
+              sizes: "384x384",
+              type: "image/png",
+              purpose: "maskable",
+            },
+            {
+              src: "icon-maskable-512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable",
+            },
+          ],
         },
       }),
       ...copyPlugin,
