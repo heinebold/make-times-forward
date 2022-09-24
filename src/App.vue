@@ -28,26 +28,28 @@ function clockEmoji(time: Dayjs): string {
 </script>
 
 <template>
-  <header>
-    <h1 title="Mach Mal Voran">Make Times Forward</h1>
-    <MainLogo class="logo" />
-    <nav>
-      <RouterLink to="/">Display</RouterLink>
-      <RouterLink to="/edit-schedule">Edit</RouterLink>
-      <RouterLink to="/settings">Settings</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-      <TextClock
-        :prefix="clockEmoji(appTime) + ' '"
-        include-seconds
-        :time="appTime"
-        :use12h="use12hTime"
-      />
-    </nav>
-  </header>
+  <div id="app">
+    <header>
+      <h1 title="Mach Mal Voran">Make Times Forward</h1>
+      <MainLogo class="logo" />
+      <nav>
+        <RouterLink to="/">Display</RouterLink>
+        <RouterLink to="/edit-schedule">Edit</RouterLink>
+        <RouterLink to="/settings">Settings</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+        <TextClock
+          :prefix="clockEmoji(appTime) + ' '"
+          include-seconds
+          :time="appTime"
+          :use12h="use12hTime"
+        />
+      </nav>
+    </header>
 
-  <main>
-    <RouterView />
-  </main>
+    <main>
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style>

@@ -10,4 +10,4 @@ app.use(router);
 app.use(vfmPlugin);
 app.use(createPinia());
 
-app.mount("#app");
+app.mount("body");
