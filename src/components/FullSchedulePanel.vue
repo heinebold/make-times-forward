@@ -1,12 +1,15 @@
 <template>
-  <div class="schedule-list">
+  <div class="schedule-list" :class="{ interactive: isInteractive }">
     <template v-for="(item, index) in enhancedItems" :key="item.id">
       <schedule-card
         class="schedule-entry"
         v-if="showPast || item.end.isAfter(appTime, 'minute')"
         :class="{ selected: item.id === selected }"
         :style="{ marginBottom: pauseMargin(item.pause) }"
-        @click="$emit('update:selected', item.id === selected ? '' : item.id)"
+        :tabindex="isInteractive ? 0 : undefined"
+        @click="select(item.id)"
+        @keydown.space="select(item.id)"
+        @keydown.enter="select(item.id)"
       >
         <label v-if="numbered">{{ index }}</label>
         <schedule-item v-bind="item" />
@@ -36,6 +39,9 @@ export default defineComponent({
     return { appTime: useClock() };
   },
   computed: {
+    isInteractive(): boolean {
+      return !!this.$attrs["onUpdate:selected"];
+    },
     durationSum(): number {
       return this.items?.length
         ? (this.items as Schedule)
@@ -62,6 +68,9 @@ export default defineComponent({
     },
   },
   methods: {
+    select(id: string) {
+      this.$emit("update:selected", id === this.selected ? "" : id);
+    },
     pause(item: TimeSlot, successor?: TimeSlot) {
       if (!this.durationSum) {
         return 0.015;
@@ -94,7 +103,13 @@ export default defineComponent({
   font-style: italic;
 }
 
-.selected {
+.schedule-entry.selected {
   background-color: var(--color-accent-bg);
+}
+.interactive .schedule-entry:not(.selected):hover {
+  background-color: var(--color-background-mute);
+}
+.interactive .schedule-entry.selected:hover {
+  color: var(--color-accent-fg);
 }
 </style>
