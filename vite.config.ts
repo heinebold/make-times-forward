@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from "url";
 import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import vue from "@vitejs/plugin-vue";
+import { VitePWA } from "vite-plugin-pwa";
 
 const base = "/make-times-forward/";
 
@@ -28,7 +29,15 @@ export default defineConfig(({ command, mode }) => {
       : [];
   return {
     base,
-    plugins: [vue(), ...copyPlugin],
+    plugins: [
+      vue(),
+      VitePWA({
+        manifest: {
+          icons: [{ src: "pwa-256.png", sizes: "256x256", type: "image/png" }],
+        },
+      }),
+      ...copyPlugin,
+    ],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
