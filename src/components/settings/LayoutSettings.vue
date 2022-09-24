@@ -1,8 +1,8 @@
 <template>
   <p>
     <label
-      ><input type="checkbox" v-model="showPastInList" /> Show past items in
-      Schedule</label
+      ><input type="checkbox" v-model="headerAsFooter" /> Move main menu to the
+      bottom</label
     >
   </p>
 </template>
@@ -12,8 +12,8 @@ import { computed } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 
 const store = useSettingsStore();
-const showPastInList = computed({
-  get: () => store.showPastInList,
-  set: store.setShowPastInList,
+const headerAsFooter = computed({
+  get: () => store.headerAsFooter,
+  set: store.setHeaderAsFooter,
 });
 </script>
