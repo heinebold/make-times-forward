@@ -21,6 +21,11 @@
         <li><a href="https://day.js.org/">dayjs</a></li>
         <li><a href="https://vue-final-modal.org/">vue-final-modal</a></li>
         <li>
+          <a href="https://sherwinshen.github.io/vue3-text-clamp"
+            >vue3-text-clamp</a
+          >
+        </li>
+        <li>
           <a href="https://github.com/eligrey/FileSaver.js">file-saver</a>
         </li>
       </ul>
