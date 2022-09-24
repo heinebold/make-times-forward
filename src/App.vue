@@ -28,7 +28,7 @@ function clockEmoji(time: Dayjs): string {
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" :class="{ headerAsFooter: settingsStore.headerAsFooter }">
     <header>
       <h1 title="Mach Mal Voran">Make Times Forward</h1>
       <MainLogo class="logo" />
@@ -66,6 +66,10 @@ function clockEmoji(time: Dayjs): string {
   display: flex;
   flex-direction: column;
   place-items: center;
+}
+
+#app.headerAsFooter {
+  flex-direction: column-reverse;
 }
 
 header {
