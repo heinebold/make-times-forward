@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import vue from "@vitejs/plugin-vue";
 
+const base = "/make-times-forward/";
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const copyPlugin =
@@ -14,18 +16,23 @@ export default defineConfig(({ command, mode }) => {
               {
                 src: "src/.htaccess",
                 dest: "",
+                transform: {
+                  encoding: "utf-8",
+                  handler: (content: string) =>
+                    content.replace("{{base}}", base),
+                },
               },
             ],
           }),
         ]
       : [];
   return {
+    base,
     plugins: [vue(), ...copyPlugin],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
-    base: "/make-times-forward/",
   };
 });
