@@ -34,11 +34,31 @@ export default defineConfig(({ command, mode }) => {
       VitePWA({
         manifestFilename: "pwa/manifest.webmanifest",
         injectRegister: "inline",
+        includeManifestIcons: false,
+        includeAssets: ["pwa/icon-maskable-384.png"],
         workbox: {
-          globPatterns: ["**/*.{js,css,html,svg,png}"],
+          runtimeCaching: [
+            {
+              urlPattern: /.+\.[0-9a-f]{8}\.[^/]+$/i,
+              handler: "CacheFirst",
+            },
+            {
+              urlPattern: /pwa\/icon(-maskable)?-\d+.*/i,
+              handler: "StaleWhileRevalidate",
+              options: {
+                precacheFallback: {
+                  fallbackURL: `${base}pwa/icon-maskable-384.png`,
+                },
+              },
+            },
+            {
+              urlPattern: /\.[^/]+$/i,
+              handler: "StaleWhileRevalidate",
+            },
+          ],
         },
         manifest: {
-          id: "make-times-forward",
+          id: base,
           name: "Make Times Forward",
           short_name: "Make Times Forward",
           display_override: [
