@@ -37,10 +37,17 @@ export default defineConfig(({ command, mode }) => {
         includeManifestIcons: false,
         includeAssets: ["pwa/icon-maskable-384.png"],
         workbox: {
+          globPatterns: [
+            "**/*.{js,css,html}",
+            "assets/Single-ding-dong-tubular-bell.*.mp3",
+          ],
           runtimeCaching: [
             {
               urlPattern: /.+\.[0-9a-f]{8}\.[^/]+$/i,
               handler: "CacheFirst",
+              options: {
+                rangeRequests: true,
+              },
             },
             {
               urlPattern: /pwa\/icon(-maskable)?-\d+.*/i,
