@@ -35,13 +35,22 @@ export default defineConfig(({ command, mode }) => {
         manifestFilename: "pwa/manifest.webmanifest",
         injectRegister: "inline",
         includeManifestIcons: false,
-        includeAssets: ["pwa/icon-maskable-384.png"],
+        includeAssets: ["pwa/icon-256.png", "pwa/icon-maskable-384.png"],
         workbox: {
           globPatterns: [
             "**/*.{js,css,html}",
             "assets/Single-ding-dong-tubular-bell.*.mp3",
           ],
           runtimeCaching: [
+            {
+              urlPattern: /assets\/time-management-\d+.+\.[0-9a-f]{8}\.[^/]+$/i,
+              handler: "CacheFirst",
+              options: {
+                precacheFallback: {
+                  fallbackURL: `${base}pwa/icon-256.png`,
+                },
+              },
+            },
             {
               urlPattern: /.+\.[0-9a-f]{8}\.[^/]+$/i,
               handler: "CacheFirst",
@@ -50,7 +59,16 @@ export default defineConfig(({ command, mode }) => {
               },
             },
             {
-              urlPattern: /pwa\/icon(-maskable)?-\d+.*/i,
+              urlPattern: /pwa\/icon-\d+.*/i,
+              handler: "StaleWhileRevalidate",
+              options: {
+                precacheFallback: {
+                  fallbackURL: `${base}pwa/icon-256.png`,
+                },
+              },
+            },
+            {
+              urlPattern: /pwa\/icon-maskable-\d+.*/i,
               handler: "StaleWhileRevalidate",
               options: {
                 precacheFallback: {
