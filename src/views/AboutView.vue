@@ -1,6 +1,11 @@
 <template>
   <div class="about">
     <h2>About</h2>
+    <section v-if="updateAvailable">
+      <h3>🆙 Update available 🆕</h3>
+      <p>There is a new version of Make Times Forward available.</p>
+      <button class="update" @click="updateApp(true)">Update now</button>
+    </section>
     <section>
       <h3>Attribution</h3>
       <p>
@@ -47,6 +52,12 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import { useServiceWorker } from "@/composables/serviceWorker";
+
+const { updateAvailable, updateApp } = useServiceWorker();
+</script>
+
 <style scoped>
 .about {
   padding: 1em;
@@ -54,5 +65,12 @@
 }
 .about section {
   margin: 1em;
+}
+
+button.update {
+  margin-top: 0.5em;
+  margin-bottom: 0.8em;
+  padding: 0.2em;
+  font-size: 110%;
 }
 </style>

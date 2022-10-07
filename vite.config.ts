@@ -33,7 +33,7 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       VitePWA({
         manifestFilename: "pwa/manifest.webmanifest",
-        injectRegister: "inline",
+        injectRegister: "auto",
         includeManifestIcons: false,
         includeAssets: ["pwa/icon-256.png", "pwa/icon-maskable-384.png"],
         workbox: {
