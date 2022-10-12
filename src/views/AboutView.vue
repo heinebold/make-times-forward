@@ -3,7 +3,7 @@
     <h2>About</h2>
     <section v-if="updateAvailable">
       <h3>🆙 Update available 🆕</h3>
-      <p>There is a new version of Make Times Forward available.</p>
+      <p>A new version of the app is available.</p>
       <button class="update" @click="updateApp(true)">Update now</button>
     </section>
     <section>
