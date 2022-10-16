@@ -6,10 +6,12 @@ import { computed } from "vue";
 import type { Dayjs } from "dayjs";
 import { useSettingsStore } from "@/stores/settings";
 import { useClock } from "@/composables/clock";
+import { useServiceWorker } from "@/composables/serviceWorker";
 
 const settingsStore = useSettingsStore();
 const appTime = useClock();
 const use12hTime = computed(() => settingsStore.use12hTime);
+const { updateAvailable } = useServiceWorker();
 
 function clockEmoji(time: Dayjs): string {
   let hour = time.hour() % 12;
@@ -36,7 +38,11 @@ function clockEmoji(time: Dayjs): string {
         <RouterLink to="/">Display</RouterLink>
         <RouterLink to="/edit-schedule">Edit</RouterLink>
         <RouterLink to="/settings">Settings</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink
+          to="/about"
+          :title="updateAvailable ? 'Update available' : ''"
+          >{{ updateAvailable ? "🆙 " : "" }}About</RouterLink
+        >
         <TextClock
           :prefix="clockEmoji(appTime) + ' '"
           include-seconds
