@@ -90,7 +90,7 @@ export default defineComponent({
 
 <style scoped>
 .current {
-  font-family: "DejaVu Sans", serif;
+  font-family: "DejaVu Sans", sans-serif;
   font-size: 2.5vmax;
   font-weight: bold;
 }
