@@ -4,7 +4,13 @@
     <section v-if="updateAvailable">
       <h3>🆙 Update available 🆕</h3>
       <p>A new version of the app is available.</p>
-      <button class="update" @click="updateApp(true)">Update now</button>
+      <button
+        class="update"
+        :disabled="updating || !updateAvailable"
+        @click="updateClick"
+      >
+        {{ updating ? "Updating..." : "Update now" }}
+      </button>
     </section>
     <section>
       <h3>Attribution</h3>
@@ -54,8 +60,15 @@
 
 <script setup lang="ts">
 import { useServiceWorker } from "@/composables/serviceWorker";
+import { ref } from "vue";
 
 const { updateAvailable, updateApp } = useServiceWorker();
+const updating = ref(false);
+
+function updateClick() {
+  updating.value = true;
+  updateApp(true).catch(() => (updating.value = false));
+}
 </script>
 
 <style scoped>
