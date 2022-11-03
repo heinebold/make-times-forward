@@ -17,6 +17,8 @@
   "dependencies": {
     "dayjs": "^1.10.7",
     "file-saver": "^2.0.5",
+    "fp-ts": "^2.13.1",
+    "io-ts": "^2.2.19",
     "pinia": "^2.0.14",
     "vue": "^3.2.36",
     "vue-final-modal": "^3.4.4",
