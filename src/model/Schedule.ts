@@ -1,7 +1,7 @@
 import { ReadTimeSlot, TimeSlot, WriteTimeSlot } from "@/model/TimeSlot";
 import * as t from "io-ts";
-import { isLeft, isRight, left, right } from "fp-ts/Either";
 import type { Either } from "fp-ts/Either";
+import { isLeft, isRight, left, right } from "fp-ts/Either";
 
 export type Schedule = TimeSlot[];
 
@@ -10,16 +10,10 @@ const Schedule = new t.Type<Schedule, object[], unknown>(
   (value: unknown): value is Schedule =>
     Array.isArray(value) && value.every(TimeSlot.is),
   (value, context) => {
-    const jsonResult: Either<string, unknown> =
-      typeof value === "string" ? tryParse(value) : right(value);
-    if (isLeft(jsonResult)) {
-      return t.failure(value, context, jsonResult.left);
-    }
-    const parsedValue = jsonResult.right;
-    if (!Array.isArray(parsedValue)) {
+    if (!Array.isArray(value)) {
       return t.failure(value, context, "Schedule is not an array");
     }
-    const timeSlots = parsedValue
+    const timeSlots = value
       .map(ReadTimeSlot.pipe(TimeSlot).decode)
       .map((v) => {
         if (import.meta.env.MODE !== "production" && isLeft(v)) {
@@ -45,7 +39,11 @@ function tryParse(text: string): Either<string, unknown> {
 }
 
 export function parseSchedule(text: string): Schedule | null {
-  const result = Schedule.decode(text);
+  const jsonResult: Either<string, unknown> = tryParse(text);
+  if (isLeft(jsonResult)) {
+    return null;
+  }
+  const result = Schedule.decode(jsonResult.right);
   if (isRight(result)) {
     return result.right;
   }
