@@ -80,7 +80,7 @@ describe("The FullSchedulePanel component", () => {
       });
       expect(wrapper.findAll(".selected").length).toBe(1);
       expect(wrapper.find(".selected").text()).toContain(
-        wrapper.props()["items"][selected].title
+        (wrapper.props()["items"] as Schedule)[selected].title
       );
     }
   );

@@ -60,24 +60,24 @@
     />
   </main-square>
   <confirmation-modal
-    name="importDialog"
     v-model="showModal"
     :click-to-close="false"
     :esc-to-close="true"
+    :can-confirm="!!importPreview.data"
     @confirm="confirmImport"
   >
-    <template v-slot="{ params }">
-      <main-square class="preview-area">
-        <h2>Import JSON File</h2>
-        <p v-if="params.text" class="modal-text">{{ params.text }}</p>
-        <full-schedule-panel
-          v-if="params.data"
-          class="schedule-preview"
-          :items="params.data"
-          :numbered="true"
-        />
-      </main-square>
-    </template>
+    <main-square class="preview-area">
+      <h2>Import JSON File</h2>
+      <p v-if="importPreview.text" class="modal-text">
+        {{ importPreview.text }}
+      </p>
+      <full-schedule-panel
+        v-if="importPreview.data"
+        class="schedule-preview"
+        :items="importPreview.data"
+        :numbered="true"
+      />
+    </main-square>
     <template #cancel>❌ Cancel</template>
     <template #confirm>✅ Import</template>
   </confirmation-modal>
@@ -94,7 +94,6 @@ import { useScheduleStore } from "@/stores/schedule";
 import EditItem from "@/components/EditItem.vue";
 import FileSelector from "@/components/FileSelector.vue";
 import { saveAs } from "file-saver";
-import { $vfm as vueFinalModal } from "vue-final-modal";
 import ConfirmationModal from "@/components/ConfirmationModal.vue";
 import { parseSchedule, stringifySchedule } from "@/model/Schedule";
 import type { Schedule } from "@/model/Schedule";
@@ -130,6 +129,7 @@ const dateOverrideString = computed({
 });
 const noValidDateOverride = computed(() => isNaN(dateOverride.value.day()));
 const showModal = ref(false);
+const importPreview = ref<{ text?: string; data?: Schedule }>({});
 
 const scheduleStart = computed(() => schedule.value[0]?.start);
 const scheduleEnd = computed(() => {
@@ -189,24 +189,31 @@ function importFile(file: File) {
   file
     ?.text()
     .then(parseSchedule)
-    .then((schedule) =>
-      vueFinalModal.show("importDialog", {
-        text: "The following schedule can be imported:",
-        data: schedule,
-      })
-    )
-    .catch(() =>
-      vueFinalModal.show("importDialog", {
+    .then((schedule) => {
+      if (schedule) {
+        importPreview.value = {
+          text: "The following schedule can be imported:",
+          data: schedule,
+        };
+      } else {
+        importPreview.value = {
+          text: "The selected file does not contain valid schedule data.",
+        };
+      }
+      showModal.value = true;
+    })
+    .catch(() => {
+      importPreview.value = {
         text: "The selected file does not contain valid schedule data.",
-        canConfirm: false,
-      })
-    );
+      };
+      showModal.value = true;
+    });
 }
 
-function confirmImport(params?: { data?: Schedule }) {
+function confirmImport() {
   currentItem.value = undefined;
   updateSelection(-1);
-  scheduleStore.replaceSchedule(params?.data ?? []);
+  scheduleStore.replaceSchedule(importPreview.value.data ?? []);
 }
 
 function exportFile() {

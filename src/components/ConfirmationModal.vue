@@ -1,37 +1,63 @@
 <template>
-  <vue-final-modal
-    v-slot="{ params, close }"
-    classes="modal-container"
+  <VueFinalModal
+    v-model="visible"
+    class="modal-container"
     content-class="modal-content"
-    @before-open="confirmed = false"
-    @opened="confirmButton.focus({ focusVisible: true })"
-    @before-close="
-      confirmed ? emit('confirm', $event.ref.params.value) : emit('cancel')
-    "
+    :click-to-close="clickToClose"
+    :esc-to-close="escToClose"
+    @opened="confirmButton?.focus()"
+    @before-close="beforeClose"
   >
-    <div class="modal__content"><slot :params="params" /></div>
+    <div class="modal__content"><slot /></div>
     <div class="modal__action">
-      <button @click="close"><slot name="cancel">Cancel</slot></button>
-      <button
-        v-if="params.canConfirm ?? true"
-        ref="confirmButton"
-        @click="(confirmed = true) && close()"
-      >
+      <button @click="visible = false">
+        <slot name="cancel">Cancel</slot>
+      </button>
+      <button v-if="canConfirm" ref="confirmButton" @click="confirm">
         <slot name="confirm">Confirm</slot>
       </button>
     </div>
-  </vue-final-modal>
+  </VueFinalModal>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { VueFinalModal } from "vue-final-modal";
+
+const props = defineProps<{
+  modelValue: boolean;
+  clickToClose?: boolean;
+  escToClose?: boolean;
+  canConfirm?: boolean;
+}>();
 
 const emit = defineEmits<{
+  (e: "update:modelValue", value: boolean): void;
   (e: "cancel"): void;
-  (e: "confirm", p: object): void;
+  (e: "confirm"): void;
 }>();
+
 const confirmed = ref(false);
-const confirmButton = ref();
+const confirmButton = ref<HTMLButtonElement>();
+
+const visible = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => emit("update:modelValue", value),
+});
+
+function beforeClose() {
+  if (confirmed.value) {
+    emit("confirm");
+  } else {
+    emit("cancel");
+  }
+  confirmed.value = false;
+}
+
+function confirm() {
+  confirmed.value = true;
+  visible.value = false;
+}
 </script>
 
 <style scoped>

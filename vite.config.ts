@@ -44,20 +44,21 @@ export default defineConfig(({ command, mode }) => {
         workbox: {
           globPatterns: [
             "**/*.{js,css,html}",
-            "assets/Single-ding-dong-tubular-bell.*.mp3",
+            "assets/Single-ding-dong-tubular-bell*.mp3",
           ],
           runtimeCaching: [
             {
-              urlPattern: /assets\/time-management-\d+.+\.[0-9a-f]{8}\.[^/]+$/i,
+              urlPattern: /assets\/time-management-\d+.*$/i,
               handler: "CacheFirst",
               options: {
+                rangeRequests: true,
                 precacheFallback: {
                   fallbackURL: `${base}pwa/icon-256.png`,
                 },
               },
             },
             {
-              urlPattern: /.+\.[0-9a-f]{8}\.[^/]+$/i,
+              urlPattern: /assets\/.+\.(?:woff2?|ttf|eot|otf|mp3)$/i,
               handler: "CacheFirst",
               options: {
                 rangeRequests: true,

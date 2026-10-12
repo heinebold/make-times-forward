@@ -54,13 +54,11 @@ describe("The CurrentSchedulePanel component", () => {
   const simpleSchedule: Schedule = [past, present, future];
 
   beforeAll(() => {
-    vi.mock("@/composables/sound", () => ({ useSound: mockUseSound }));
     setAppClock(() => now);
   });
 
   afterAll(() => {
     setAppClock(dayjs);
-    vi.unmock("@/composables/sound");
   });
 
   it("shows a bunch of placeholders when there's no schedule", () => {
@@ -129,9 +127,8 @@ describe("The CurrentSchedulePanel component", () => {
     }
   );
 
-  it.todo("gets the mocks like I want them", () => {
+  it.todo("plays the ding dong sound when sound playback is enabled", () => {
     mountPanel(simpleSchedule);
-    expect(mockAudioConstructor).toBeCalledTimes(0);
     expect(mockUseSound).toBeCalledTimes(1);
   });
 });
