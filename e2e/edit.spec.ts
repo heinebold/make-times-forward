@@ -22,11 +22,11 @@ test("adds an item in edit mode and shows it on the home page", async ({
   await page.locator("button", { hasText: "Add" }).click();
 
   await expect(
-    page.locator(".schedule-item .title", { hasText: "Keynote" })
+    page.locator(".schedule-item .title", { hasText: "Keynote" }),
   ).toHaveCount(1);
 
   await page.goto("/make-times-forward/");
   await expect(
-    page.locator(".schedule-item .title", { hasText: "Keynote" }).first()
+    page.locator(".schedule-item .title", { hasText: "Keynote" }).first(),
   ).toBeVisible();
 });

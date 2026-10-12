@@ -26,7 +26,7 @@ describe("The TimeSettings component", () => {
 
   it("starts checked for 12h time", () => {
     const input = mountWithSettings({ settings: { use12hTime: true } }).find(
-      "input"
+      "input",
     );
     expect((input.element as HTMLInputElement).checked).toBe(true);
   });

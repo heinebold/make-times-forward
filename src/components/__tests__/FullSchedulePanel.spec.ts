@@ -34,7 +34,7 @@ function mountPanel(
     selected?: string;
     numbered?: boolean;
   },
-  items = simpleSchedule
+  items = simpleSchedule,
 ) {
   return mount(FullSchedulePanel, {
     props: { items, ...props },
@@ -80,9 +80,9 @@ describe("The FullSchedulePanel component", () => {
       });
       expect(wrapper.findAll(".selected").length).toBe(1);
       expect(wrapper.find(".selected").text()).toContain(
-        (wrapper.props()["items"] as Schedule)[selected].title
+        (wrapper.props()["items"] as Schedule)[selected].title,
       );
-    }
+    },
   );
 
   it("Marks nothing as selected if selected item is hidden", () => {
@@ -95,7 +95,7 @@ describe("The FullSchedulePanel component", () => {
     (selected) => {
       const wrapper = mountPanel({ showPast: true, selected });
       expect(wrapper.findAll(".selected").length).toBe(0);
-    }
+    },
   );
 
   it("Numbers the items correctly when told to", () => {
@@ -122,6 +122,6 @@ describe("The FullSchedulePanel component", () => {
       const wrapper = mountPanel({ showPast: false });
       wrapper.find("[title=Future]").element.parentElement?.click();
       expect("The index payload of the emitted event").toBe(2);
-    }
+    },
   );
 });

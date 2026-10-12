@@ -35,10 +35,10 @@ const props = defineProps<{ start: Dayjs; end: Dayjs; title: string }>();
 
 const durationSeconds = computed(() => props.end.diff(props.start, "seconds"));
 const elapsedSeconds = computed(() =>
-  appTime.value.diff(props.start, "seconds")
+  appTime.value.diff(props.start, "seconds"),
 );
 const hasStarted = computed(
-  () => !appTime.value.isBefore(props.start, "second")
+  () => !appTime.value.isBefore(props.start, "second"),
 );
 const hasEnded = computed(() => appTime.value.isAfter(props.end, "second"));
 </script>

@@ -22,7 +22,7 @@ export function normalizeTimeSlot(raw: TimeSlot) {
 
 export function generateId() {
   return `${Math.round(Math.random() * 10000)}-${Math.round(
-    Math.random() * 100000
+    Math.random() * 100000,
   )}-${Math.round(Math.random() * 10000)}`;
 }
 

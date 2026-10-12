@@ -47,7 +47,7 @@ export default defineComponent({
     },
     firstNonPastIndex(): number {
       const foundIndex = this.sortedItems.findIndex((item: TimeSlot) =>
-        item.end.isAfter(this.appTime, "minute")
+        item.end.isAfter(this.appTime, "minute"),
       );
       return foundIndex < 0 ? this.sortedItems.length : foundIndex;
     },

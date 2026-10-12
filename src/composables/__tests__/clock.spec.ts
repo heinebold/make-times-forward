@@ -62,7 +62,7 @@ describe("The app clock", () => {
     expect(clock.value).toEqual(dayjs(startTime));
     vi.advanceTimersByTime(500);
     expect(clock.value).toEqual(
-      dayjs(startTime).set("ms", 0).add(2, "seconds")
+      dayjs(startTime).set("ms", 0).add(2, "seconds"),
     );
   });
 
@@ -130,7 +130,7 @@ describe.each([0, 4, 10])(
 
         expect(
           diff,
-          `@${i}: Time was ${actualTime}, expected ${expectedTime}`
+          `@${i}: Time was ${actualTime}, expected ${expectedTime}`,
         ).toBeLessThanOrEqual(allowedDeviation);
         lastTickWasTooFar = diff > maxDeviation;
       }
@@ -149,9 +149,9 @@ describe.each([0, 4, 10])(
     function restartSpeedySystemTime() {
       return setInterval(() => {
         vi.setSystemTime(
-          dayjs(vi.getMockedSystemTime()).add(deviationStep, "ms").toDate()
+          dayjs(vi.getMockedSystemTime()).add(deviationStep, "ms").toDate(),
         );
       }, 1000);
     }
-  }
+  },
 );

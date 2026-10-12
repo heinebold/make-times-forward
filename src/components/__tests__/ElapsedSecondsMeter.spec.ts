@@ -17,9 +17,9 @@ describe("The ElapsedSecondsMeter component", () => {
       const elapsed = duration + parseInt("0" + elapsedAsString);
       const wrapper = mountMeter(duration, elapsed);
       expect(
-        wrapper.find("meter").element.attributes.getNamedItem("max")?.value
+        wrapper.find("meter").element.attributes.getNamedItem("max")?.value,
       ).toEqual("" + duration);
-    }
+    },
   );
 
   it("has Value = Elapsed for Elapsed < Duration", () => {
@@ -27,7 +27,7 @@ describe("The ElapsedSecondsMeter component", () => {
     const elapsed = 40;
     const wrapper = mountMeter(duration, elapsed);
     expect(
-      wrapper.find("meter").element.attributes.getNamedItem("value")?.value
+      wrapper.find("meter").element.attributes.getNamedItem("value")?.value,
     ).toEqual("" + elapsed);
   });
 
@@ -36,7 +36,7 @@ describe("The ElapsedSecondsMeter component", () => {
     const elapsed = 50;
     const wrapper = mountMeter(duration, elapsed);
     expect(
-      wrapper.find("meter").element.attributes.getNamedItem("value")?.value
+      wrapper.find("meter").element.attributes.getNamedItem("value")?.value,
     ).toEqual("" + duration);
   });
 
@@ -45,7 +45,7 @@ describe("The ElapsedSecondsMeter component", () => {
     const elapsed = 50;
     const wrapper = mountMeter(duration, elapsed);
     expect(
-      wrapper.find("meter").element.attributes.getNamedItem("low")?.value
+      wrapper.find("meter").element.attributes.getNamedItem("low")?.value,
     ).toEqual("900");
   });
 
@@ -54,7 +54,7 @@ describe("The ElapsedSecondsMeter component", () => {
     const elapsed = 50;
     const wrapper = mountMeter(duration, elapsed);
     expect(
-      wrapper.find("meter").element.attributes.getNamedItem("low")?.value
+      wrapper.find("meter").element.attributes.getNamedItem("low")?.value,
     ).toEqual("120");
   });
 
@@ -63,9 +63,9 @@ describe("The ElapsedSecondsMeter component", () => {
     (duration: number) => {
       const wrapper = mountMeter(duration, 0);
       expect(
-        wrapper.find("meter").element.attributes.getNamedItem("low")?.value
+        wrapper.find("meter").element.attributes.getNamedItem("low")?.value,
       ).toEqual("45");
-    }
+    },
   );
 
   it.each([1000, 180, 51])(
@@ -73,9 +73,9 @@ describe("The ElapsedSecondsMeter component", () => {
     (duration: number) => {
       const wrapper = mountMeter(duration, 0);
       expect(
-        wrapper.find("meter").element.attributes.getNamedItem("high")?.value
+        wrapper.find("meter").element.attributes.getNamedItem("high")?.value,
       ).toEqual("" + (duration - 5));
-    }
+    },
   );
 
   it.each([50, 5, 0])(
@@ -83,8 +83,8 @@ describe("The ElapsedSecondsMeter component", () => {
     (duration: number) => {
       const wrapper = mountMeter(duration, 0);
       expect(
-        wrapper.find("meter").element.attributes.getNamedItem("high")?.value
+        wrapper.find("meter").element.attributes.getNamedItem("high")?.value,
       ).toEqual("46");
-    }
+    },
   );
 });

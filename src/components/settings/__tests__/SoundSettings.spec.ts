@@ -26,7 +26,7 @@ describe("The SoundSettings component", () => {
 
   it("starts checked when sounds are enabled", () => {
     const input = mountWithSettings({ settings: { playSounds: true } }).find(
-      "input"
+      "input",
     );
     expect((input.element as HTMLInputElement).checked).toBe(true);
   });

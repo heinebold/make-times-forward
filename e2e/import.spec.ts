@@ -16,19 +16,19 @@ test("imports a schedule from a file", async ({ page }) => {
   await (await fileChooserPromise).setFiles(importFixture);
 
   await expect(modalText(page)).toContainText(
-    "The following schedule can be imported:"
+    "The following schedule can be imported:",
   );
   await expect(
     page.locator(".modal-content .schedule-item .title", {
       hasText: "Keynote",
-    })
+    }),
   ).toBeVisible();
 
   await page.locator("button", { hasText: "✅ Import" }).click();
-  await expect(page.locator(".modal-content")).not.toBeVisible();
+  await expect(page.locator(".modal-content")).toBeHidden();
 
   await expect(
-    page.locator(".schedule-item .title", { hasText: "Keynote" }).first()
+    page.locator(".schedule-item .title", { hasText: "Keynote" }).first(),
   ).toBeVisible();
 });
 
@@ -46,10 +46,10 @@ test("shows an error modal with disabled import for unparsable files", async ({
   });
 
   await expect(modalText(page)).toContainText(
-    "The selected file does not contain valid schedule data."
+    "The selected file does not contain valid schedule data.",
   );
   await expect(
-    page.locator(".modal-content button", { hasText: "Import" })
+    page.locator(".modal-content button", { hasText: "Import" }),
   ).toHaveCount(0);
 });
 
@@ -62,10 +62,10 @@ test("import can be cancelled without changing the schedule", async ({
 
   await expect(modalText(page)).toBeVisible();
   await page.locator("button", { hasText: "❌ Cancel" }).click();
-  await expect(page.locator(".modal-content")).not.toBeVisible();
+  await expect(page.locator(".modal-content")).toBeHidden();
 
   await expect(
-    page.locator(".schedule-item .title", { hasText: "Keynote" })
+    page.locator(".schedule-item .title", { hasText: "Keynote" }),
   ).toHaveCount(0);
 });
 

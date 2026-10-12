@@ -47,7 +47,7 @@ export default defineComponent({
         ? (this.items as Schedule)
             .map((t) => Math.abs(t.end.diff(t.start, "minutes")))
             .reduce(
-              (previousValue, currentValue) => previousValue + currentValue
+              (previousValue, currentValue) => previousValue + currentValue,
             )
         : 1;
     },

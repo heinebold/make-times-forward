@@ -40,19 +40,19 @@ describe("CurrentItem with a start date in the future", () => {
   it("Shows no meter", () => {
     expect(wrapper.findAll("meter").length).toBe(0);
     expect(
-      wrapper.findAllComponents({ name: "ElapsedSecondsMeter" })
+      wrapper.findAllComponents({ name: "ElapsedSecondsMeter" }),
     ).toHaveLength(0);
   });
 
   it("Shows duration info", () => {
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      start.minute()
+      start.minute(),
     );
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      end.minute()
+      end.minute(),
     );
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      end.diff(start, "minutes")
+      end.diff(start, "minutes"),
     );
   });
 
@@ -94,19 +94,19 @@ describe("CurrentItem with a start date in the past and the end in the future", 
 
   it("Shows a meter", () => {
     expect(
-      wrapper.findAllComponents({ name: "ElapsedSecondsMeter" })
+      wrapper.findAllComponents({ name: "ElapsedSecondsMeter" }),
     ).toHaveLength(1);
   });
 
   it("Shows duration info", () => {
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      start.minute()
+      start.minute(),
     );
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      end.minute()
+      end.minute(),
     );
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      end.diff(start, "minutes")
+      end.diff(start, "minutes"),
     );
   });
 
@@ -149,19 +149,19 @@ describe("CurrentItem with an end in the past", () => {
   it("Shows no meter", () => {
     expect(wrapper.findAll("meter").length).toBe(0);
     expect(
-      wrapper.findAllComponents({ name: "ElapsedSecondsMeter" })
+      wrapper.findAllComponents({ name: "ElapsedSecondsMeter" }),
     ).toHaveLength(0);
   });
 
   it("Shows duration info", () => {
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      start.minute()
+      start.minute(),
     );
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      end.minute()
+      end.minute(),
     );
     expect(wrapper.findComponent({ name: "DurationInfo" }).html()).toContain(
-      end.diff(start, "minutes")
+      end.diff(start, "minutes"),
     );
   });
 

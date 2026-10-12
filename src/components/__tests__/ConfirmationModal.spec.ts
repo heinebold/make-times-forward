@@ -15,7 +15,7 @@ function modalContent() {
 
 function mountModal(
   extraProps: Record<string, unknown> = {},
-  slots: Record<string, string> = {}
+  slots: Record<string, string> = {},
 ) {
   return mount(ConfirmationModal, {
     props: { modelValue: true, ...extraProps },

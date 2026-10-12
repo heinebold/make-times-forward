@@ -21,7 +21,7 @@ export function parseSchedule(text: string): Schedule | null {
 
 export function stringifySchedule(
   schedule: Schedule,
-  space?: string | number
+  space?: string | number,
 ): string {
   return JSON.stringify(schedule, storedFields, space);
 }

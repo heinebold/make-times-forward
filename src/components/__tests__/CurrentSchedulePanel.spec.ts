@@ -124,7 +124,7 @@ describe("The CurrentSchedulePanel component", () => {
       expect(wrapper.findAll(`.${itemClass}.placeholder`).length).toEqual(0);
       expect(wrapper.findAll(`.${itemClass} > *`).length).toEqual(1);
       expect(wrapper.findAll(`.${itemClass} .schedule-item`).length).toEqual(1);
-    }
+    },
   );
 
   it.todo("plays the ding dong sound when sound playback is enabled", () => {

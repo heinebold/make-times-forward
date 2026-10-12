@@ -56,7 +56,7 @@ describe("The schedule store", () => {
 
       expect(store.schedule.map((slot) => slot.start.hour())).toEqual([12, 14]);
       expect(
-        store.schedule.every((slot) => /^\d+-\d+-\d+$/.test(slot.id))
+        store.schedule.every((slot) => /^\d+-\d+-\d+$/.test(slot.id)),
       ).toBe(true);
     });
 
@@ -88,7 +88,7 @@ describe("The schedule store", () => {
     it("throws for an unknown id", () => {
       const store = useScheduleStore();
       expect(() =>
-        store.updateScheduleItem(demoItem("2024-05-04T14:00", "nope"))
+        store.updateScheduleItem(demoItem("2024-05-04T14:00", "nope")),
       ).toThrow();
     });
   });

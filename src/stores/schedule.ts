@@ -11,7 +11,7 @@ interface State {
 function readStoredSchedule(): Schedule {
   try {
     return parseSchedule(localStorage.getItem("schedule") ?? "") ?? [];
-  } catch (e) {
+  } catch {
     return [];
   }
 }

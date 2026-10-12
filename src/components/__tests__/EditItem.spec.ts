@@ -22,13 +22,13 @@ describe("The EditItem component", () => {
     expect((wrapper.element as HTMLElement).title).toBe("demo-1");
     expect(wrapper.find("input").element).toBeTruthy();
     expect(
-      (wrapper.findAll("input")[0].element as HTMLInputElement).value
+      (wrapper.findAll("input")[0].element as HTMLInputElement).value,
     ).toBe("Demo");
     expect(
-      (wrapper.findAll("input")[1].element as HTMLInputElement).value
+      (wrapper.findAll("input")[1].element as HTMLInputElement).value,
     ).toBe("2024-05-04T10:00");
     expect(
-      (wrapper.findAll("input")[2].element as HTMLInputElement).value
+      (wrapper.findAll("input")[2].element as HTMLInputElement).value,
     ).toBe("2024-05-04T11:00");
   });
 
@@ -39,7 +39,7 @@ describe("The EditItem component", () => {
 
     expect(lastEmitted(wrapper).title).toBe("Changed");
     expect(lastEmitted(wrapper).start.isSame(demoItem.start, "minute")).toBe(
-      true
+      true,
     );
     expect(lastEmitted(wrapper).end.isSame(demoItem.end, "minute")).toBe(true);
     expect(lastEmitted(wrapper).id).toBe("demo-1");
@@ -70,7 +70,7 @@ describe("The EditItem component", () => {
     await wrapper.findAll("input")[1].setValue("2024-06-05T09:30");
 
     expect(
-      lastEmitted(wrapper).end.isSame(dayjs("2024-05-04T10:00"), "minute")
+      lastEmitted(wrapper).end.isSame(dayjs("2024-05-04T10:00"), "minute"),
     ).toBe(true);
   });
 

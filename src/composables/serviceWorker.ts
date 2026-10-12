@@ -21,25 +21,28 @@ function enableUpdateCheck(swUrl: string, intervalSeconds: number) {
   if (updateInterval !== null) {
     clearInterval(updateInterval);
   }
-  updateInterval = setInterval(async () => {
-    if (!navigator?.onLine || !("connection" in navigator)) {
-      return;
-    }
+  updateInterval = setInterval(
+    async () => {
+      if (!navigator?.onLine || !("connection" in navigator)) {
+        return;
+      }
 
-    if (registration?.installing) {
-      return;
-    }
+      if (registration?.installing) {
+        return;
+      }
 
-    const resp = await fetch(swUrl, {
-      cache: "no-store",
-      headers: {
-        "cache-control": "no-cache",
-      },
-    });
-    if (resp?.status === 200) {
-      await registration?.update().catch(console.debug);
-    }
-  }, 1000 * Math.max(10, intervalSeconds));
+      const resp = await fetch(swUrl, {
+        cache: "no-store",
+        headers: {
+          "cache-control": "no-cache",
+        },
+      });
+      if (resp?.status === 200) {
+        await registration?.update().catch(console.debug);
+      }
+    },
+    1000 * Math.max(10, intervalSeconds),
+  );
 }
 
 export const useServiceWorker = () => {

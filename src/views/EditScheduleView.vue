@@ -104,13 +104,13 @@ const schedule = computed(() => scheduleStore.schedule);
 const selectedId = ref("");
 const currentItem: Ref<TimeSlot | undefined> = ref(undefined);
 const currentIndex = computed(() =>
-  schedule.value.findIndex((t) => t.id === selectedId.value)
+  schedule.value.findIndex((t) => t.id === selectedId.value),
 );
 const currentItemIncomplete = computed(
   () =>
     !currentItem.value?.title ||
     (isNaN(currentItem.value?.start.minute()) &&
-      isNaN(currentItem.value?.end.minute()))
+      isNaN(currentItem.value?.end.minute())),
 );
 const currentItemModified = computed(() => {
   const currentSelected = schedule.value[currentIndex.value];
@@ -137,7 +137,7 @@ const scheduleEnd = computed(() => {
     return undefined;
   }
   return schedule.value.reduce((acc: TimeSlot, current: TimeSlot) =>
-    current.end.isAfter(acc.end, "date") ? current : acc
+    current.end.isAfter(acc.end, "date") ? current : acc,
   ).end;
 });
 

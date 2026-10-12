@@ -40,26 +40,26 @@ watch(
     if (!newToday.isSame(oldToday, "date")) {
       today.value = newToday;
     }
-  }
+  },
 );
 
 const scheduleToday = computed(() =>
   alwaysToday.value
     ? adjustedSchedule(scheduleStore.schedule, today.value)
-    : scheduleStore.schedule
+    : scheduleStore.schedule,
 );
 const scheduleYesterday = computed(() =>
   alwaysToday.value
     ? adjustedSchedule(scheduleStore.schedule, today.value.subtract(1, "day"))
-    : scheduleStore.schedule
+    : scheduleStore.schedule,
 );
 
 const schedule = computed(() =>
   scheduleYesterday.value[scheduleYesterday.value.length - 1]?.end.isBefore(
-    appTime.value
+    appTime.value,
   )
     ? scheduleToday.value
-    : scheduleYesterday.value
+    : scheduleYesterday.value,
 );
 
 function adjustedSchedule(schedule: Schedule, date: Dayjs): Schedule {

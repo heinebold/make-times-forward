@@ -33,7 +33,7 @@ const props = withDefaults(
   }>(),
   {
     canConfirm: true,
-  }
+  },
 );
 
 const emit = defineEmits<{

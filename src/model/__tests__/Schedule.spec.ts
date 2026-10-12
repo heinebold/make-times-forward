@@ -50,7 +50,7 @@ describe("parseSchedule", () => {
 
   it("defaults the title for date-only entries", () => {
     const schedule = parseSchedule(
-      JSON.stringify([{ start: dayjs("2024-05-04T10:00").toJSON() }])
+      JSON.stringify([{ start: dayjs("2024-05-04T10:00").toJSON() }]),
     );
     expect(schedule).toHaveLength(1);
     expect(schedule?.[0].title).toEqual("");

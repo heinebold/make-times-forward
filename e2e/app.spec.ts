@@ -10,9 +10,9 @@ test("displays the app with an empty state", async ({ page }) => {
   await expect(page).toHaveTitle(/Make Times Forward/);
 
   await expect(page.locator(".empty-info h2")).toHaveText(
-    "The current schedule is empty"
+    "The current schedule is empty",
   );
   await expect(
-    page.locator(".empty-info a", { hasText: "Edit Section" })
+    page.locator(".empty-info a", { hasText: "Edit Section" }),
   ).toBeVisible();
 });
