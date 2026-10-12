@@ -32,6 +32,7 @@ export default defineConfig(({ command, mode }) => {
     base,
     test: {
       setupFiles: ["./vitest.setup.ts"],
+      include: ["src/**/*.{test,spec}?(x).?(c|m)[jt]s?(x)"],
       server: { deps: { inline: ["vue3-text-clamp"] } },
     },
     plugins: [

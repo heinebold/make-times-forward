@@ -2,7 +2,10 @@ import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import path from "node:path";
 
-const importFixture = path.join(__dirname, "fixtures/import-schedule.json");
+const importFixture = path.join(
+  import.meta.dirname,
+  "fixtures/import-schedule.json",
+);
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/make-times-forward/");
