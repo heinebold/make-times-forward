@@ -24,12 +24,17 @@
 import { computed, ref } from "vue";
 import { VueFinalModal } from "vue-final-modal";
 
-const props = defineProps<{
-  modelValue: boolean;
-  clickToClose?: boolean;
-  escToClose?: boolean;
-  canConfirm?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    modelValue: boolean;
+    clickToClose?: boolean;
+    escToClose?: boolean;
+    canConfirm?: boolean;
+  }>(),
+  {
+    canConfirm: true,
+  }
+);
 
 const emit = defineEmits<{
   (e: "update:modelValue", value: boolean): void;
