@@ -5,7 +5,7 @@
     content-class="modal-content"
     :click-to-close="clickToClose"
     :esc-to-close="escToClose"
-    @opened="confirmButton?.focus()"
+    @opened="confirmButton?.focus({ focusVisible: true } as FocusOptions)"
     @before-close="beforeClose"
   >
     <div class="modal__content"><slot /></div>

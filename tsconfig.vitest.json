@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.app.json",
   "exclude": [],
+  "include": ["env.d.ts", "vitest.setup.ts", "src/**/*.ts", "src/**/*.vue"],
   "compilerOptions": {
     "composite": true,
     "types": ["node", "jsdom"]
