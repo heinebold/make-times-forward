@@ -10,7 +10,7 @@ const DayjsType = new t.Type<Dayjs, string, unknown>(
       const d = dayjs(s);
       return d.isValid() ? t.success(d) : t.failure(value, context);
     }),
-  (d) => d.toISOString()
+  (d) => d.toISOString(),
 );
 
 const StoredTimeSlotProps = {
@@ -45,12 +45,14 @@ export const TimeSlot = new t.Type<TimeSlot, WriteTimeSlot, ReadTimeSlot>(
       : t.failure(v, c, "no valid times in time slot");
   },
   //
-  (ts) => ({ title: ts.title, start: ts.start, end: ts.end })
+  (ts) => ({ title: ts.title, start: ts.start, end: ts.end }),
 );
 
 export function normalizeTimeSlot(raw: TimeSlot | ReadTimeSlot): TimeSlot {
-  const validStart = raw.start?.isValid() ? raw.start : raw.end ?? dayjs(null);
-  const validEnd = raw.end?.isValid() ? raw.end : raw.start ?? dayjs(null);
+  const validStart = raw.start?.isValid()
+    ? raw.start
+    : (raw.end ?? dayjs(null));
+  const validEnd = raw.end?.isValid() ? raw.end : (raw.start ?? dayjs(null));
   const correctDateOrder = !validStart.isAfter(validEnd, "minute");
   const rawId = "id" in raw ? raw.id.trim() : "";
 

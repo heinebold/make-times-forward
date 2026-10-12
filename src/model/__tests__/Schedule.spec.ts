@@ -70,7 +70,7 @@ describe("parseSchedule", () => {
     expect(parseSchedule(JSON.stringify(true))).toBeNull();
   });
 
-  it("throws on unparsable text", () => {
-    expect(() => parseSchedule("definitely not JSON")).toThrow();
+  it("returns null on unparsable text instead of throwing", () => {
+    expect(parseSchedule("definitely not JSON")).toBeNull();
   });
 });

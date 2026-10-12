@@ -1,4 +1,9 @@
-import { ReadTimeSlot, TimeSlot, WriteTimeSlot } from "@/model/TimeSlot";
+import {
+  byStart,
+  ReadTimeSlot,
+  TimeSlot,
+  WriteTimeSlot,
+} from "@/model/TimeSlot";
 import * as t from "io-ts";
 import type { Either } from "fp-ts/Either";
 import { isLeft, isRight, left, right } from "fp-ts/Either";
@@ -13,9 +18,8 @@ const Schedule = new t.Type<Schedule, object[], unknown>(
     Array.isArray(value)
       ? t.success(decodeValidTimeSlots(value))
       : t.failure(value, context, "Schedule is not an array"),
-  (value) => value.map(WriteTimeSlot.encode)
+  (value) => value.map(WriteTimeSlot.encode),
 );
-
 export function parseSchedule(text: string): Schedule | null {
   const jsonResult: Either<string, unknown> = tryParse(text);
   if (isLeft(jsonResult)) {
@@ -27,13 +31,6 @@ export function parseSchedule(text: string): Schedule | null {
   const result = Schedule.decode(jsonResult.right);
   logLeft(result);
   return isRight(result) ? result.right : null;
-}
-
-export function stringifySchedule(
-  schedule: Schedule,
-  space?: string | number
-): string {
-  return JSON.stringify(Schedule.encode(schedule), null, space);
 }
 
 function tryParse(text: string): Either<string, unknown> {
@@ -49,7 +46,8 @@ const decodeValidTimeSlots = (items: unknown[]) =>
     .map(ReadTimeSlot.pipe(TimeSlot).decode)
     .map(logLeft)
     .filter(isRight)
-    .map((r) => r.right);
+    .map((r) => r.right)
+    .sort(byStart);
 
 export function stringifySchedule(
   schedule: Schedule,
