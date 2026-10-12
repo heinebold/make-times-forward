@@ -149,9 +149,7 @@ describe.each([0, 4, 10])(
     function restartSpeedySystemTime() {
       return setInterval(() => {
         vi.setSystemTime(
-          dayjs(vi.getMockedSystemTime())
-            .add(1000 + deviationStep, "ms")
-            .toDate()
+          dayjs(vi.getMockedSystemTime()).add(deviationStep, "ms").toDate()
         );
       }, 1000);
     }

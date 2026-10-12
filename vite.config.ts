@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from "url";
 
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import vue from "@vitejs/plugin-vue";
@@ -29,6 +30,10 @@ export default defineConfig(({ command, mode }) => {
       : [];
   return {
     base,
+    test: {
+      setupFiles: ["./vitest.setup.ts"],
+      server: { deps: { inline: ["vue3-text-clamp"] } },
+    },
     plugins: [
       vue(),
       VitePWA({
